@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OverDrive Live — Professional Live Streaming</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="colors_and_type.css">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+  <script type="text/babel">
+// tweaks-panel — inlined for file:// compatibility
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;height:22px;
+    border-radius:6px;cursor:default;padding:0}
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+`;
+
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  const setTweak = React.useCallback((key, val) => {
+    setValues((prev) => ({ ...prev, [key]: val }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: val } }, '*');
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current; if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    offsetRef.current = {
+      x: Math.min(Math.max(PAD, window.innerWidth - w - PAD), Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(Math.max(PAD, window.innerHeight - h - PAD), Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(clampToViewport) : null;
+    if (ro) ro.observe(document.documentElement);
+    else window.addEventListener('resize', clampToViewport);
+    return () => { if (ro) ro.disconnect(); else window.removeEventListener('resize', clampToViewport); };
+  }, [open, clampToViewport]);
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+  const dismiss = () => { setOpen(false); window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*'); };
+  const onDragStart = (e) => {
+    const panel = dragRef.current; if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right, startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => { offsetRef.current = { x: startRight - (ev.clientX - sx), y: startBottom - (ev.clientY - sy) }; clampToViewport(); };
+    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
+  };
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}><b>{title}</b>
+          <button className="twk-x" onMouseDown={(e) => e.stopPropagation()} onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+function TweakSection({ label, children }) {
+  return <><div className="twk-sect">{label}</div>{children}</>;
+}
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl"><span>{label}</span>{value != null && <span className="twk-val">{value}</span>}</div>
+      {children}
+    </div>
+  );
+}
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'} role="switch" aria-checked={!!value} onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+  const valueRef = React.useRef(value); valueRef.current = value;
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const i = Math.floor(((clientX - r.left - 2) / (r.width - 4)) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX); if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => { if (!trackRef.current) return; const v = segAt(ev.clientX); if (v !== valueRef.current) onChange(v); };
+    const up = () => { setDragging(false); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
+  };
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown} className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb" style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`, width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>{o.label}</button>)}
+      </div>
+    </TweakRow>
+  );
+}
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+function TweakColor({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input type="color" className="twk-swatch" value={value} onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSlider, TweakToggle, TweakRadio, TweakText, TweakColor });
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #fff; color: #0A0A0A; font-family: 'Barlow', sans-serif; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #f5f5f5; }
+    ::-webkit-scrollbar-thumb { background: #C41E1E; border-radius: 2px; }
+
+    @keyframes live-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.85)} }
+    @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    @keyframes fade-up { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fade-in { from{opacity:0} to{opacity:1} }
+    @keyframes modal-in { from{opacity:0;transform:translate(-50%,-50%) scale(0.97) translateY(12px)} to{opacity:1;transform:translate(-50%,-50%) scale(1) translateY(0)} }
+    @keyframes flicker { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.7} 94%{opacity:1} 97%{opacity:0.85} 98%{opacity:1} }
+
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-left { opacity:0; transform:translateX(-28px); transition:opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1); }
+    .reveal-left.visible { opacity:1; transform:translateX(0); }
+    .reveal-right { opacity:0; transform:translateX(28px); transition:opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1); }
+    .reveal-right.visible { opacity:1; transform:translateX(0); }
+    .reveal-zoom { opacity:0; transform:scale(0.88) translateY(16px); transition:opacity 0.55s cubic-bezier(.22,1,.36,1), transform 0.55s cubic-bezier(.34,1.4,.64,1); }
+    .reveal-zoom.visible { opacity:1; transform:scale(1) translateY(0); }
+    .d1{transition-delay:.05s} .d2{transition-delay:.12s} .d3{transition-delay:.2s}
+    .d4{transition-delay:.28s} .d5{transition-delay:.36s} .d6{transition-delay:.44s}
+
+    /* ── Hamburger ── */
+    .hamburger { display:none; flex-direction:column; justify-content:center; gap:5px; background:none; border:none; cursor:pointer; padding:6px; z-index:201; }
+    .hamburger span { display:block; width:22px; height:2px; background:#fff; border-radius:1px; transition:transform .25s, opacity .2s; }
+    .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+    /* ── Mobile menu overlay ── */
+    .mob-menu { display:none; position:fixed; top:68px; left:0; right:0; background:rgba(10,10,10,0.98); border-bottom:1px solid #1a1a1a; z-index:198; flex-direction:column; padding:8px 20px 20px; backdrop-filter:blur(16px); }
+    .mob-menu.open { display:flex; }
+    .mob-menu a { font-family:'Barlow',sans-serif; font-size:13px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; padding:14px 0; border-bottom:1px solid #1a1a1a; transition:color .15s; }
+    .mob-menu a:last-of-type { border-bottom:none; }
+    .mob-menu .mob-cta { margin-top:16px; text-align:center; }
+
+    /* ── Responsive breakpoints ── */
+    @media (max-width:1024px) {
+      .services-grid { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+      .footer-grid { grid-template-columns:1fr 1fr !important; gap:32px !important; }
+    }
+    @media (max-width:768px) {
+      .nav-desktop { display:none !important; }
+      .nav-cta { display:none !important; }
+      .hamburger { display:flex !important; }
+      .services-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+      .about-grid { grid-template-columns:1fr !important; gap:40px !important; }
+      .stat-grid { grid-template-columns:1fr 1fr !important; }
+      .logo-grid { grid-template-columns:repeat(4,1fr) !important; }
+      .contact-grid { grid-template-columns:1fr !important; }
+      .contact-grid>div:last-child { border-left:1px solid #1a1a1a !important; border-radius:0 0 4px 4px !important; border-top:1px solid #1a1a1a !important; }
+      .team-full-grid { grid-template-columns:1fr !important; }
+      .team-contractor-grid { grid-template-columns:repeat(3,1fr) !important; }
+      .footer-grid { grid-template-columns:1fr 1fr !important; gap:24px !important; }
+      .section-inner { padding-left:20px !important; padding-right:20px !important; }
+      .hero-badge { display:none !important; }
+      .hero-ghost-cam { display:none !important; }
+      .hero-stat-strip { flex-wrap:wrap !important; max-width:100% !important; }
+      .hero-stat-strip>div { flex:0 0 50% !important; border-right:none !important; padding-left:0 !important; padding-right:16px !important; margin-bottom:16px; }
+      .section-block { padding-top:72px !important; padding-bottom:72px !important; }
+      .service-modal { width:95vw !important; max-height:92vh !important; }
+    }
+    @media (max-width:480px) {
+      .services-grid { grid-template-columns:1fr !important; }
+      .logo-grid { grid-template-columns:repeat(3,1fr) !important; }
+      .team-contractor-grid { grid-template-columns:repeat(2,1fr) !important; }
+      .footer-grid { grid-template-columns:1fr !important; }
+      .hero-stat-strip>div { flex:0 0 50% !important; }
+    }
+
+    .nav-link-dark { transition:color .15s; color:#666; }
+    .nav-link-dark:hover { color:#0A0A0A !important; }
+    .nav-link-light { transition:color .15s; color:rgba(255,255,255,0.5); }
+    .nav-link-light:hover { color:#fff !important; }
+
+    .btn-primary {
+      font-family:'Blue Highway',sans-serif; font-size:14px; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase;
+      background:#C41E1E; color:#fff; border:none; border-radius:4px;
+      padding:14px 32px; cursor:pointer;
+      transition:background .15s, transform .1s, box-shadow .15s;
+      display:inline-block; text-decoration:none;
+    }
+    .btn-primary:hover { background:#991616; box-shadow:0 4px 20px rgba(196,30,30,0.3); }
+    .btn-primary:active { transform:scale(0.97); }
+
+    .btn-outline-dark {
+      font-family:'Blue Highway',sans-serif; font-size:14px; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase;
+      background:transparent; color:#0A0A0A; border:1.5px solid #D0D0D0; border-radius:4px;
+      padding:14px 32px; cursor:pointer;
+      transition:border-color .15s, background .15s;
+      text-decoration:none; display:inline-block;
+    }
+    .btn-outline-dark:hover { border-color:#0A0A0A; }
+
+    .btn-outline-light {
+      font-family:'Blue Highway',sans-serif; font-size:14px; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase;
+      background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,0.3); border-radius:4px;
+      padding:14px 32px; cursor:pointer;
+      transition:border-color .15s, background .15s;
+      text-decoration:none; display:inline-block;
+    }
+    .btn-outline-light:hover { border-color:rgba(255,255,255,0.7); }
+
+    .service-card {
+      background:#111; border:1px solid #222;
+      padding:24px 20px 22px; cursor:pointer; position:relative; overflow:hidden;
+      transition:border-color .2s, transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
+    }
+    .service-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:#C41E1E; transform:scaleX(0); transform-origin:left;
+      transition:transform .35s cubic-bezier(.22,1,.36,1);
+    }
+    .service-card:hover { border-color:#333; transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,0.4); }
+    .service-card:hover::before { transform:scaleX(1); }
+
+    .showreel-btn {
+      display:flex; align-items:center; gap:14px;
+      background:rgba(10,10,10,0.55); border:1.5px solid rgba(255,255,255,0.18); border-radius:4px;
+      padding:14px 20px; cursor:pointer; backdrop-filter:blur(12px);
+      transition:border-color .18s, background .18s;
+    }
+    .showreel-btn:hover { border-color:#C41E1E; background:rgba(196,30,30,0.15); }
+    .play-icon {
+      width:44px; height:44px; background:#C41E1E; border-radius:50%;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+      transition:transform .2s, background .15s;
+    }
+    .showreel-btn:hover .play-icon { transform:scale(1.1); background:#991616; }
+
+    .team-card {
+      background:#fff; border:1px solid #E8E8E8; overflow:hidden;
+      transition:border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .team-card:hover { border-color:#ccc; transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,0.07); }
+
+    .marquee-track { display:flex; gap:20px; animation:marquee 50s linear infinite; width:max-content; }
+    .marquee-track:hover { animation-play-state:paused; }
+
+    /* Modal */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:499; backdrop-filter:blur(4px); animation:fade-in .2s ease; display:flex; align-items:center; justify-content:center; }
+    .service-modal { position:fixed; top:50%; left:50%; z-index:500; width:78vw; max-width:960px; max-height:88vh; display:flex; flex-direction:column; border-radius:6px; overflow:hidden; animation:modal-in .3s cubic-bezier(.22,1,.36,1) forwards; box-shadow:0 24px 80px rgba(0,0,0,0.3); }
+    .service-modal-inner { display:flex; flex-direction:column; height:100%; max-height:88vh; background:#fff; }
+
+    .tab-btn {
+      font-family:'Barlow',sans-serif; font-size:12px; font-weight:600;
+      letter-spacing:.1em; text-transform:uppercase;
+      background:none; border:none; color:#999; cursor:pointer; padding:14px 22px;
+      border-bottom:2px solid transparent; transition:color .15s, border-color .15s;
+      white-space:nowrap;
+    }
+    .tab-btn.active { color:#0A0A0A; border-bottom-color:#C41E1E; }
+    .tab-btn:hover:not(.active) { color:#555; }
+
+    .cfg-chip {
+      font-family:'Blue Highway',sans-serif; font-size:15px; font-weight:700;
+      border:1.5px solid #E0E0E0; border-radius:4px;
+      padding:10px 18px; cursor:pointer; background:#fff;
+      transition:border-color .15s, background .15s, color .15s;
+      text-transform:uppercase; letter-spacing:.04em; color:#999;
+    }
+    .cfg-chip.active { border-color:#C41E1E; background:rgba(196,30,30,0.06); color:#C41E1E; }
+    .cfg-chip:hover:not(.active) { border-color:#bbb; color:#555; }
+
+    .cfg-toggle {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0; border-bottom:1px solid #F0F0F0; cursor:pointer;
+    }
+    .cfg-toggle:last-child { border-bottom:none; }
+    .toggle-track {
+      width:42px; height:24px; border-radius:12px; position:relative;
+      transition:background .2s; flex-shrink:0;
+    }
+    .toggle-thumb {
+      position:absolute; top:3px; left:3px; width:18px; height:18px;
+      background:#fff; border-radius:50%; transition:transform .2s;
+      box-shadow:0 1px 4px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const { useState, useEffect, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#C41E1E",
+  "logoStyle": "banner",
+  "logoHeight": 40,
+  "navStyle": "transparent",
+  "heroCta": "Book Your Event",
+  "showreel": "Showreel"
+}/*EDITMODE-END*/;
+
+/* ── Scroll reveal ── */
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-zoom');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); }
+        else { e.target.classList.remove('visible'); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
+/* ── Canvas speed lines (dark sections only) ── */
+const SpeedCanvas = ({ style }) => {
+  const ref = useRef();
+  useEffect(() => {
+    const canvas = ref.current;if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let raf;
+    const lines = Array.from({ length: 24 }, () => ({
+      x: Math.random() * 1600, y: Math.random() * 900,
+      len: 60 + Math.random() * 180, speed: 1.5 + Math.random() * 3,
+      alpha: 0.05 + Math.random() * 0.09, width: 0.5 + Math.random() * 0.8
+    }));
+    const resize = () => {canvas.width = canvas.offsetWidth;canvas.height = canvas.offsetHeight;};
+    resize();
+    window.addEventListener('resize', resize);
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      lines.forEach((l) => {
+        const g = ctx.createLinearGradient(l.x - l.len, l.y, l.x, l.y);
+        g.addColorStop(0, 'transparent');
+        g.addColorStop(0.6, `rgba(196,30,30,${l.alpha})`);
+        g.addColorStop(1, 'transparent');
+        ctx.beginPath();ctx.moveTo(l.x - l.len, l.y);ctx.lineTo(l.x, l.y);
+        ctx.strokeStyle = g;ctx.lineWidth = l.width;ctx.stroke();
+        l.x += l.speed;
+        if (l.x - l.len > canvas.width) {l.x = -l.len;l.y = Math.random() * canvas.height;}
+      });
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => {cancelAnimationFrame(raf);window.removeEventListener('resize', resize);};
+  }, []);
+  return <canvas ref={ref} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', ...style }} />;
+};
+
+/* ── Section label ── */
+const SectionLabel = ({ text, accent }) =>
+<div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+    <div style={{ height: 2, width: 26, background: accent }} />
+    <span style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent }}>{text}</span>
+  </div>;
+
+
+/* ══════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════ */
+const Header = ({ onBook, tweaks }) => {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    const fn = () => { setScrolled(window.scrollY > 60); };
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  const accent = tweaks.accentColor;
+  const bg = scrolled || menuOpen ? 'rgba(10,10,10,0.95)' : 'transparent';
+  const border = scrolled || menuOpen ? '1px solid #1a1a1a' : '1px solid transparent';
+
+  const closeMenu = () => setMenuOpen(false);
+  const scrollTo = (id) => { closeMenu(); setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 50); };
+
+  const LogoEl = () => {
+    if (tweaks.logoStyle === 'square+wordmark') return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <img src="assets/logo-square.png" alt="" style={{ height: tweaks.logoHeight, width: tweaks.logoHeight }} />
+        <div style={{ lineHeight: 1 }}>
+          <div style={{ fontFamily: 'Blue Highway', fontSize: tweaks.logoHeight * 0.55, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#fff' }}>OverDrive</div>
+          <div style={{ fontFamily: 'Blue Highway', fontSize: tweaks.logoHeight * 0.35, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.14em', color: accent }}>Live</div>
+        </div>
+      </div>);
+    if (tweaks.logoStyle === 'square') return <img src="assets/logo-square.png" alt="OverDrive Live" style={{ height: tweaks.logoHeight, width: tweaks.logoHeight }} />;
+    return <img src="assets/logo-banner.png" alt="OverDrive Live" style={{ height: tweaks.logoHeight }} />;
+  };
+
+  const linkStyle = { fontFamily: 'Barlow', fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none' };
+
+  return (
+    <>
+      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: 68, background: bg, borderBottom: border, transition: 'background .3s, border-color .3s' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <LogoEl />
+          <nav className="nav-desktop" style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+            {['Services','About'].map((l) =>
+              <a key={l} href={l === 'About' ? '#about' : `#${l.toLowerCase()}`} className="nav-link-light" style={linkStyle}>{l}</a>
+            )}
+            <a href="https://www.overdrivefilms.com" target="_blank" rel="noopener noreferrer"
+              style={{ ...linkStyle, color: '#C47000', transition: 'color .15s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#D98000'}
+              onMouseLeave={e => e.currentTarget.style.color = '#C47000'}>Films</a>
+            <a href="#contact" className="nav-link-light" style={linkStyle}>Contact</a>
+          </nav>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button className="btn-primary nav-cta" style={{ padding: '10px 22px', fontSize: 12, background: accent }} onClick={() => scrollTo('contact')}>Get a Quote</button>
+            <button className={`hamburger${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(v => !v)} aria-label="Menu">
+              <span /><span /><span />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className={`mob-menu${menuOpen ? ' open' : ''}`}>
+        <a href="#services" className="nav-link-light" onClick={() => scrollTo('services')}>Services</a>
+        <a href="#about" className="nav-link-light" onClick={() => scrollTo('about')}>About</a>
+        <a href="https://www.overdrivefilms.com" target="_blank" rel="noopener noreferrer" onClick={closeMenu} style={{ color: '#C47000' }}>Films</a>
+        <a href="#contact" className="nav-link-light" onClick={() => scrollTo('contact')}>Contact</a>
+        <div className="mob-cta">
+          <button className="btn-primary" style={{ width: '100%', background: accent, padding: '13px 0', fontSize: 13 }} onClick={() => scrollTo('contact')}>Get a Quote</button>
+        </div>
+      </div>
+    </>);
+};
+
+/* ══════════════════════════════════════════
+   HERO (stays dark — cinematic)
+══════════════════════════════════════════ */
+const Hero = ({ onShowreel, onBook, tweaks }) => {
+  const accent = tweaks.accentColor;
+  const [counts, setCounts] = useState({ events: 0, cams: 0, years: 0 });
+
+  useEffect(() => {
+    const targets = { events: 500, cams: 6, years: 10 };
+    const dur = 2200;
+    const start = Date.now();
+    const tick = () => {
+      const p = Math.min((Date.now() - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      setCounts({ events: Math.floor(ease * targets.events), cams: Math.floor(ease * targets.cams), years: Math.floor(ease * targets.years) });
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    const t = setTimeout(() => requestAnimationFrame(tick), 500);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <section style={{ position: 'relative', width: '100%', height: '100vh', minHeight: 720, overflow: 'hidden', display: 'flex', alignItems: 'flex-end' }}>
+      {/* Full-screen background image */}
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url("assets/hero-bg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
+      {/* Dark overlay for legibility */}
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(110deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0.25) 100%)', zIndex: 1 }} />
+      <SpeedCanvas style={{ zIndex: 2 }} />
+      {/* Grid */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px)',
+        backgroundSize: '72px 72px' }} />
+
+      {/* Live badge */}
+      <div className="hero-badge" style={{ position: 'absolute', top: 96, right: 48, zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(20,20,20,0.85)', border: '1px solid #2a2a2a', borderRadius: 4, padding: '9px 16px', backdropFilter: 'blur(12px)' }}>
+          <span style={{ width: 8, height: 8, background: accent, borderRadius: '50%', display: 'inline-block', animation: 'live-pulse 2s infinite' }} />
+          <span style={{ fontFamily: 'Blue Highway', fontSize: 13, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff' }}>On Air</span>
+        </div>
+        <div style={{ fontFamily: 'JetBrains Mono', fontSize: 10, color: '#333', letterSpacing: '0.06em' }}>SRC-1 · 1080p · HLS</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 3, marginTop: 4 }}>
+          {[...Array(6)].map((_, i) =>
+          <div key={i} style={{ width: 40, height: 28, background: i === 0 ? 'rgba(196,30,30,0.2)' : 'rgba(26,26,26,0.7)', border: `1px solid ${i === 0 ? 'rgba(196,30,30,0.5)' : '#222'}`, borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontFamily: 'JetBrains Mono', fontSize: 9, color: i === 0 ? accent : '#333' }}>C{i + 1}</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+
+      {/* Location badge — fixed viewport position, no animation so no compositor layer that could fight z-index */}
+      <div style={{ position: 'absolute', top: 92, left: 0, right: 0, zIndex: 150, pointerEvents: 'none' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ height: 2, width: 26, background: accent, flexShrink: 0 }} />
+            <span style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: accent, whiteSpace: 'nowrap' }}>Adelaide, South Australia</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Content — padded top to clear nav */}
+      <div className="section-inner" style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 40px', width: '100%', paddingBottom: 80, paddingTop: 68 }}>
+        <div style={{ maxWidth: 700 }}>
+          <h1 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(54px,8.5vw,108px)', fontWeight: 700, textTransform: 'uppercase', lineHeight: 0.9, letterSpacing: '-0.02em', color: '#fff', marginBottom: 26, animation: 'fade-up .7s .2s both' }}>
+            Your Event<br />
+            <span style={{ color: accent }}>Live</span><br />
+            Flawless
+          </h1>
+          <p style={{ fontFamily: 'Barlow', fontSize: 18, fontWeight: 300, lineHeight: 1.65, color: '#777', maxWidth: 490, marginBottom: 40, animation: 'fade-up .7s .35s both' }}>
+            Multi-camera live streaming and broadcast production built for events of any scale.
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', animation: 'fade-up .7s .45s both' }}>
+            <button className="btn-primary" style={{ background: accent }} onClick={() => { const el = document.getElementById('contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}>{tweaks.heroCta}</button>
+            <button className="showreel-btn" onClick={onShowreel}>
+              <div className="play-icon" style={{ background: accent }}>
+                <svg width="13" height="15" viewBox="0 0 14 16" fill="none"><path d="M1 1L13 8L1 15V1Z" fill="white" /></svg>
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontFamily: 'Blue Highway', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff', lineHeight: 1 }}>{tweaks.showreel}</div>
+                <div style={{ fontFamily: 'Barlow', fontSize: 11, color: '#555', marginTop: 3 }}>2 min · Best of 2024</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Stat strip */}
+        <div className="hero-stat-strip" style={{ marginTop: 52, display: 'flex', gap: 0, borderTop: '1px solid #181818', paddingTop: 28, maxWidth: 580, animation: 'fade-up .7s .55s both' }}>
+          {[[`${counts.events}+`, 'Events Streamed'], [`${counts.cams}+`, 'Cameras'], [`${counts.years}+`, 'Years Experience'], ['Full HD', 'Quality']].map(([val, lbl], i) =>
+          <div key={i} style={{ flex: 1, paddingRight: 20, borderRight: i < 3 ? '1px solid #181818' : 'none', paddingLeft: i > 0 ? 20 : 0 }}>
+              <div style={{ fontFamily: 'Blue Highway', fontSize: 28, fontWeight: 700, color: i === 2 ? accent : '#fff', lineHeight: 1, textTransform: 'uppercase' }}>{val}</div>
+              <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#333', marginTop: 5 }}>{lbl}</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 220, background: 'linear-gradient(transparent, #0A0A0A)', pointerEvents: 'none', zIndex: 5 }} />
+
+      <div style={{ position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, opacity: 0.35, animation: 'fade-in 1s 1s both' }}>
+        <span style={{ fontFamily: 'Barlow', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#aaa' }}>Scroll</span>
+        <div style={{ width: 1, height: 28, background: 'linear-gradient(#aaa,transparent)' }} />
+      </div>
+    </section>);
+
+};
+
+/* ══════════════════════════════════════════
+   SERVICE DATA
+══════════════════════════════════════════ */
+const SERVICE_DATA = {
+  corporate: { label: 'Corporate', tagline: 'AGMs, Town Halls & Conferences',
+    intro: 'Polished multi-camera production for corporate events. Broadcast-ready output to any platform — from boardroom AGMs to national town halls.',
+    onsite: ['2× dedicated 15A power circuits (separate from PA/FOH)', 'Ethernet or min 20 Mbps upload (we carry bonded 4G backup)', 'Clear sightlines from camera positions to stage/podium', 'Minimum 1 hour setup access before first guest arrives', 'Small production area (2×3m) for switcher and crew station', 'Run sheet and presenter order at least 48hrs prior'],
+    steps: [{ num: '01', title: 'Discovery Call', desc: 'Align on event brief, run sheet, platform (Zoom, YouTube, Teams, custom), audience size, and branding requirements.' }, { num: '02', title: 'Site Visit', desc: 'Venue walkthrough to confirm camera positions, power access, internet, and AV integration with house systems.' }, { num: '03', title: 'Pre-Production', desc: 'Build your graphics package — lower thirds, title cards, holding slides, opening animation — all matched to your brand.' }, { num: '04', title: 'Setup & Rehearsal', desc: 'Full rig day before your event. Test stream, rehearsal with AV team, presenter monitor check.' }, { num: '05', title: 'Event Day — Go Live', desc: 'Real-time multi-camera switching, live audio mixing, stream monitoring. Dedicated technical director on comms.' }, { num: '06', title: 'Post-Event Delivery', desc: 'Master recording within 24hrs. ISO camera files available. Platform archive link confirmed.' }]
+  },
+  event: { label: 'Event', tagline: 'Concerts, Galas & Ceremonies',
+    intro: 'From graduation ceremonies to music festivals — we deliver atmosphere, scale, and quality. Every camera position designed to tell the story of the room.',
+    onsite: ['Stage plan and technical rider minimum 2 weeks prior', 'Rigging access points confirmed with venue manager', 'Dedicated broadcast position (FOH or elevated platform)', 'Power: minimum 2× 20A circuits, separate from FOH audio', 'All-areas crew credential for setup day and event day', 'Full run of show with artist changeover times'],
+    steps: [{ num: '01', title: 'Briefing', desc: 'Event type, audience scale, platform, key moments to capture, and on-screen talent requirements.' }, { num: '02', title: 'Technical Rider', desc: 'We produce a full technical rider — camera positions, rigging, power, comms plan — shared with the venue.' }, { num: '03', title: 'Pre-Production', desc: 'Graphics package: animated opening title, lower thirds, sponsor logos, holding screens.' }, { num: '04', title: 'Setup Day', desc: 'Full rig, cable management, camera focus and colour match, comms test, stream test to platform.' }, { num: '05', title: 'Rehearsal / Sound Check', desc: 'Live mix rehearsal with FOH. Confirm IEM integration. Camera operator briefing with director.' }, { num: '06', title: 'Show Day', desc: 'Live production with full crew on comms. Real-time switching, graphics, stream monitoring.' }, { num: '07', title: 'Post-Event', desc: 'Full recording within 48hrs. ISO files available. Highlights cut within 72hrs.' }]
+  },
+  sport: { label: 'Sport', tagline: 'Live Sport & Athletics',
+    intro: 'Fast-paced multi-angle coverage with real-time switching and replay. Built for action. Built for broadcast. From local leagues to state-level championship.',
+    onsite: ['Elevated camera gantry or scaffold tower for wide shot', 'Field/venue access credential for all camera operators', 'Commentary position with clear sightline to full playing surface', 'Timing system feed or manual score entry process agreed', 'Internet uplink: 30 Mbps+ upload (we carry bonded 4G backup)', 'Minimum 90 min setup access before first whistle'],
+    steps: [{ num: '01', title: 'Technical Meeting', desc: 'Align on broadcast requirements, platform, graphic standards, and any athlete/sponsor commitments.' }, { num: '02', title: 'Venue Inspection', desc: 'Confirm gantry access, camera platform suitability, power locations, commentary room.' }, { num: '03', title: 'Graphics Build', desc: 'Team logos, scoreboard skin, athlete lower thirds, competition title animation, sponsor rotation.' }, { num: '04', title: 'Setup Day', desc: 'All cameras rigged and focused. Replay system tested. Commentary booth set up with talkback.' }, { num: '05', title: 'Pre-Match', desc: 'Full stream test, commentary team briefed on cues, scoreboard operator test, director run-through.' }, { num: '06', title: 'Live Match Production', desc: 'Full multi-camera coverage with real-time replay operator. Scoreboard updated live.' }, { num: '07', title: 'Post-Match', desc: 'Highlights package cut and delivered same day. Full master recording next business day.' }]
+  },
+  broadcast: { label: 'Broadcast', tagline: 'Full Broadcast Production',
+    intro: 'End-to-end broadcast solutions with production values to match any network. Graphics, commentary, replay, and multichannel delivery — all under one roof.',
+    onsite: ['Dedicated 3-phase power supply or minimum 4× 20A circuits', 'Secure production flypack area with cable management access', 'Internet: 50 Mbps+ upload (we carry bonded 4G/5G backup)', 'Talent greenroom with confidence monitor and IFB feed', 'Minimum 2-hour pre-production access on day of broadcast', 'Full script, rundown, and talent brief minimum 48hrs prior'],
+    steps: [{ num: '01', title: 'Full Production Brief', desc: 'Script, rundown, platform destinations, graphic style guide, talent list, sponsor commitments.' }, { num: '02', title: 'Director Assignment', desc: 'Senior director and producer assigned. Full crew call issued. Pre-production schedule locked.' }, { num: '03', title: 'Location Scout', desc: 'Technical specification produced — power, comms, camera positions, talent areas.' }, { num: '04', title: 'Pre-Production', desc: 'Full graphics package built and approved. Opening animation, lower thirds, bumpers, music.' }, { num: '05', title: 'Technical Rehearsal', desc: 'Full dress rehearsal with talent. All cameras, graphics, audio live. Notes addressed before TX.' }, { num: '06', title: 'Broadcast Day', desc: 'Full crew on comms. Live TX with director calling cameras, graphics operator, audio engineer.' }, { num: '07', title: 'Post-Broadcast', desc: 'Master TX recording. Platform-specific edits. Compliance archive. Highlights within 48hrs.' }]
+  },
+  systems: { label: 'Systems', tagline: 'Custom Installs & Equipment Hire',
+    intro: 'Purpose-built livestream and audio systems for boardrooms, houses of worship, venues, and studios. We design, supply, install, and support — or simply hire you the gear.',
+    hire: [
+      { category: 'Camera Packages', items: ['Sony FX3 Cinema Package (lens + monitor)', 'Sony PXW-Z190 ENG Package', 'PTZ Camera (HDMI/NDI output)', 'GoPro Hero Package (action/POV shots)', 'Tripod & fluid head sets'] },
+      { category: 'Switching & Vision', items: ['Blackmagic ATEM Mini Pro (4 inputs, stream direct)', 'Blackmagic ATEM Constellation (16 inputs, broadcast)', 'Blackmagic Web Presenter HD (USB streaming)'] },
+      { category: 'Encoding & Streaming', items: ['LiveU Solo (bonded 4G encoder)', 'Teradek VidiU (cloud streaming encoder)', 'Laptop streaming station (OBS configured)'] },
+      { category: 'Audio', items: ['Rode Wireless GO II (dual lavalier kit)', 'Sennheiser EW 100 RF system', 'Zoom H6 portable recorder', 'DI boxes & XLR snake sets', 'QSC K10.2 powered speaker pair'] },
+      { category: 'Accessories', items: ['LED panel lighting (dimmable, bi-colour)', 'HDMI / SDI cables & adapters', 'Confidence monitor (15" portable display)', 'Equipment transport cases & trolleys'] }
+    ],
+    build: [
+      { title: 'Boardroom & Corporate', desc: 'Fixed PTZ camera, ceiling mic array, HDMI switching, and software encoder. Designed for hybrid meetings, town halls, and recurring webcasts — fully operable by non-technical staff.' },
+      { title: 'House of Worship', desc: 'Multi-camera install with automated switching, graphics templates for announcements and lyrics, and reliable platform delivery. Scalable from weekly services to major events.' },
+      { title: 'Venue & Events Space', desc: 'Permanent or semi-permanent rig for recurring events. Vision switcher, fixed camera positions, audio tie lines, and control room setup with operator station.' },
+      { title: 'Studio Build', desc: 'Full broadcast studio from ground up — lighting grid, acoustic treatment, multi-camera vision system, intercom, and confidence monitors. Suited for regular content production or training environments.' },
+      { title: 'Streaming Infrastructure', desc: 'End-to-end network design for live streaming — encoding, CDN configuration, platform management (YouTube, Facebook, custom RTMP), and redundancy planning.' },
+    ],
+    steps: [{ num: '01', title: 'Consultation', desc: 'Understand your use case — streaming platform, audience size, room layout, budget, and any existing AV equipment.' }, { num: '02', title: 'System Design', desc: 'We produce a full system diagram: camera positions, audio signal flow, encoding path, network topology, and cable schedule.' }, { num: '03', title: 'Equipment Specification', desc: 'Hardware selected and quoted — cameras, lenses, switcher, encoder, audio interface, cabling, and mounts. Hire options available for any or all items.' }, { num: '04', title: 'Installation', desc: 'Our team installs and commissions the full system. Cable management, mounting, labelling, and full signal test.' }, { num: '05', title: 'Training & Handover', desc: 'Your team trained on day-to-day operation. Documentation provided. Remote support available.' }, { num: '06', title: 'Ongoing Support', desc: 'Optional support retainer — remote troubleshooting, firmware updates, and on-site call-outs as needed.' }]
+  }
+};
+
+/* ══════════════════════════════════════════
+   SERVICE MODAL
+══════════════════════════════════════════ */
+const ServiceConfig = ({ accent }) => {
+  const [cameras, setCameras] = useState(3);
+  const [graphics, setGraphics] = useState(false);
+  const [videoPlayback, setVideoPlayback] = useState(false);
+  const [clientFeed, setClientFeed] = useState(false);
+  const [audio, setAudio] = useState('ours'); // 'ours' | 'client' | 'hybrid'
+
+  const Toggle = ({ label, sublabel, value, onChange }) =>
+  <div className="cfg-toggle" onClick={() => onChange(!value)}>
+      <div>
+        <div style={{ fontFamily: 'Barlow', fontSize: 14, fontWeight: 600, color: '#0A0A0A' }}>{label}</div>
+        {sublabel && <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#999', marginTop: 2 }}>{sublabel}</div>}
+      </div>
+      <div className="toggle-track" style={{ background: value ? accent : '#E0E0E0' }}>
+        <div className="toggle-thumb" style={{ transform: value ? 'translateX(18px)' : 'translateX(0)' }} />
+      </div>
+    </div>;
+
+
+  const included = [];
+  included.push(`${cameras} Camera${cameras > 1 ? 's' : ''} (${cameras <= 2 ? 'Single operator' : cameras <= 4 ? '2 operators' : '3 operators'})`);
+  if (graphics) included.push('Graphics Package (lower thirds, titles, bugs)');
+  if (videoPlayback) included.push('Video Playback / Pre-roll');
+  if (clientFeed) included.push('Client Feed Input (HDMI/SDI)');
+  if (audio === 'ours') included.push('Our Full Audio Package (operators + gear)');
+  if (audio === 'client') included.push('Client Audio Integration (we connect, they operate)');
+  if (audio === 'hybrid') included.push('Hybrid Audio (client FOH + our broadcast mix)');
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
+      <div>
+        {/* Camera count */}
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: 12 }}>Camera Count</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {[1, 2, 3, 4, 5, 6].map((n) =>
+            <button key={n} className={`cfg-chip ${cameras === n ? 'active' : ''}`} onClick={() => setCameras(n)}
+            style={{ borderColor: cameras === n ? accent : '#E0E0E0', background: cameras === n ? `rgba(196,30,30,0.06)` : '#fff', color: cameras === n ? accent : '#999' }}>
+                {n} {n === 1 ? 'Cam' : 'Cams'}
+              </button>
+            )}
+          </div>
+          <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#bbb', marginTop: 10 }}>
+            {cameras <= 2 && 'Ideal for intimate corporate sessions and small briefings.'}
+            {cameras === 3 && 'Our most popular config — wide, mid, and presenter close-up.'}
+            {cameras === 4 && 'Full event coverage with dedicated audience/atmosphere camera.'}
+            {cameras >= 5 && 'Stadium-grade multi-angle production. Up to 3 operators.'}
+          </div>
+        </div>
+
+        {/* Options */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: 4 }}>Production Options</div>
+          <Toggle label="Graphics Package" sublabel="Lower thirds, titles, sponsor bugs, animated opens" value={graphics} onChange={setGraphics} />
+          <Toggle label="Video Playback" sublabel="Pre-roll, interstitials, or recorded segments" value={videoPlayback} onChange={setVideoPlayback} />
+          <Toggle label="Client Feed Input" sublabel="Ingest HDMI or SDI from your existing AV system" value={clientFeed} onChange={setClientFeed} />
+        </div>
+
+        {/* Audio */}
+        <div>
+          <div style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: 10 }}>Audio</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[['ours', 'Our Audio Team', 'We supply full audio gear and operators'], ['client', 'Client Audio', 'Your team operates audio — we receive a feed'], ['hybrid', 'Hybrid', 'Client runs FOH; we run a separate broadcast mix']].map(([val, label, sub]) =>
+            <div key={val} onClick={() => setAudio(val)}
+            style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 16px', border: `1.5px solid ${audio === val ? accent : '#E8E8E8'}`, borderRadius: 4, cursor: 'pointer', background: audio === val ? `rgba(196,30,30,0.04)` : '#fff', transition: 'border-color .15s, background .15s' }}>
+                <div style={{ width: 18, height: 18, borderRadius: '50%', border: `2px solid ${audio === val ? accent : '#ccc'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {audio === val && <div style={{ width: 8, height: 8, borderRadius: '50%', background: accent }} />}
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'Barlow', fontSize: 13, fontWeight: 600, color: '#0A0A0A' }}>{label}</div>
+                  <div style={{ fontFamily: 'Barlow', fontSize: 11, color: '#999' }}>{sub}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Summary panel */}
+      <div>
+        <div style={{ background: '#F9F9F9', border: '1px solid #EFEFEF', borderRadius: 4, padding: '28px 24px', position: 'sticky', top: 20 }}>
+          <div style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: 16 }}>What's Included</div>
+          {included.map((item, i) =>
+          <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 12 }}>
+              <div style={{ width: 20, height: 20, background: `rgba(196,30,30,0.1)`, border: `1px solid rgba(196,30,30,0.2)`, borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                <svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5l2.5 2.5L8 1" stroke={accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </div>
+              <span style={{ fontFamily: 'Barlow', fontSize: 13, color: '#555', lineHeight: 1.5 }}>{item}</span>
+            </div>
+          )}
+          <div style={{ borderTop: '1px solid #EBEBEB', marginTop: 20, paddingTop: 20 }}>
+            <div style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: 12 }}>We Always Provide</div>
+            {['Cameras & Lens Kit', 'Camera Operators', 'Vision Switcher (ATEM)', 'Broadcast Encoder (LiveU)', 'Comms System for Crew', 'All cabling & rigging'].map((item, i) =>
+            <div key={i} style={{ fontFamily: 'Barlow', fontSize: 12, color: '#888', marginBottom: 6, paddingLeft: 14, borderLeft: `2px solid ${accent}`, marginLeft: 2 }}>{item}</div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>);
+
+};
+
+const ServiceModal = ({ service, onClose, accent }) => {
+  const [tab, setTab] = useState('overview');
+  const data = SERVICE_DATA[service];
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    const fn = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', fn);
+    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', fn); };
+  }, []);
+
+  const PROVIDES = {
+    corporate: ['Vision switcher & multi-camera flypack','Dedicated presenter & wide cameras','Live graphics — lower thirds, title cards, bugs','Broadcast encoder with platform delivery','Lapel & shotgun microphone package','Crew comms & technical direction'],
+    event: ['Full multi-camera flypack (4–6 cams)','Handheld ENG operators for crowd & atmosphere','Animated event graphics & sponsor bugs','Bonded uplink — simultaneous multi-platform','On-site audio capture & broadcast mix','Replay & highlights system'],
+    sport: ['Wide overview + action sideline cameras','Dedicated slow-motion replay camera','Live scoreboard & athlete lower thirds','Commentary booth setup & talkback','Real-time replay operator','Full crew on comms throughout'],
+    broadcast: ['Full broadcast flypack up to 6 cameras','ISO recording on every channel','Animated open, bumpers & full graphic package','Professional CDN delivery — multi-platform','Teleprompter & talent IFB package','Senior director + full production crew'],
+    systems: ['Full system design & documentation','Camera, lens & mounting hardware supply','Vision switcher & encoding solution','Professional audio interface & speaker systems','Network & streaming platform integration','Equipment hire — short or long term','Staff training & operational handover','Ongoing remote & on-site support'],
+  };
+
+  const isSystem = service === 'systems';
+  const tabs = isSystem ? ['hire','build','process'] : ['overview','onsite','process'];
+  const labels = isSystem
+    ? { hire:'Equipment Hire', build:'Custom Build', process:'Process' }
+    : { overview:'What We Provide', onsite:'Requirements', process:'Process' };
+
+  return (
+    <>
+      <div className="modal-overlay" onClick={onClose} />
+      <div className="service-modal">
+        <div className="service-modal-inner">
+          {/* Header */}
+          <div style={{ background:'#fff', borderBottom:'1px solid #E8E8E8', padding:'24px 36px 0', flexShrink:0 }}>
+            <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:16 }}>
+              <div>
+                <div style={{ fontFamily:'Barlow', fontSize:10, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:accent, marginBottom:4 }}>Service</div>
+                <h2 style={{ fontFamily:'Blue Highway', fontSize:30, fontWeight:700, textTransform:'uppercase', color:'#0A0A0A', lineHeight:1 }}>{data.label}</h2>
+                <p style={{ fontFamily:'Barlow', fontSize:13, color:'#bbb', marginTop:4 }}>{data.tagline}</p>
+              </div>
+              <button onClick={onClose} style={{ background:'#F5F5F5', border:'1px solid #E8E8E8', borderRadius:4, color:'#888', width:36, height:36, fontSize:16, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', lineHeight:1, flexShrink:0 }}
+                onMouseEnter={e=>{e.currentTarget.style.color='#0A0A0A';}}
+                onMouseLeave={e=>{e.currentTarget.style.color='#888';}}>✕</button>
+            </div>
+            <div style={{ display:'flex', gap:0 }}>
+              {tabs.map(t => (
+                <button key={t} className={`tab-btn ${tab===t?'active':''}`} onClick={() => setTab(t)}
+                  style={{ borderBottomColor:tab===t?accent:'transparent', color:tab===t?'#0A0A0A':'#bbb', padding:'10px 20px', fontSize:11 }}>{labels[t]}</button>
+              ))}
+            </div>
+          </div>
+
+          {/* Scrollable content */}
+          <div style={{ flex:1, overflowY:'auto', background:'#FAFAFA', padding:'36px 36px 48px' }}>
+
+            {tab === 'overview' && (
+              <div>
+                <p style={{ fontFamily:'Barlow', fontSize:15, fontWeight:300, color:'#666', lineHeight:1.7, marginBottom:28, maxWidth:580 }}>{data.intro}</p>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
+                  {PROVIDES[service].map((item, i) => (
+                    <div key={i} style={{ display:'flex', gap:10, alignItems:'flex-start', background:'#fff', border:'1px solid #EBEBEB', borderRadius:4, padding:'14px 16px' }}>
+                      <div style={{ width:20, height:20, background:`rgba(196,30,30,0.08)`, border:`1px solid rgba(196,30,30,0.2)`, borderRadius:2, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:1 }}>
+                        <svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5l2.5 2.5L8 1" stroke={accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </div>
+                      <span style={{ fontFamily:'Barlow', fontSize:13, color:'#555', lineHeight:1.5 }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {tab === 'hire' && (
+              <div>
+                <p style={{ fontFamily:'Barlow', fontSize:14, color:'#aaa', marginBottom:28, lineHeight:1.65 }}>Short or long-term hire available on all items. Delivery, setup assistance, and operator hire available on request.</p>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
+                  {data.hire.map((cat, i) => (
+                    <div key={i} style={{ background:'#fff', border:'1px solid #EBEBEB', borderRadius:4, padding:'20px 20px 16px' }}>
+                      <div style={{ fontFamily:'Blue Highway', fontSize:14, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.04em', color:accent, marginBottom:12 }}>{cat.category}</div>
+                      {cat.items.map((item, j) => (
+                        <div key={j} style={{ display:'flex', gap:10, alignItems:'flex-start', marginBottom:8 }}>
+                          <div style={{ width:5, height:5, borderRadius:'50%', background:accent, flexShrink:0, marginTop:6 }} />
+                          <span style={{ fontFamily:'Barlow', fontSize:12, color:'#555', lineHeight:1.5 }}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {tab === 'build' && (
+              <div style={{ maxWidth:660 }}>
+                <p style={{ fontFamily:'Barlow', fontSize:14, color:'#aaa', marginBottom:28, lineHeight:1.65 }}>We design and install permanent or semi-permanent systems tailored to your space and workflow.</p>
+                {data.build.map((item, i) => (
+                  <div key={i} style={{ display:'flex', gap:16, alignItems:'flex-start', padding:'18px 0', borderBottom:'1px solid #EBEBEB' }}>
+                    <div style={{ width:40, height:40, background:i===0?accent:'#F0F0F0', border:`1px solid ${i===0?accent:'#E0E0E0'}`, borderRadius:4, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                      <span style={{ fontFamily:'JetBrains Mono', fontSize:11, fontWeight:600, color:i===0?'#fff':'#aaa' }}>0{i+1}</span>
+                    </div>
+                    <div style={{ paddingTop:8 }}>
+                      <div style={{ fontFamily:'Blue Highway', fontSize:18, fontWeight:700, textTransform:'uppercase', color:'#0A0A0A', lineHeight:1, marginBottom:6 }}>{item.title}</div>
+                      <p style={{ fontFamily:'Barlow', fontSize:13, color:'#777', lineHeight:1.6 }}>{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {tab === 'onsite' && (
+              <div style={{ maxWidth:640 }}>
+                <p style={{ fontFamily:'Barlow', fontSize:14, color:'#aaa', marginBottom:24, lineHeight:1.65 }}>We coordinate with your venue on all technical requirements. Here's what we need on the day:</p>
+                {data.onsite.map((item, i) => (
+                  <div key={i} style={{ display:'flex', gap:14, alignItems:'flex-start', padding:'14px 0', borderBottom:'1px solid #EBEBEB' }}>
+                    <div style={{ width:24, height:24, background:`rgba(196,30,30,0.08)`, border:`1px solid rgba(196,30,30,0.2)`, borderRadius:3, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:1 }}>
+                      <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3L9 1" stroke={accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
+                    <span style={{ fontFamily:'Barlow', fontSize:13, color:'#555', lineHeight:1.6 }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {tab === 'process' && (
+              <div style={{ maxWidth:640 }}>
+                <p style={{ fontFamily:'Barlow', fontSize:14, color:'#aaa', marginBottom:24, lineHeight:1.65 }}>From first call to final delivery — here's exactly how we run the job:</p>
+                {data.steps.map((s, i) => (
+                  <div key={i} style={{ display:'flex', gap:16, alignItems:'flex-start', padding:'16px 0', borderBottom:'1px solid #EBEBEB' }}>
+                    <div style={{ width:40, height:40, background:i===0?accent:'#F0F0F0', border:`1px solid ${i===0?accent:'#E0E0E0'}`, borderRadius:4, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                      <span style={{ fontFamily:'JetBrains Mono', fontSize:11, fontWeight:600, color:i===0?'#fff':'#aaa' }}>{s.num}</span>
+                    </div>
+                    <div style={{ paddingTop:8 }}>
+                      <div style={{ fontFamily:'Blue Highway', fontSize:18, fontWeight:700, textTransform:'uppercase', color:'#0A0A0A', lineHeight:1, marginBottom:6 }}>{s.title}</div>
+                      <p style={{ fontFamily:'Barlow', fontSize:13, color:'#777', lineHeight:1.6 }}>{s.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div style={{ background:'#fff', borderTop:'1px solid #E8E8E8', padding:'16px 36px', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+            <span style={{ fontFamily:'Barlow', fontSize:12, color:'#bbb' }}>Scroll down to build your custom quote</span>
+            <button className="btn-outline-dark" style={{ padding:'9px 20px', fontSize:12 }} onClick={onClose}>Close</button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+/* ══════════════════════════════════════════
+   SERVICES SECTION
+══════════════════════════════════════════ */
+const serviceIcons = {
+  corporate: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="7" width="22" height="16" rx="2" /><path d="M9 7V5a1 1 0 011-1h8a1 1 0 011 1v2" /><path d="M14 13v4M10 15h8" /></svg>,
+  event: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="14,3 17,10 25,11 19,17 21,24 14,20 7,24 9,17 3,11 11,10" /></svg>,
+  sport: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="14" cy="14" r="11" /><path d="M8 6.5c2 4 2 11 0 15M20 6.5c-2 4-2 11 0 15M3 11h22M3 17h22" /></svg>,
+  broadcast: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="24" height="15" rx="2" /><path d="M9 24h10M14 20v4" /><circle cx="14" cy="12.5" r="3.5" /></svg>,
+  systems: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="8" width="10" height="7" rx="1.5" /><rect x="16" y="8" width="10" height="7" rx="1.5" /><path d="M12 11.5h4M7 15v5M21 15v5M4 20h6M18 20h6" /></svg>
+};
+
+const Services = ({ onServiceClick, accent }) => {
+  useReveal();
+  return (
+    <section id="services" className="section-block" style={{ background: '#0A0A0A', padding: '112px 0', borderBottom: '1px solid #1a1a1a' }}>
+      <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
+        <div className="reveal" style={{ marginBottom: 60 }}>
+          <SectionLabel text="What We Do" accent={accent} />
+          <h2 style={{ fontFamily: 'Blue Highway', fontSize: 52, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.01em', color: '#fff', lineHeight: 0.95 }}>Built for Every Stage</h2>
+          <p style={{ fontFamily: 'Barlow', fontSize: 16, fontWeight: 300, color: '#555', marginTop: 14, maxWidth: 420, lineHeight: 1.65 }}>Four specialist verticals. One production team. Broadcast-grade results.</p>
+        </div>
+        <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,minmax(0,1fr))', gap: 14 }}>
+          {Object.entries(SERVICE_DATA).map(([key, s], i) =>
+          <div key={key} className={`service-card reveal-zoom d${i + 1}`} onClick={() => onServiceClick(key)}>
+              <div style={{ color: '#444', marginBottom: 22, transition: 'color .2s' }}
+            onMouseEnter={(e) => e.currentTarget.style.color = accent}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#444'}>
+                {serviceIcons[key]}
+              </div>
+              <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: accent, marginBottom: 8 }}>{s.label}</div>
+              <h3 style={{ fontFamily: 'Blue Highway', fontSize: 16, fontWeight: 700, textTransform: 'uppercase', color: '#fff', lineHeight: 1.2, marginBottom: 12 }}>{s.tagline}</h3>
+              <p style={{ fontFamily: 'Barlow', fontSize: 13, color: '#555', lineHeight: 1.65, marginBottom: 22 }}>{s.intro.slice(0, 100)}…</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: accent }}>
+                <span style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>View Details</span>
+                <svg width="13" height="9" viewBox="0 0 14 10" fill="none"><path d="M0 5h12M8 1l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>);
+
+};
+
+
+
+/* ══════════════════════════════════════════
+   TEAM
+══════════════════════════════════════════ */
+const TEAM = [
+{ name: 'Alex Parrish', role: 'Director of Photography', type: 'full', bio: 'Co-founder. 10+ years in live broadcast. Led production for State Athletics, Adelaide Tech Summit, and dozens of corporate events across SA.' },
+{ name: 'Jordan Keane', role: 'Technical Director', type: 'full', bio: 'Co-founder. Broadcast engineering specialist. Oversees all systems — switching, encoding, networking, and signal flow for every production.' },
+{ name: 'Sam Rivers', role: 'Camera Operator', type: 'contractor', bio: 'Handheld and action specialist. 6 years in sports broadcast and live event coverage.' },
+{ name: 'Mia Chen', role: 'Audio Engineer', type: 'contractor', bio: 'Broadcast audio specialist. RF, mix, and IEM integration with FOH teams.' },
+{ name: 'Tyler Cross', role: 'Graphics & Motion', type: 'contractor', bio: 'Live graphics packages — scoreboard skins to animated broadcast opens.' },
+{ name: 'Bec Walsh', role: 'Camera Operator', type: 'contractor', bio: 'Multi-format operator with corporate, event, and sports production experience.' },
+{ name: 'Dan Okoro', role: 'Replay Operator', type: 'contractor', bio: 'Live replay and highlight specialist across sport and entertainment.' },
+{ name: 'Luka Petrov', role: 'Technical Support', type: 'contractor', bio: 'Setup, cabling, and systems support for every production day.' }];
+
+
+const Team = ({ accent }) => {
+  const [showTeam, setShowTeam] = useState(false);
+  return (
+    <section id="about" className="section-block" style={{ background: '#fff', padding: '112px 0', borderBottom: '1px solid #EFEFEF' }}>
+      <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
+        <div className="reveal about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start', marginBottom: 56 }}>
+          <div>
+            <SectionLabel text="About Us" accent={accent} />
+            <h2 style={{ fontFamily: 'Blue Highway', fontSize: 48, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.01em', color: '#0A0A0A', lineHeight: 0.95, marginBottom: 24 }}>
+              Adelaide's Live<br />Production Specialists
+            </h2>
+            <p style={{ fontFamily: 'Barlow', fontSize: 16, fontWeight: 300, color: '#666', lineHeight: 1.75, marginBottom: 20 }}>
+              OverDrive Live was founded by two broadcast professionals who believed every event — no matter the size — deserves broadcast-quality production. We started with a single camera and a passion for live storytelling. Today we run full multi-camera flypack rigs across South Australia.
+            </p>
+            <ul style={{ margin: '0 0 20px', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 11 }}>
+              {['Broadcast-quality at every scale', 'Adelaide-based, nationally experienced', 'Full crew — no subcontracting, no surprises'].map((item, idx) => (
+                <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 18, height: 18, borderRadius: 2, border: `1.5px solid ${accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <svg width="9" height="7" viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke={accent} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <span style={{ fontFamily: 'Barlow', fontSize: 14, color: '#555', lineHeight: 1.5 }}>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p style={{ fontFamily: 'Barlow', fontSize: 14, color: '#aaa', lineHeight: 1.75, marginBottom: 32 }}>
+              Our core team of two full-timers is supported by a trusted network of six specialist contractors — camera operators, audio engineers, graphics artists, and replay technicians — brought in for every production. You always get the right crew for the job.
+            </p>
+            <button onClick={() => setShowTeam(v => !v)}
+              style={{ fontFamily: 'Blue Highway', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${accent}`, borderRadius: 4, color: accent, padding: '10px 22px', cursor: 'pointer', transition: 'background .15s, color .15s', display: 'flex', alignItems: 'center', gap: 8 }}
+              onMouseEnter={e => { e.currentTarget.style.background = accent; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = accent; }}>
+              {showTeam ? 'Hide Team ↑' : 'Meet the Team ↓'}
+            </button>
+          </div>
+          <div>
+            <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden', marginBottom: 14 }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: accent, zIndex: 2 }} />
+              <img src="assets/team-photo.png" alt="OverDrive Live in production" style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 16px 12px', background: 'linear-gradient(transparent, rgba(0,0,0,0.55))', pointerEvents: 'none' }}>
+                <span style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.65)' }}>OverDrive Live · On Location</span>
+              </div>
+            </div>
+            <div className="stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+              {[['8+', 'Years Experience', true], ['500+', 'Events Delivered', false], ['2', 'Full-Time Crew', true], ['6', 'Specialist Contractors', false]].map(([val, lbl, red], i) => (
+                <div key={i} className={`reveal-zoom d${i+1}`} style={{ background: '#F9F9F9', border: '1px solid #EFEFEF', borderRadius: 4, padding: '22px 20px' }}>
+                  <div style={{ fontFamily: 'Blue Highway', fontSize: 34, fontWeight: 700, color: red ? accent : '#0A0A0A', lineHeight: 1, textTransform: 'uppercase', marginBottom: 6 }}>{val}</div>
+                  <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#aaa', fontWeight: 500 }}>{lbl}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Expandable team */}
+        <div style={{ overflow: 'hidden', maxHeight: showTeam ? 800 : 0, transition: 'max-height 0.5s cubic-bezier(.22,1,.36,1)', opacity: showTeam ? 1 : 0, transitionProperty: 'max-height, opacity' }}>
+          <div style={{ paddingTop: 8 }}>
+            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#ccc', marginBottom: 12 }}>Core Team</div>
+            <div className="team-full-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+              {TEAM.filter(t => t.type === 'full').map((m, i) => (
+                <div key={i} className={`team-card reveal-zoom d${i+1}`} style={{ display: 'flex' }}>
+                  <div style={{ width: 90, background: `linear-gradient(160deg, ${accent}18 0%, #F0F0F0 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: accent }} />
+                    <span style={{ fontFamily: 'Blue Highway', fontSize: 26, fontWeight: 700, color: accent }}>{m.name.split(' ').map(n => n[0]).join('')}</span>
+                  </div>
+                  <div style={{ padding: '18px 20px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                      <div style={{ width: 5, height: 5, background: accent, borderRadius: '50%' }} />
+                      <span style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent }}>Full Time</span>
+                    </div>
+                    <div style={{ fontFamily: 'Blue Highway', fontSize: 18, fontWeight: 700, textTransform: 'uppercase', color: '#0A0A0A', marginBottom: 2 }}>{m.name}</div>
+                    <div style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#ccc', marginBottom: 8 }}>{m.role}</div>
+                    <p style={{ fontFamily: 'Barlow', fontSize: 12, color: '#888', lineHeight: 1.6 }}>{m.bio}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#ccc', marginBottom: 12 }}>Production Contractors</div>
+            <div className="team-contractor-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 10 }}>
+              {TEAM.filter(t => t.type === 'contractor').map((m, i) => (
+                <div key={i} className={`team-card reveal-zoom d${i+1}`} style={{ padding: '18px 12px', textAlign: 'center' }}>
+                  <div style={{ width: 42, height: 42, background: '#F5F5F5', border: '1px solid #EBEBEB', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
+                    <span style={{ fontFamily: 'Blue Highway', fontSize: 16, fontWeight: 700, color: '#ccc' }}>{m.name.split(' ').map(n => n[0]).join('')}</span>
+                  </div>
+                  <div style={{ fontFamily: 'Blue Highway', fontSize: 12, fontWeight: 700, textTransform: 'uppercase', color: '#0A0A0A', lineHeight: 1.2, marginBottom: 4 }}>{m.name.split(' ')[0]}<br />{m.name.split(' ')[1]}</div>
+                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#ccc', marginBottom: 6 }}>{m.role}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+/* ══════════════════════════════════════════
+   TESTIMONIALS
+══════════════════════════════════════════ */
+const TESTIMONIALS = [
+  { name: 'Sarah Mitchell', role: 'Event Director, Adelaide Convention Centre', quote: 'The production quality was outstanding. Our virtual attendees felt just as connected as those in the room. Truly broadcast-grade work.' },
+  { name: 'James Whitfield', role: 'CEO, National Foods Ltd', quote: 'Our AGM ran flawlessly. The multi-camera setup and clean switching gave our shareholders a professional, polished experience.' },
+  { name: 'Coach Dan Ryrie', role: 'Athletics SA', quote: "Three championships with OverDrive Live now. The live switching, graphics, and replays are exactly what elite sport deserves." },
+  { name: 'Rebecca Lao', role: 'Head of Comms, University of SA', quote: 'Six simultaneous cameras, flawless stream for families watching worldwide. Graduation season is high-stakes — they nailed it.' },
+  { name: 'Marcus Webb', role: 'Festival Director, City Music Collective', quote: 'The energy on camera matched the energy in the room. Every angle captured, every moment delivered. Will use again without question.' },
+  { name: 'Priya Sharma', role: 'Operations Manager, TechSummit AU', quote: 'Fast setup, reliable stream, zero issues on the day. Exactly what you need when thousands of people are tuning in live.' },
+];
+
+const Stars = ({ accent }) => (
+  <div style={{ display: 'flex', gap: 3, marginBottom: 12 }}>
+    {[...Array(5)].map((_, i) => <svg key={i} width="12" height="12" viewBox="0 0 14 14" fill={accent}><polygon points="7,1 8.8,5.2 13.4,5.5 10,8.4 11.1,13 7,10.5 2.9,13 4,8.4 0.6,5.5 5.2,5.2"/></svg>)}
+  </div>
+);
+
+const CLIENT_LOGOS = [
+  { name: 'Adelaide Convention Centre', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor"/><rect x="12" y="2" width="6" height="6" rx="1" fill="currentColor"/><rect x="2" y="12" width="6" height="6" rx="1" fill="currentColor"/><rect x="12" y="12" width="6" height="6" rx="1" fill="currentColor"/></svg> },
+  { name: 'Athletics SA', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M2 16L10 4l8 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M5.5 11h9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg> },
+  { name: 'National Foods', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="2"/><circle cx="10" cy="10" r="3" fill="currentColor"/></svg> },
+  { name: 'University of SA', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2L18 7v1L10 5 2 8V7l8-5z" fill="currentColor"/><rect x="5" y="10" width="10" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="8" y="13" width="4" height="4" fill="currentColor"/></svg> },
+  { name: 'City Music Collective', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 14V7l14-3v7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><circle cx="6" cy="14" r="3" stroke="currentColor" strokeWidth="1.8"/><circle cx="17" cy="11" r="3" stroke="currentColor" strokeWidth="1.8"/></svg> },
+  { name: 'TechSummit AU', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="2.5" fill="currentColor"/><circle cx="3" cy="5" r="1.5" fill="currentColor"/><circle cx="17" cy="5" r="1.5" fill="currentColor"/><circle cx="3" cy="15" r="1.5" fill="currentColor"/><circle cx="17" cy="15" r="1.5" fill="currentColor"/><path d="M4.5 5.5L8 8.5M15.5 5.5L12 8.5M4.5 14.5L8 11.5M15.5 14.5L12 11.5" stroke="currentColor" strokeWidth="1.2"/></svg> },
+  { name: 'Adelaide Oval', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="10" rx="8" ry="6" stroke="currentColor" strokeWidth="2"/><ellipse cx="10" cy="10" rx="4" ry="2.5" stroke="currentColor" strokeWidth="1.5"/></svg> },
+  { name: 'SA Health', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M3 10h14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/></svg> },
+  { name: 'Channel 7 Adelaide', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 5h12L9 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+  { name: 'City of Adelaide', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2L18 8v10H2V8l8-6z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/><rect x="7" y="12" width="6" height="6" fill="currentColor"/></svg> },
+  { name: 'Flinders University', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2c0 0-7 5-7 10a7 7 0 0014 0C17 7 10 2 10 2z" stroke="currentColor" strokeWidth="1.8"/><path d="M10 8v8M7 11h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg> },
+  { name: 'RAA Group', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l2.5 5h5.5l-4.5 3.5 1.5 5.5L10 13l-5 3 1.5-5.5L2 7h5.5L10 2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg> },
+];
+
+const Testimonials = ({ accent }) => {
+  const doubled = [...TESTIMONIALS, ...TESTIMONIALS];
+  return (
+    <section className="section-block" style={{ background: '#F5F5F5', padding: '88px 0', overflow: 'hidden', borderBottom: '1px solid #E8E8E8' }}>
+      {/* Client logos */}
+      <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', marginBottom: 72 }}>
+        <div className="reveal" style={{ marginBottom: 28 }}>
+          <SectionLabel text="Trusted By" accent={accent} />
+        </div>
+        <div className="logo-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 1, background: '#E8E8E8' }}>
+          {CLIENT_LOGOS.map((client, i) => (
+            <div key={i} className={`reveal d${(i%6)+1}`}
+              style={{ background: '#fff', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, transition: 'background .2s', cursor: 'default' }}
+              onMouseEnter={e => e.currentTarget.style.background = '#FAFAFA'}
+              onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
+              <img
+                src={`https://placehold.co/64x64/F0F0F0/AAAAAA?text=${encodeURIComponent(client.name.split(' ').map(w=>w[0]).join('').slice(0,4))}`}
+                alt={client.name}
+                style={{ width: 64, height: 64, objectFit: 'contain', borderRadius: 4 }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Testimonials */}
+      <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', marginBottom: 36 }}>
+        <div className="reveal" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+          <div>
+            <SectionLabel text="Client Stories" accent={accent} />
+            <h2 style={{ fontFamily: 'Blue Highway', fontSize: 42, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.01em', color: '#0A0A0A', lineHeight: 0.95 }}>What They Say</h2>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            {[...Array(5)].map((_,i) => <svg key={i} width="14" height="14" viewBox="0 0 14 14" fill={accent}><polygon points="7,1 8.8,5.2 13.4,5.5 10,8.4 11.1,13 7,10.5 2.9,13 4,8.4 0.6,5.5 5.2,5.2"/></svg>)}
+            <span style={{ fontFamily: 'Blue Highway', fontSize: 18, fontWeight: 700, color: '#0A0A0A', marginLeft: 8 }}>5.0</span>
+          </div>
+        </div>
+      </div>
+      <div style={{ position: 'relative' }}>
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(90deg, #F5F5F5, transparent)', zIndex: 10, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(270deg, #F5F5F5, transparent)', zIndex: 10, pointerEvents: 'none' }} />
+        <div style={{ overflow: 'hidden' }}>
+          <div className="marquee-track">
+            {doubled.map((t, i) => (
+              <div key={i} style={{ width: 300, flexShrink: 0, background: '#fff', border: '1px solid #E8E8E8', padding: '20px 20px 16px' }}>
+                <Stars accent={accent} />
+                <p style={{ fontFamily: 'Barlow', fontSize: 13, color: '#666', lineHeight: 1.7, marginBottom: 14, fontStyle: 'italic' }}>"{t.quote}"</p>
+                <div style={{ borderTop: '1px solid #F0F0F0', paddingTop: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 28, height: 28, background: '#F5F5F5', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ fontFamily: 'Blue Highway', fontSize: 12, fontWeight: 700, color: accent }}>{t.name[0]}</span>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: 'Barlow', fontSize: 12, fontWeight: 600, color: '#0A0A0A' }}>{t.name}</div>
+                    <div style={{ fontFamily: 'Barlow', fontSize: 10, color: '#bbb', marginTop: 1 }}>{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ══════════════════════════════════════════
+   CONTACT (merged CTA + Quote)
+══════════════════════════════════════════ */
+const ContactSection = ({ accent }) => {
+  const [sentGeneral, setSentGeneral] = useState(false);
+  const [sentDetailed, setSentDetailed] = useState(false);
+  const [detailedError, setDetailedError] = useState(false);
+  const [activeService, setActiveService] = useState('corporate');
+  const [cameras, setCameras] = useState(3);
+  const [graphics, setGraphics] = useState(false);
+  const [videoPlayback, setVideoPlayback] = useState(false);
+  const [clientFeed, setClientFeed] = useState(false);
+  const [audio, setAudio] = useState('ours');
+
+  const inp = { background: '#111', border: '1px solid #222', borderRadius: 4, color: '#fff', fontFamily: 'Barlow', fontSize: 14, padding: '11px 14px', outline: 'none', width: '100%' };
+
+  const Toggle = ({ label, sublabel, value, onChange }) => (
+    <div className="cfg-toggle" onClick={() => onChange(!value)} style={{ borderBottomColor: '#1e1e1e', cursor: 'pointer' }}>
+      <div>
+        <div style={{ fontFamily: 'Barlow', fontSize: 13, fontWeight: 600, color: '#ccc' }}>{label}</div>
+        {sublabel && <div style={{ fontFamily: 'Barlow', fontSize: 11, color: '#777', marginTop: 2 }}>{sublabel}</div>}
+      </div>
+      <div className="toggle-track" style={{ background: value ? accent : '#2a2a2a' }}>
+        <div className="toggle-thumb" style={{ transform: value ? 'translateX(18px)' : 'translateX(0)' }} />
+      </div>
+    </div>
+  );
+
+  const included = [`${cameras} Cam${cameras > 1 ? 's' : ''}`];
+  if (graphics) included.push('Graphics');
+  if (videoPlayback) included.push('Playback');
+  if (clientFeed) included.push('Client Feed');
+  included.push(audio === 'ours' ? 'Our Audio' : audio === 'client' ? 'Client Audio' : 'Hybrid Audio');
+
+  const SuccessTick = ({ msg }) => (
+    <div style={{ padding: '40px', textAlign: 'center', border: '1px solid #1e1e1e', borderRadius: 4 }}>
+      <div style={{ width: 44, height: 44, background: `rgba(196,30,30,0.15)`, border: `1px solid rgba(196,30,30,0.3)`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+        <svg width="18" height="14" viewBox="0 0 22 18" fill="none"><path d="M1 9l7 7L21 1" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </div>
+      <div style={{ fontFamily: 'Blue Highway', fontSize: 20, textTransform: 'uppercase', color: '#fff', marginBottom: 6 }}>Sent</div>
+      <p style={{ fontFamily: 'Barlow', fontSize: 13, color: '#888' }}>{msg}</p>
+    </div>
+  );
+
+  return (
+    <section id="contact" style={{ position: 'relative', background: '#0A0A0A', padding: '100px 0 0', overflow: 'hidden' }}>
+      <SpeedCanvas />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${accent} 35%, ${accent} 70%, transparent)` }} />
+      {/* Ghost wordmark */}
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', overflow: 'hidden' }}>
+        <div style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(80px,14vw,180px)', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(255,255,255,0.018)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>GO LIVE</div>
+      </div>
+
+      <div className="section-inner" style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
+        {/* Headline */}
+        <div style={{ textAlign: 'center', marginBottom: 72 }}>
+          <div className="reveal" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: `rgba(196,30,30,0.1)`, border: `1px solid rgba(196,30,30,0.25)`, borderRadius: 2, padding: '5px 12px', marginBottom: 24 }}>
+            <span style={{ width: 6, height: 6, background: accent, borderRadius: '50%', display: 'inline-block', animation: 'live-pulse 2s infinite' }} />
+            <span style={{ fontFamily: 'Blue Highway', fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent }}>Ready to Go Live</span>
+          </div>
+          <h2 className="reveal" style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(40px,6.5vw,84px)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.02em', color: '#fff', lineHeight: 0.92, marginBottom: 20 }}>
+            Your Event Deserves<br /><span style={{ color: accent }}>Broadcast Quality.</span>
+          </h2>
+          <p className="reveal" style={{ fontFamily: 'Barlow', fontSize: 17, fontWeight: 300, color: '#888', maxWidth: 420, lineHeight: 1.65, margin: '0 auto' }}>
+            Tell us about your event and we'll come back within 24 hours.
+          </p>
+        </div>
+
+        {/* Two-column forms */}
+        <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 0 }}>
+          {/* General Enquiry */}
+          <div className="reveal-zoom" style={{ background: '#0D0D0D', border: '1px solid #1a1a1a', borderRadius: '4px 0 0 0', padding: '40px' }}>
+            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 6 }}>General Enquiry</div>
+            <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>Quick Question</div>
+            {sentGeneral ? <SuccessTick msg="We'll reply within 24 hours." /> : (
+              <form onSubmit={async e => {
+                e.preventDefault();
+                const res = await fetch('https://formspree.io/f/mjgjdabw', {
+                  method: 'POST', headers: { 'Accept': 'application/json' },
+                  body: new FormData(e.target)
+                });
+                if (res.ok) setSentGeneral(true);
+              }} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <input name="name" style={inp} placeholder="Your Name" required />
+                  <input name="email" type="email" style={inp} placeholder="Email" required />
+                </div>
+                <input name="organisation" style={inp} placeholder="Organisation" />
+                <textarea name="message" rows={5} style={{ ...inp, resize: 'vertical' }} placeholder="Tell us about your event, or ask us anything." />
+                <button type="submit" className="btn-primary" style={{ alignSelf: 'flex-start', padding: '12px 28px', fontSize: 12, background: accent }}>Send Enquiry</button>
+              </form>
+            )}
+          </div>
+
+          {/* Detailed Quote */}
+          <div className="reveal-zoom d2" style={{ background: '#111', border: '1px solid #1a1a1a', borderLeft: 'none', borderRadius: '0 4px 0 0', padding: '40px' }}>
+            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 6 }}>Detailed Quote</div>
+            <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>Build Your Production</div>
+            {sentDetailed ? <SuccessTick msg="We'll respond with a tailored plan within 24 hours." /> : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                {/* Service */}
+                <div>
+                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Service Type</div>
+                  <div style={{ position: 'relative' }}>
+                    <select value={activeService} onChange={e => { setActiveService(e.target.value); setCameras(3); setGraphics(false); setVideoPlayback(false); setClientFeed(false); setAudio('ours'); }}
+                      style={{ ...inp, appearance: 'none', paddingRight: 36, cursor: 'pointer', fontWeight: 600 }}>
+                      {Object.entries(SERVICE_DATA).map(([key, s]) => <option key={key} value={key}>{s.label} — {s.tagline}</option>)}
+                    </select>
+                    <svg style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="11" height="7" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#555" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                  </div>
+                </div>
+                {/* Cameras */}
+                <div>
+                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Cameras</div>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    {[1,2,3,4,5,6].map(n => (
+                      <button type="button" key={n} onClick={() => setCameras(n)}
+                        style={{ width: 38, height: 36, borderRadius: 4, border: `1.5px solid ${cameras === n ? accent : '#222'}`, background: cameras === n ? `rgba(196,30,30,0.12)` : '#0D0D0D', color: cameras === n ? accent : '#444', fontFamily: 'Blue Highway', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}>{n}</button>
+                    ))}
+                  </div>
+                </div>
+                {/* Toggles */}
+                <div style={{ border: '1px solid #1e1e1e', borderRadius: 4, padding: '0 14px' }}>
+                  <Toggle label="Graphics Package" sublabel="Lower thirds, titles, bugs" value={graphics} onChange={setGraphics} />
+                  <Toggle label="Video Playback" sublabel="Pre-roll / interstitials" value={videoPlayback} onChange={setVideoPlayback} />
+                  <Toggle label="Client Feed Input" sublabel="HDMI or SDI ingest" value={clientFeed} onChange={setClientFeed} />
+                </div>
+                {/* Audio */}
+                <div>
+                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Audio</div>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    {[['ours','Our Team'],['client','Client'],['hybrid','Hybrid']].map(([val, lbl]) => (
+                      <button type="button" key={val} onClick={() => setAudio(val)}
+                        style={{ flex: 1, padding: '8px 4px', borderRadius: 4, border: `1.5px solid ${audio === val ? accent : '#222'}`, background: audio === val ? `rgba(196,30,30,0.1)` : '#0D0D0D', color: audio === val ? accent : '#444', fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>{lbl}</button>
+                    ))}
+                  </div>
+                </div>
+                {/* Config tags */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {included.map((item, i) => <span key={i} style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 600, color: accent, background: `rgba(196,30,30,0.08)`, border: `1px solid rgba(196,30,30,0.2)`, borderRadius: 2, padding: '3px 9px' }}>{item}</span>)}
+                </div>
+                {/* Form */}
+                <form onSubmit={async e => {
+                  e.preventDefault();
+                  setDetailedError(false);
+                  try {
+                    const data = new FormData(e.target);
+                    data.append('service', activeService);
+                    data.append('cameras', cameras);
+                    data.append('graphics_package', graphics ? 'Yes' : 'No');
+                    data.append('video_playback', videoPlayback ? 'Yes' : 'No');
+                    data.append('client_feed_input', clientFeed ? 'Yes' : 'No');
+                    data.append('audio', audio);
+                    const res = await fetch('https://formspree.io/f/xaqazpwb', {
+                      method: 'POST', headers: { 'Accept': 'application/json' }, body: data
+                    });
+                    if (res.ok) { setSentDetailed(true); } else { setDetailedError(true); }
+                  } catch { setDetailedError(true); }
+                }} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <input name="name" style={inp} placeholder="Your Name" required />
+                    <input name="email" type="email" style={inp} placeholder="Email" required />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <input name="event_date" style={inp} type="date" />
+                    <input name="venue" style={inp} placeholder="Venue / Location" />
+                  </div>
+                  <textarea name="notes" rows={2} style={{ ...inp, resize: 'none' }} placeholder="Anything else…" />
+                  {detailedError && <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#e05555' }}>Something went wrong — please try again or email us directly at contact@overdrivefilms.com</div>}
+                  <button type="submit" className="btn-primary" style={{ padding: '12px 28px', fontSize: 12, background: accent }}>Send Quote Request</button>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Feature strip */}
+        <div style={{ display: 'flex', borderTop: '1px solid #141414', marginTop: 0 }}>
+          {['No obligation','24hr response','Adelaide based','Full HD quality'].map((txt, i) => (
+            <div key={i} style={{ flex: 1, textAlign: 'center', padding: '20px 14px', borderRight: i < 3 ? '1px solid #141414' : 'none' }}>
+              <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#666' }}>{txt}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+const Footer = () =>
+<footer style={{ background: '#060606', borderTop: '1px solid #111', padding: '48px 0 24px' }}>
+    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
+      <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 40 }}>
+        <div>
+          <img src="assets/logo-banner.png" alt="OverDrive Live" style={{ height: 26, marginBottom: 16 }} />
+          <p style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', lineHeight: 1.65, maxWidth: 240 }}>Professional live streaming and broadcast production, based in Adelaide, South Australia.</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 14 }}>
+            <span style={{ width: 5, height: 5, background: '#C41E1E', borderRadius: '50%', display: 'inline-block' }} />
+            <span style={{ fontFamily: 'Barlow', fontSize: 11, color: '#777' }}>Adelaide, SA, Australia</span>
+          </div>
+        </div>
+        {[['Services', ['Corporate', 'Event', 'Sport', 'Broadcast']], ['Company', ['About', 'Team', 'Portfolio', 'Contact']], ['Contact', ['info@overdrivefilms.com', 'Adelaide, SA']]].map(([h, ls]) =>
+      <div key={h}>
+            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>{h}</div>
+            {ls.map((l) => <div key={l} style={{ marginBottom: 8 }}><a href="#" style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', textDecoration: 'none' }}>{l}</a></div>)}
+          </div>
+      )}
+      </div>
+      <div style={{ borderTop: '1px solid #111', paddingTop: 18, display: 'flex', justifyContent: 'space-between' }}>
+        <span style={{ fontFamily: 'Barlow', fontSize: 11, color: '#555' }}>© 2026 OverDrive Live. All rights reserved.</span>
+        <span style={{ fontFamily: 'JetBrains Mono', fontSize: 10, color: '#555' }}>ADL · SA · AU</span>
+      </div>
+    </div>
+  </footer>;
+
+
+/* ══════════════════════════════════════════
+   SIMPLE MODALS
+══════════════════════════════════════════ */
+const ShowreelModal = ({ onClose }) =>
+<>
+    <div className="modal-overlay" onClick={onClose} />
+    <div style={{ position: 'fixed', inset: 0, zIndex: 501, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div style={{ background: '#fff', border: '1px solid #E8E8E8', borderRadius: 4, maxWidth: 580, width: '100%', padding: '36px', position: 'relative', animation: 'modal-in .3s cubic-bezier(.22,1,.36,1)' }}>
+        <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, background: 'none', border: 'none', color: '#bbb', fontSize: 18, cursor: 'pointer', lineHeight: 1 }}>✕</button>
+        <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#C41E1E', marginBottom: 8 }}>Showreel</div>
+        <h3 style={{ fontFamily: 'Blue Highway', fontSize: 28, textTransform: 'uppercase', color: '#0A0A0A', marginBottom: 20 }}>Best of 2024</h3>
+        <div style={{ background: '#F7F7F7', border: '1px solid #EBEBEB', borderRadius: 4, height: 220, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: 18, gap: 10 }}>
+          <div style={{ width: 52, height: 52, background: 'rgba(196,30,30,0.1)', border: '1px solid rgba(196,30,30,0.2)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><path d="M1 1L13 8L1 15V1Z" fill="#C41E1E" /></svg>
+          </div>
+          <span style={{ fontFamily: 'Barlow', fontSize: 12, color: '#bbb' }}>Add your showreel embed here</span>
+        </div>
+        <p style={{ fontFamily: 'Barlow', fontSize: 13, color: '#aaa', lineHeight: 1.65 }}>A showcase of our best live productions from across South Australia.</p>
+      </div>
+    </div>
+  </>;
+
+
+const BookModal = ({ onClose, accent }) => {
+  const [sent, setSent] = useState(false);
+  const inp = { background: '#F9F9F9', border: '1px solid #E8E8E8', borderRadius: 4, color: '#0A0A0A', fontFamily: 'Barlow', fontSize: 14, padding: '10px 14px', outline: 'none', width: '100%' };
+  return (
+    <>
+      <div className="modal-overlay" onClick={onClose} />
+      <div style={{ position: 'fixed', inset: 0, zIndex: 501, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, overflowY: 'auto' }}>
+        <div style={{ background: '#fff', border: '1px solid #E8E8E8', borderRadius: 4, maxWidth: 500, width: '100%', padding: '36px', position: 'relative', animation: 'modal-in .3s cubic-bezier(.22,1,.36,1)' }}>
+          <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, background: 'none', border: 'none', color: '#bbb', fontSize: 18, cursor: 'pointer', lineHeight: 1 }}>✕</button>
+          {sent ?
+          <div style={{ textAlign: 'center', padding: '16px 0' }}>
+              <div style={{ width: 52, height: 52, background: 'rgba(196,30,30,0.08)', border: '1px solid rgba(196,30,30,0.2)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                <svg width="22" height="18" viewBox="0 0 22 18" fill="none"><path d="M1 9l7 7L21 1" stroke="#C41E1E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </div>
+              <h3 style={{ fontFamily: 'Blue Highway', fontSize: 28, textTransform: 'uppercase', color: '#0A0A0A', marginBottom: 8 }}>Enquiry Sent</h3>
+              <p style={{ fontFamily: 'Barlow', fontSize: 14, color: '#aaa' }}>We'll be in touch within 24 hours.</p>
+            </div> :
+
+          <>
+              <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 8 }}>Get in Touch</div>
+              <h3 style={{ fontFamily: 'Blue Highway', fontSize: 28, textTransform: 'uppercase', color: '#0A0A0A', marginBottom: 22 }}>Book Your Event</h3>
+              <form onSubmit={(e) => {e.preventDefault();setSent(true);}} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <input style={inp} placeholder="Your Name" />
+                  <input style={inp} type="email" placeholder="Email" />
+                </div>
+                <select style={{ ...inp, appearance: 'none' }}>
+                  <option value="">Service Type</option>
+                  <option>Corporate</option><option>Event</option><option>Sport</option><option>Broadcast</option>
+                </select>
+                <textarea rows={4} style={{ ...inp, resize: 'vertical' }} placeholder="Tell us about your event — date, venue, audience size…" />
+                <button type="submit" className="btn-primary" style={{ alignSelf: 'flex-start', padding: '12px 28px', fontSize: 13, background: accent }}>Send Enquiry</button>
+              </form>
+            </>
+          }
+        </div>
+      </div>
+    </>);
+
+};
+
+/* ══════════════════════════════════════════
+   APP
+══════════════════════════════════════════ */
+const App = () => {
+  const [showreel, setShowreel] = useState(false);
+  const [activeService, setActiveService] = useState(null);
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const accent = tweaks.accentColor;
+
+  return (
+    <>
+      <Header tweaks={tweaks} />
+      <Hero onShowreel={() => setShowreel(true)} tweaks={tweaks} />
+      <Services onServiceClick={setActiveService} accent={accent} />
+      <Team accent={accent} />
+      <Testimonials accent={accent} />
+      <ContactSection accent={accent} />
+      <Footer />
+
+      {activeService && <ServiceModal service={activeService} onClose={() => setActiveService(null)} accent={accent} />}
+      {showreel && <ShowreelModal onClose={() => setShowreel(false)} />}
+
+      <TweaksPanel>
+        <TweakSection label="Navigation" />
+        <TweakRadio label="Logo Style" value={tweaks.logoStyle} options={['banner', 'square', 'square+wordmark']} onChange={(v) => setTweak('logoStyle', v)} />
+        <TweakSlider label="Logo Size" value={tweaks.logoHeight} min={24} max={52} step={2} unit="px" onChange={(v) => setTweak('logoHeight', v)} />
+        <TweakRadio label="Nav Background" value={tweaks.navStyle} options={['transparent', 'solid']} onChange={(v) => setTweak('navStyle', v)} />
+        <TweakSection label="Brand" />
+        <TweakColor label="Accent Colour" value={tweaks.accentColor} onChange={(v) => setTweak('accentColor', v)} />
+        <TweakSection label="Hero Copy" />
+        <TweakText label="Primary CTA" value={tweaks.heroCta} onChange={(v) => setTweak('heroCta', v)} />
+        <TweakText label="Showreel Button" value={tweaks.showreel} onChange={(v) => setTweak('showreel', v)} />
+      </TweaksPanel>
+    </>);
+
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
+l>
