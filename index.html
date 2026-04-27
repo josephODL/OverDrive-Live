@@ -293,6 +293,8 @@ Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSli
       .contact-grid>div:last-child { border-left:1px solid #1a1a1a !important; border-radius:0 0 4px 4px !important; border-top:1px solid #1a1a1a !important; }
       .team-full-grid { grid-template-columns:1fr !important; }
       .team-contractor-grid { grid-template-columns:repeat(3,1fr) !important; }
+      .pricing-grid { grid-template-columns:1fr !important; }
+      .pricing-quote-strip { flex-direction:column !important; align-items:flex-start !important; }
       .footer-grid { grid-template-columns:1fr 1fr !important; gap:24px !important; }
       .section-inner { padding-left:20px !important; padding-right:20px !important; }
       .hero-badge { display:none !important; }
@@ -616,28 +618,22 @@ const Hero = ({ onShowreel, onBook, tweaks }) => {
       </div>
 
 
-      {/* Location badge — fixed viewport position, no animation so no compositor layer that could fight z-index */}
-      <div style={{ position: 'absolute', top: 92, left: 0, right: 0, zIndex: 150, pointerEvents: 'none' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ height: 2, width: 26, background: accent, flexShrink: 0 }} />
-            <span style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: accent, whiteSpace: 'nowrap' }}>Adelaide, South Australia</span>
-          </div>
-        </div>
-      </div>
-
       {/* Content — padded top to clear nav */}
       <div className="section-inner" style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 40px', width: '100%', paddingBottom: 80, paddingTop: 68 }}>
         <div style={{ maxWidth: 700 }}>
-          <h1 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(54px,8.5vw,108px)', fontWeight: 700, textTransform: 'uppercase', lineHeight: 0.9, letterSpacing: '-0.02em', color: '#fff', marginBottom: 26, animation: 'fade-up .7s .2s both' }}>
+          <h1 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(54px,8.5vw,108px)', fontWeight: 700, textTransform: 'uppercase', lineHeight: 0.9, letterSpacing: '-0.02em', color: '#fff', marginBottom: 18, animation: 'fade-up .7s .2s both' }}>
             Your Event<br />
             <span style={{ color: accent }}>Live</span><br />
             Flawless
           </h1>
-          <p style={{ fontFamily: 'Barlow', fontSize: 18, fontWeight: 300, lineHeight: 1.65, color: '#777', maxWidth: 490, marginBottom: 40, animation: 'fade-up .7s .35s both' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 26, animation: 'fade-up .7s .3s both' }}>
+            <div style={{ height: 2, width: 26, background: accent, flexShrink: 0 }} />
+            <span style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: accent, whiteSpace: 'nowrap' }}>Adelaide, South Australia</span>
+          </div>
+          <p style={{ fontFamily: 'Barlow', fontSize: 18, fontWeight: 300, lineHeight: 1.65, color: '#777', maxWidth: 490, marginBottom: 40, animation: 'fade-up .7s .4s both' }}>
             Multi-camera live streaming and broadcast production built for events of any scale.
           </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', animation: 'fade-up .7s .45s both' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', animation: 'fade-up .7s .5s both' }}>
             <button className="btn-primary" style={{ background: accent }} onClick={() => { const el = document.getElementById('contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}>{tweaks.heroCta}</button>
             <button className="showreel-btn" onClick={onShowreel}>
               <div className="play-icon" style={{ background: accent }}>
@@ -980,7 +976,7 @@ const serviceIcons = {
   systems: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="8" width="10" height="7" rx="1.5" /><rect x="16" y="8" width="10" height="7" rx="1.5" /><path d="M12 11.5h4M7 15v5M21 15v5M4 20h6M18 20h6" /></svg>
 };
 
-const Services = ({ onServiceClick, accent }) => {
+const Services = ({ onServiceClick, onPricingOpen, accent }) => {
   useReveal();
   return (
     <section id="services" className="section-block" style={{ background: '#0A0A0A', padding: '112px 0', borderBottom: '1px solid #1a1a1a' }}>
@@ -1007,6 +1003,16 @@ const Services = ({ onServiceClick, accent }) => {
               </div>
             </div>
           )}
+        </div>
+        <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', gap: 16, borderTop: '1px solid #181818', paddingTop: 36 }}>
+          <button onClick={onPricingOpen}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontFamily: 'Blue Highway', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', background: accent, border: 'none', borderRadius: 4, color: '#fff', padding: '12px 26px', cursor: 'pointer', transition: 'opacity .15s' }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/></svg>
+            View Pricing
+          </button>
+          <span style={{ fontFamily: 'Barlow', fontSize: 13, color: '#444' }}>Our most popular livestream packages — starting from $1,000.</span>
         </div>
       </div>
     </section>);
@@ -1226,13 +1232,137 @@ const Testimonials = ({ accent }) => {
 /* ══════════════════════════════════════════
    CONTACT (merged CTA + Quote)
 ══════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   PRICING MODAL
+══════════════════════════════════════════ */
+const PACKAGES = [
+  {
+    name: 'Basic',
+    from: '$1,000',
+    duration: '1hr Stream',
+    cameras: 1,
+    highlight: false,
+    inclusions: ['1 Producer', 'No camera operator required', '1-hour livestream', 'Same day setup & backdown', 'Basic full-screen graphics', 'Stream to 1 platform'],
+  },
+  {
+    name: 'Standard',
+    from: '$2,000',
+    duration: '2hr Stream',
+    cameras: 2,
+    highlight: true,
+    inclusions: ['1 Camera operator', '1 Producer', '2-hour livestream', 'Same day or prior day setup', 'Full-screen graphics package', 'Video / presentation feed input', 'Stream to 1 platform'],
+  },
+  {
+    name: 'Advanced',
+    from: '$2,500',
+    duration: '4hr Stream',
+    cameras: 2,
+    highlight: false,
+    inclusions: ['1 Camera operator', '1 Producer', '4-hour livestream', 'Same day or prior day setup', 'Full-screen graphics package', 'Lower thirds graphics', 'Video / presentation feed input', 'Stream to 1 platform'],
+  },
+];
+
+const QUOTE_ONLY = ['Sports', 'Systems Integration', 'Broadcast'];
+
+const PricingModal = ({ onClose, accent }) => {
+  React.useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
+  }, []);
+
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.82)', zIndex: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 16px', backdropFilter: 'blur(6px)' }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#0D0D0D', border: '1px solid #1e1e1e', borderRadius: 6, width: '100%', maxWidth: 960, maxHeight: '90vh', overflowY: 'auto', position: 'relative' }}>
+
+        {/* Modal header */}
+        <div style={{ padding: '32px 40px 24px', borderBottom: '1px solid #1a1a1a', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 20, position: 'sticky', top: 0, background: '#0D0D0D', zIndex: 2 }}>
+          <div>
+            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 4 }}>Pricing</div>
+            <div style={{ fontFamily: 'Blue Highway', fontSize: 28, fontWeight: 700, textTransform: 'uppercase', color: '#fff', lineHeight: 1 }}>Most Popular Packages</div>
+            <p style={{ fontFamily: 'Barlow', fontSize: 13, color: '#555', marginTop: 8 }}>Our most popular livestream packages for events &amp; corporate. Sports, Systems &amp; Broadcast are quoted individually.</p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+            <a href="assets/overdrive-live-rate-card.pdf" download="OverDrive Live Rate Card.pdf"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'Blue Highway', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: accent, border: `1.5px solid ${accent}`, borderRadius: 4, padding: '9px 16px', textDecoration: 'none', whiteSpace: 'nowrap', transition: 'background .15s, color .15s' }}
+              onMouseEnter={e => { e.currentTarget.style.background = accent; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = accent; }}>
+              <svg width="11" height="13" viewBox="0 0 14 16" fill="none"><path d="M7 1v9M3 7l4 4 4-4M2 13h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Download Rate Card
+            </a>
+            <button onClick={onClose} style={{ width: 36, height: 36, borderRadius: 4, border: '1px solid #2a2a2a', background: '#111', color: '#666', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'color .15s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+              onMouseLeave={e => e.currentTarget.style.color = '#666'}>
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Package cards */}
+        <div style={{ padding: '32px 40px' }}>
+          <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2, marginBottom: 2 }}>
+            {PACKAGES.map((pkg, i) => (
+              <div key={i} style={{ position: 'relative', background: pkg.highlight ? '#141414' : '#0A0A0A', border: `1px solid ${pkg.highlight ? accent + '40' : '#1a1a1a'}`, padding: '32px 28px 28px', display: 'flex', flexDirection: 'column' }}>
+                {pkg.highlight && <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: accent }} />}
+                {pkg.highlight && <div style={{ position: 'absolute', top: 14, right: 14, fontFamily: 'Barlow', fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent, background: `rgba(196,30,30,0.12)`, border: `1px solid rgba(196,30,30,0.25)`, borderRadius: 2, padding: '3px 8px' }}>Most Popular</div>}
+                <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#444', marginBottom: 8 }}>{pkg.duration} · {pkg.cameras} Cam{pkg.cameras > 1 ? 's' : ''}</div>
+                <div style={{ fontFamily: 'Blue Highway', fontSize: 20, fontWeight: 700, textTransform: 'uppercase', color: '#fff', marginBottom: 4 }}>{pkg.name}</div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 24 }}>
+                  <span style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 600, color: '#555', letterSpacing: '0.06em', textTransform: 'uppercase' }}>From</span>
+                  <span style={{ fontFamily: 'Blue Highway', fontSize: 36, fontWeight: 700, color: pkg.highlight ? accent : '#fff', lineHeight: 1 }}>{pkg.from}</span>
+                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: 9, flex: 1 }}>
+                  {pkg.inclusions.map((item, j) => (
+                    <li key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ width: 15, height: 15, borderRadius: 2, background: pkg.highlight ? `rgba(196,30,30,0.15)` : '#1a1a1a', border: `1px solid ${pkg.highlight ? accent + '50' : '#2a2a2a'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <svg width="7" height="6" viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke={pkg.highlight ? accent : '#555'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </div>
+                      <span style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', lineHeight: 1.4 }}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a href="#contact" onClick={e => { e.preventDefault(); onClose(); setTimeout(() => { const el = document.getElementById('contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 200); }}
+                  style={{ display: 'block', textAlign: 'center', fontFamily: 'Blue Highway', fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '10px 0', borderRadius: 4, border: `1.5px solid ${pkg.highlight ? accent : '#2a2a2a'}`, background: pkg.highlight ? accent : 'transparent', color: pkg.highlight ? '#fff' : '#555', textDecoration: 'none', cursor: 'pointer', transition: 'all .15s' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = accent; e.currentTarget.style.borderColor = accent; e.currentTarget.style.color = '#fff'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = pkg.highlight ? accent : 'transparent'; e.currentTarget.style.borderColor = pkg.highlight ? accent : '#2a2a2a'; e.currentTarget.style.color = pkg.highlight ? '#fff' : '#555'; }}>
+                  Get a Quote
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Quote-only strip */}
+          <div className="pricing-quote-strip" style={{ background: '#080808', border: '1px solid #1a1a1a', borderTop: 'none', padding: '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+              <span style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#444' }}>Quote Only</span>
+              {QUOTE_ONLY.map((name, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#333' }} />
+                  <span style={{ fontFamily: 'Barlow', fontSize: 13, color: '#555' }}>{name}</span>
+                </div>
+              ))}
+            </div>
+            <span style={{ fontFamily: 'Barlow', fontSize: 12, color: '#444' }}>Scoped individually — contact us for a tailored quote.</span>
+          </div>
+
+          <p style={{ fontFamily: 'Barlow', fontSize: 11, color: '#2e2e2e', lineHeight: 1.7 }}>
+            * Prices are starting-from rates for standard metro Adelaide venues. Travel, multi-day, and interstate events quoted separately. Prices are not inclusive of GST. Download the rate card for a full breakdown.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ContactSection = ({ accent }) => {
   const [sentGeneral, setSentGeneral] = useState(false);
+  const [generalError, setGeneralError] = useState(false);
   const [sentDetailed, setSentDetailed] = useState(false);
   const [detailedError, setDetailedError] = useState(false);
   const [activeService, setActiveService] = useState('corporate');
-  const [cameras, setCameras] = useState(3);
-  const [graphics, setGraphics] = useState(false);
+  const [cameras, setCameras] = useState(2);
+  const [graphics, setGraphics] = useState(true);
   const [videoPlayback, setVideoPlayback] = useState(false);
   const [clientFeed, setClientFeed] = useState(false);
   const [audio, setAudio] = useState('ours');
@@ -1255,7 +1385,7 @@ const ContactSection = ({ accent }) => {
   if (graphics) included.push('Graphics');
   if (videoPlayback) included.push('Playback');
   if (clientFeed) included.push('Client Feed');
-  included.push(audio === 'ours' ? 'Our Audio' : audio === 'client' ? 'Client Audio' : 'Hybrid Audio');
+  included.push(audio === 'ours' ? 'Our Team Audio' : audio === 'client' ? 'Your Team Audio' : 'Hybrid Audio');
 
   const SuccessTick = ({ msg }) => (
     <div style={{ padding: '40px', textAlign: 'center', border: '1px solid #1e1e1e', borderRadius: 4 }}>
@@ -1297,14 +1427,17 @@ const ContactSection = ({ accent }) => {
           <div className="reveal-zoom" style={{ background: '#0D0D0D', border: '1px solid #1a1a1a', borderRadius: '4px 0 0 0', padding: '40px' }}>
             <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 6 }}>General Enquiry</div>
             <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>Quick Question</div>
-            {sentGeneral ? <SuccessTick msg="We'll reply within 24 hours." /> : (
+            {sentGeneral ? <SuccessTick msg="Thanks for contacting us, we will get back to you ASAP." /> : (
               <form onSubmit={async e => {
                 e.preventDefault();
-                const res = await fetch('https://formspree.io/f/mjgjdabw', {
-                  method: 'POST', headers: { 'Accept': 'application/json' },
-                  body: new FormData(e.target)
-                });
-                if (res.ok) setSentGeneral(true);
+                setGeneralError(false);
+                try {
+                  const res = await fetch('https://formspree.io/f/mjgjdabw', {
+                    method: 'POST', headers: { 'Accept': 'application/json' },
+                    body: new FormData(e.target)
+                  });
+                  if (res.ok) { setSentGeneral(true); } else { setGeneralError(true); }
+                } catch { setGeneralError(true); }
               }} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <input name="name" style={inp} placeholder="Your Name" required />
@@ -1312,6 +1445,7 @@ const ContactSection = ({ accent }) => {
                 </div>
                 <input name="organisation" style={inp} placeholder="Organisation" />
                 <textarea name="message" rows={5} style={{ ...inp, resize: 'vertical' }} placeholder="Tell us about your event, or ask us anything." />
+                {generalError && <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#e05555' }}>Something went wrong — please try again or email us at contact@overdrivefilms.com</div>}
                 <button type="submit" className="btn-primary" style={{ alignSelf: 'flex-start', padding: '12px 28px', fontSize: 12, background: accent }}>Send Enquiry</button>
               </form>
             )}
@@ -1321,13 +1455,13 @@ const ContactSection = ({ accent }) => {
           <div className="reveal-zoom d2" style={{ background: '#111', border: '1px solid #1a1a1a', borderLeft: 'none', borderRadius: '0 4px 0 0', padding: '40px' }}>
             <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 6 }}>Detailed Quote</div>
             <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>Build Your Production</div>
-            {sentDetailed ? <SuccessTick msg="We'll respond with a tailored plan within 24 hours." /> : (
+            {sentDetailed ? <SuccessTick msg="Thanks for contacting us, we will get back to you ASAP." /> : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 {/* Service */}
                 <div>
                   <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Service Type</div>
                   <div style={{ position: 'relative' }}>
-                    <select value={activeService} onChange={e => { setActiveService(e.target.value); setCameras(3); setGraphics(false); setVideoPlayback(false); setClientFeed(false); setAudio('ours'); }}
+                    <select value={activeService} onChange={e => { setActiveService(e.target.value); setCameras(2); setGraphics(true); setVideoPlayback(false); setClientFeed(false); setAudio('ours'); }}
                       style={{ ...inp, appearance: 'none', paddingRight: 36, cursor: 'pointer', fontWeight: 600 }}>
                       {Object.entries(SERVICE_DATA).map(([key, s]) => <option key={key} value={key}>{s.label} — {s.tagline}</option>)}
                     </select>
@@ -1348,13 +1482,13 @@ const ContactSection = ({ accent }) => {
                 <div style={{ border: '1px solid #1e1e1e', borderRadius: 4, padding: '0 14px' }}>
                   <Toggle label="Graphics Package" sublabel="Lower thirds, titles, bugs" value={graphics} onChange={setGraphics} />
                   <Toggle label="Video Playback" sublabel="Pre-roll / interstitials" value={videoPlayback} onChange={setVideoPlayback} />
-                  <Toggle label="Client Feed Input" sublabel="HDMI or SDI ingest" value={clientFeed} onChange={setClientFeed} />
+                  <Toggle label="Computer or Feed Input" sublabel="HDMI or SDI ingest from your system" value={clientFeed} onChange={setClientFeed} />
                 </div>
                 {/* Audio */}
                 <div>
-                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Audio</div>
+                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Livestream Audio Input</div>
                   <div style={{ display: 'flex', gap: 6 }}>
-                    {[['ours','Our Team'],['client','Client'],['hybrid','Hybrid']].map(([val, lbl]) => (
+                    {[['ours','Our Team'],['client','Your Team'],['hybrid','Hybrid']].map(([val, lbl]) => (
                       <button type="button" key={val} onClick={() => setAudio(val)}
                         style={{ flex: 1, padding: '8px 4px', borderRadius: 4, border: `1.5px solid ${audio === val ? accent : '#222'}`, background: audio === val ? `rgba(196,30,30,0.1)` : '#0D0D0D', color: audio === val ? accent : '#444', fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>{lbl}</button>
                     ))}
@@ -1374,7 +1508,7 @@ const ContactSection = ({ accent }) => {
                     data.append('cameras', cameras);
                     data.append('graphics_package', graphics ? 'Yes' : 'No');
                     data.append('video_playback', videoPlayback ? 'Yes' : 'No');
-                    data.append('client_feed_input', clientFeed ? 'Yes' : 'No');
+                    data.append('computer_or_feed_input', clientFeed ? 'Yes' : 'No');
                     data.append('audio', audio);
                     const res = await fetch('https://formspree.io/f/xaqazpwb', {
                       method: 'POST', headers: { 'Accept': 'application/json' }, body: data
@@ -1428,12 +1562,27 @@ const Footer = () =>
             <span style={{ fontFamily: 'Barlow', fontSize: 11, color: '#777' }}>Adelaide, SA, Australia</span>
           </div>
         </div>
-        {[['Services', ['Corporate', 'Event', 'Sport', 'Broadcast']], ['Company', ['About', 'Team', 'Portfolio', 'Contact']], ['Contact', ['info@overdrivefilms.com', 'Adelaide, SA']]].map(([h, ls]) =>
-      <div key={h}>
-            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>{h}</div>
-            {ls.map((l) => <div key={l} style={{ marginBottom: 8 }}><a href="#" style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', textDecoration: 'none' }}>{l}</a></div>)}
+        <div>
+          <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>Services</div>
+          {['Corporate', 'Event', 'Sport', 'Broadcast', 'Hire & System Building', 'Consulting'].map(l =>
+            <div key={l} style={{ marginBottom: 8, fontFamily: 'Barlow', fontSize: 12, color: '#777' }}>{l}</div>
+          )}
+        </div>
+        <div>
+          <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>Company</div>
+          {[['Services','#services'],['About','#about'],['Films','https://www.overdrivefilms.com'],['Contact','#contact']].map(([label, href]) =>
+            <div key={label} style={{ marginBottom: 8 }}>
+              <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined} style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', textDecoration: 'none' }}>{label}</a>
+            </div>
+          )}
+        </div>
+        <div>
+          <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>Contact</div>
+          <div style={{ marginBottom: 8 }}>
+            <a href="mailto:contact@overdrivefilms.com" style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', textDecoration: 'none' }}>contact@overdrivefilms.com</a>
           </div>
-      )}
+          <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777' }}>Adelaide, SA, Australia</div>
+        </div>
       </div>
       <div style={{ borderTop: '1px solid #111', paddingTop: 18, display: 'flex', justifyContent: 'space-between' }}>
         <span style={{ fontFamily: 'Barlow', fontSize: 11, color: '#555' }}>© 2026 OverDrive Live. All rights reserved.</span>
@@ -1513,6 +1662,7 @@ const BookModal = ({ onClose, accent }) => {
 const App = () => {
   const [showreel, setShowreel] = useState(false);
   const [activeService, setActiveService] = useState(null);
+  const [showPricing, setShowPricing] = useState(false);
   const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const accent = tweaks.accentColor;
 
@@ -1520,13 +1670,14 @@ const App = () => {
     <>
       <Header tweaks={tweaks} />
       <Hero onShowreel={() => setShowreel(true)} tweaks={tweaks} />
-      <Services onServiceClick={setActiveService} accent={accent} />
+      <Services onServiceClick={setActiveService} onPricingOpen={() => setShowPricing(true)} accent={accent} />
       <Team accent={accent} />
       <Testimonials accent={accent} />
       <ContactSection accent={accent} />
       <Footer />
 
       {activeService && <ServiceModal service={activeService} onClose={() => setActiveService(null)} accent={accent} />}
+      {showPricing && <PricingModal onClose={() => setShowPricing(false)} accent={accent} />}
       {showreel && <ShowreelModal onClose={() => setShowreel(false)} />}
 
       <TweaksPanel>
