@@ -3,7 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OverDrive Live — Professional Live Streaming</title>
+  <title>OverDrive Live — Live Streaming &amp; Broadcast Production Adelaide</title>
+  <meta name="description" content="Adelaide's live streaming specialists. Corporate events, sport, graduations &amp; concerts streamed professionally across SA and Australia. Get a quote today.">
+  <meta name="keywords" content="live streaming Adelaide, event live stream Adelaide, broadcast production South Australia, corporate live streaming Adelaide, multi-camera production SA">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://overdrivelive.com.au/">
+  <meta name="theme-color" content="#C41E1E">
+  <meta name="geo.region" content="AU-SA">
+  <meta name="geo.placename" content="Adelaide, South Australia">
+  <meta name="geo.position" content="-34.9285;138.6007">
+  <meta name="ICBM" content="-34.9285, 138.6007">
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico">
+  <link rel="shortcut icon" href="assets/logo-square.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-square.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/logo-square.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-square.png">
+
+  <!-- Font preload -->
+  <link rel="preload" href="fonts/blue_highway_cd.ttf" as="font" type="font/ttf" crossorigin>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RYB6B83FJ5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RYB6B83FJ5');
+  </script>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="OverDrive Live">
+  <meta property="og:title" content="OverDrive Live — Live Streaming &amp; Broadcast Production Adelaide">
+  <meta property="og:description" content="Adelaide's live streaming specialists. Corporate events, sport, graduations &amp; concerts streamed professionally across SA and Australia.">
+  <meta property="og:url" content="https://overdrivelive.com.au/">
+  <meta property="og:image" content="https://overdrivelive.com.au/assets/hero-bg.jpg">
+  <meta property="og:locale" content="en_AU">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OverDrive Live — Live Streaming &amp; Broadcast Production Adelaide">
+  <meta name="twitter:description" content="Adelaide's live streaming specialists. Corporate events, sport, graduations &amp; concerts streamed professionally across SA and Australia.">
+  <meta name="twitter:image" content="https://overdrivelive.com.au/assets/hero-bg.jpg">
+
+  <!-- JSON-LD LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "OverDrive Live",
+    "url": "https://overdrivelive.com.au/",
+    "telephone": "+61435117352",
+    "email": "contact@overdrivefilms.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Adelaide",
+      "addressRegion": "SA",
+      "addressCountry": "AU"
+    },
+    "areaServed": ["Adelaide", "South Australia", "Australia"],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Live Streaming Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Corporate Live Streaming Adelaide" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Event Live Streaming Adelaide" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sport Live Streaming South Australia" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Broadcast Production Adelaide" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AV Systems Integration Adelaide" } }
+      ]
+    },
+    "sameAs": ["https://www.instagram.com/overdrive__live/"]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -423,9 +498,92 @@ Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSli
       background:#fff; border-radius:50%; transition:transform .2s;
       box-shadow:0 1px 4px rgba(0,0,0,0.2);
     }
+
+    /* ── Case Studies ── */
+    .case-studies-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+    }
+    @media(max-width:1024px){ .case-studies-grid{ grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:768px){ .case-studies-grid{ grid-template-columns:1fr; } }
+
+    .cs-card {
+      background:#141414; border:1px solid #1e1e1e; border-radius:4px;
+      overflow:hidden; transition:transform .2s, box-shadow .2s;
+      border-top:2px solid transparent;
+    }
+    .cs-card:hover {
+      transform:translateY(-4px); box-shadow:0 12px 32px rgba(0,0,0,0.5);
+      border-top-color:#C41E1E;
+    }
+    .cs-card-inner { padding:24px; }
+    .cs-badge {
+      display:inline-block; padding:3px 10px; border:1px solid #2a2a2a;
+      border-radius:2px; font-family:Barlow,sans-serif; font-size:10px;
+      font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#888;
+      margin-bottom:12px;
+    }
+    .cs-stat-row {
+      display:flex; gap:16px; margin-top:18px; padding-top:16px;
+      border-top:1px solid #1e1e1e;
+    }
+    .cs-stat {
+      flex:1; display:flex; flex-direction:column; gap:3px;
+    }
+    .cs-stat-val {
+      font-family:'Blue Highway',Barlow,sans-serif; font-size:16px; font-weight:700;
+      color:#fff;
+    }
+    .cs-stat-lbl {
+      font-family:Barlow,sans-serif; font-size:10px; color:#555;
+      text-transform:uppercase; letter-spacing:.06em;
+    }
+
+    /* ── FAQ ── */
+    .faq-item { border-bottom:1px solid #1a1a1a; }
+    .faq-btn {
+      width:100%; background:none; border:none; cursor:pointer;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:20px 0; text-align:left; gap:16px;
+    }
+    .faq-q {
+      font-family:Barlow,sans-serif; font-size:16px; font-weight:600;
+      color:#fff; line-height:1.35;
+    }
+    .faq-icon {
+      flex-shrink:0; width:22px; height:22px; border:1px solid #333; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      color:#888; font-size:14px; transition:transform .25s, border-color .25s;
+    }
+    .faq-icon.open { transform:rotate(45deg); border-color:#C41E1E; color:#C41E1E; }
+    .faq-answer {
+      overflow:hidden; transition:max-height .3s ease, opacity .3s ease;
+      opacity:0;
+    }
+    .faq-answer.open { opacity:1; }
+    .faq-answer-inner {
+      font-family:Barlow,sans-serif; font-size:14px; color:#888; line-height:1.7;
+      padding-bottom:20px;
+    }
+
+    /* ── Social Icons ── */
+    .social-icon-link {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:34px; height:34px; border:1px solid #444; border-radius:4px;
+      color:#aaa; transition:color .15s, border-color .15s, background .15s;
+    }
+    .social-icon-link:hover { color:#fff; border-color:#C41E1E; background:rgba(196,30,30,0.12); }
   </style>
 </head>
 <body>
+<noscript>
+  <div style="font-family:sans-serif;max-width:640px;margin:80px auto;padding:0 24px;color:#333">
+    <h1>OverDrive Live — Live Streaming &amp; Broadcast Production Adelaide</h1>
+    <p>OverDrive Live is Adelaide's professional live streaming and broadcast production company. We deliver flawless live streams for corporate events, graduations, sport, concerts, and more across South Australia and Australia.</p>
+    <p><strong>Services:</strong> Corporate Live Streaming · Event Live Streaming · Sport Broadcasting · Multi-Camera Production · AV Systems Integration · Consulting</p>
+    <p><strong>Phone:</strong> 0435 117 352 &nbsp;|&nbsp; <strong>Email:</strong> contact@overdrivefilms.com &nbsp;|&nbsp; <strong>Location:</strong> Adelaide, SA, Australia</p>
+    <p>Packages start from $1,000. <a href="mailto:contact@overdrivefilms.com">Contact us</a> for a quote.</p>
+  </div>
+</noscript>
 <div id="root"></div>
 <script type="text/babel">
 
@@ -538,9 +696,11 @@ const Header = ({ onBook, tweaks }) => {
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <LogoEl />
           <nav className="nav-desktop" style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
-            {['Services','About'].map((l) =>
-              <a key={l} href={l === 'About' ? '#about' : `#${l.toLowerCase()}`} className="nav-link-light" style={linkStyle}>{l}</a>
+            {[['Services','#services'],['About','#about']].map((l) =>
+              <a key={l[0]} href={l[0] === 'About' ? '#about' : `#${l[0].toLowerCase()}`} className="nav-link-light" style={linkStyle}>{l[0]}</a>
             )}
+            <a href="work.html" className="nav-link-light" style={linkStyle}>Work</a>
+            <a href="work.html#faq" className="nav-link-light" style={linkStyle}>FAQ</a>
             <a href="https://www.overdrivefilms.com" target="_blank" rel="noopener noreferrer"
               style={{ ...linkStyle, color: '#C47000', transition: 'color .15s' }}
               onMouseEnter={e => e.currentTarget.style.color = '#D98000'}
@@ -559,6 +719,8 @@ const Header = ({ onBook, tweaks }) => {
       <div className={`mob-menu${menuOpen ? ' open' : ''}`}>
         <a href="#services" className="nav-link-light" onClick={() => scrollTo('services')}>Services</a>
         <a href="#about" className="nav-link-light" onClick={() => scrollTo('about')}>About</a>
+        <a href="work.html" className="nav-link-light">Work</a>
+        <a href="work.html#faq" className="nav-link-light">FAQ</a>
         <a href="https://www.overdrivefilms.com" target="_blank" rel="noopener noreferrer" onClick={closeMenu} style={{ color: '#C47000' }}>Films</a>
         <a href="#contact" className="nav-link-light" onClick={() => scrollTo('contact')}>Contact</a>
         <div className="mob-cta">
@@ -590,7 +752,7 @@ const Hero = ({ onShowreel, onBook, tweaks }) => {
   }, []);
 
   return (
-    <section style={{ position: 'relative', width: '100%', height: '100vh', minHeight: 720, overflow: 'hidden', display: 'flex', alignItems: 'flex-end' }}>
+    <section style={{ position: 'relative', width: '100%', height: '100vh', minHeight: 760, overflow: 'hidden', display: 'flex', alignItems: 'flex-end' }}>
       {/* Full-screen background image */}
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url("assets/hero-bg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
       {/* Dark overlay for legibility */}
@@ -621,7 +783,7 @@ const Hero = ({ onShowreel, onBook, tweaks }) => {
       {/* Content — padded top to clear nav */}
       <div className="section-inner" style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 40px', width: '100%', paddingBottom: 80, paddingTop: 68 }}>
         <div style={{ maxWidth: 700 }}>
-          <h1 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(54px,8.5vw,108px)', fontWeight: 700, textTransform: 'uppercase', lineHeight: 0.9, letterSpacing: '-0.02em', color: '#fff', marginBottom: 18, animation: 'fade-up .7s .2s both' }}>
+          <h1 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(54px,6.5vw,96px)', fontWeight: 700, textTransform: 'uppercase', lineHeight: 0.9, letterSpacing: '-0.02em', color: '#fff', marginBottom: 18, animation: 'fade-up .7s .2s both' }}>
             Your Event<br />
             <span style={{ color: accent }}>Live</span><br />
             Flawless
@@ -1025,8 +1187,8 @@ const Services = ({ onServiceClick, onPricingOpen, accent }) => {
    TEAM
 ══════════════════════════════════════════ */
 const TEAM = [
-{ name: 'Alex Parrish', role: 'Director of Photography', type: 'full', bio: 'Co-founder. 10+ years in live broadcast. Led production for State Athletics, Adelaide Tech Summit, and dozens of corporate events across SA.' },
-{ name: 'Jordan Keane', role: 'Technical Director', type: 'full', bio: 'Co-founder. Broadcast engineering specialist. Oversees all systems — switching, encoding, networking, and signal flow for every production.' },
+{ name: 'Joseph Clarke', role: 'Director of Photography', type: 'full', bio: 'Co-founder. 10+ years in live broadcast. Led production for State Athletics, Adelaide Tech Summit, and dozens of corporate events across SA.' },
+{ name: 'Jack Bennett', role: 'Technical Director', type: 'full', bio: 'Co-founder. Broadcast engineering specialist. Oversees all systems — switching, encoding, networking, and signal flow for every production.' },
 { name: 'Sam Rivers', role: 'Camera Operator', type: 'contractor', bio: 'Handheld and action specialist. 6 years in sports broadcast and live event coverage.' },
 { name: 'Mia Chen', role: 'Audio Engineer', type: 'contractor', bio: 'Broadcast audio specialist. RF, mix, and IEM integration with FOH teams.' },
 { name: 'Tyler Cross', role: 'Graphics & Motion', type: 'contractor', bio: 'Live graphics packages — scoreboard skins to animated broadcast opens.' },
@@ -1349,6 +1511,14 @@ const PricingModal = ({ onClose, accent }) => {
           <p style={{ fontFamily: 'Barlow', fontSize: 11, color: '#2e2e2e', lineHeight: 1.7 }}>
             * Prices are starting-from rates for standard metro Adelaide venues. Travel, multi-day, and interstate events quoted separately. Prices are not inclusive of GST. Download the rate card for a full breakdown.
           </p>
+          <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #141414', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <span style={{ fontFamily: 'Barlow', fontSize: 12, color: '#444' }}>Have questions about what's included?</span>
+            <a href="work.html#faq" style={{ fontFamily: 'Barlow', fontSize: 12, fontWeight: 600, color: '#C41E1E', textDecoration: 'none' }}
+              onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+              onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}>
+              Read our FAQ →
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -1416,8 +1586,17 @@ const ContactSection = ({ accent }) => {
           <h2 className="reveal" style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(40px,6.5vw,84px)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.02em', color: '#fff', lineHeight: 0.92, marginBottom: 20 }}>
             Your Event Deserves<br /><span style={{ color: accent }}>Broadcast Quality.</span>
           </h2>
-          <p className="reveal" style={{ fontFamily: 'Barlow', fontSize: 17, fontWeight: 300, color: '#888', maxWidth: 420, lineHeight: 1.65, margin: '0 auto' }}>
+          <p className="reveal" style={{ fontFamily: 'Barlow', fontSize: 17, fontWeight: 300, color: '#888', maxWidth: 420, lineHeight: 1.65, margin: '0 auto 16px' }}>
             Tell us about your event and we'll come back within 24 hours.
+          </p>
+          <p className="reveal" style={{ fontFamily: 'Barlow', fontSize: 13, color: '#555', margin: '0 auto' }}>
+            Not sure yet?{' '}
+            <a href="work.html#faq" style={{ color: '#C41E1E', textDecoration: 'none', fontWeight: 600 }}
+              onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+              onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}>
+              Read our FAQ
+            </a>
+            {' '}for answers to common questions about pricing, equipment, and what to expect.
           </p>
         </div>
 
@@ -1550,6 +1729,18 @@ const ContactSection = ({ accent }) => {
 /* ══════════════════════════════════════════
    FOOTER
 ══════════════════════════════════════════ */
+const SocialIcons = () => (
+  <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+    <a href="https://www.instagram.com/overdrive__live/" target="_blank" rel="noopener noreferrer" className="social-icon-link" aria-label="Instagram">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="5"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+  </div>
+);
+
 const Footer = () =>
 <footer style={{ background: '#060606', borderTop: '1px solid #111', padding: '48px 0 24px' }}>
     <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
@@ -1561,6 +1752,7 @@ const Footer = () =>
             <span style={{ width: 5, height: 5, background: '#C41E1E', borderRadius: '50%', display: 'inline-block' }} />
             <span style={{ fontFamily: 'Barlow', fontSize: 11, color: '#777' }}>Adelaide, SA, Australia</span>
           </div>
+          <SocialIcons />
         </div>
         <div>
           <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>Services</div>
@@ -1570,7 +1762,7 @@ const Footer = () =>
         </div>
         <div>
           <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>Company</div>
-          {[['Services','#services'],['About','#about'],['Films','https://www.overdrivefilms.com'],['Contact','#contact']].map(([label, href]) =>
+          {[['Services','#services'],['About','#about'],['Work','work.html'],['FAQ','work.html#faq'],['Films','https://www.overdrivefilms.com'],['Contact','#contact'],['Privacy Policy','privacy.html']].map(([label, href]) =>
             <div key={label} style={{ marginBottom: 8 }}>
               <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined} style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', textDecoration: 'none' }}>{label}</a>
             </div>
@@ -1580,6 +1772,9 @@ const Footer = () =>
           <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>Contact</div>
           <div style={{ marginBottom: 8 }}>
             <a href="mailto:contact@overdrivefilms.com" style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', textDecoration: 'none' }}>contact@overdrivefilms.com</a>
+          </div>
+          <div style={{ marginBottom: 8 }}>
+            <a href="tel:+61435117352" style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', textDecoration: 'none' }}>0435 117 352</a>
           </div>
           <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777' }}>Adelaide, SA, Australia</div>
         </div>
