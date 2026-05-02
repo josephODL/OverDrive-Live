@@ -1529,6 +1529,7 @@ const PricingModal = ({ onClose, accent }) => {
 };
 
 const ContactSection = ({ accent }) => {
+  const [formTab, setFormTab] = useState('general');
   const [sentGeneral, setSentGeneral] = useState(false);
   const [generalError, setGeneralError] = useState(false);
   const [sentDetailed, setSentDetailed] = useState(false);
@@ -1574,10 +1575,6 @@ const ContactSection = ({ accent }) => {
     <section id="contact" style={{ position: 'relative', background: '#0A0A0A', padding: '100px 0 0', overflow: 'hidden' }}>
       <SpeedCanvas />
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${accent} 35%, ${accent} 70%, transparent)` }} />
-      {/* Ghost wordmark */}
-      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', overflow: 'hidden' }}>
-        <div style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(80px,14vw,180px)', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(255,255,255,0.018)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>GO LIVE</div>
-      </div>
 
       <div className="section-inner" style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
         {/* Headline */}
@@ -1603,116 +1600,125 @@ const ContactSection = ({ accent }) => {
           </p>
         </div>
 
-        {/* Two-column forms */}
-        <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 0 }}>
-          {/* General Enquiry */}
-          <div className="reveal-zoom" style={{ background: '#0D0D0D', border: '1px solid #1a1a1a', borderRadius: '4px 0 0 0', padding: '40px' }}>
-            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 6 }}>General Enquiry</div>
-            <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>Quick Question</div>
-            {sentGeneral ? <SuccessTick msg="Thanks for contacting us, we will get back to you ASAP." /> : (
-              <form onSubmit={async e => {
-                e.preventDefault();
-                setGeneralError(false);
-                try {
-                  const res = await fetch('https://formspree.io/f/mjgjdabw', {
-                    method: 'POST', headers: { 'Accept': 'application/json' },
-                    body: new FormData(e.target)
-                  });
-                  if (res.ok) { setSentGeneral(true); } else { setGeneralError(true); }
-                } catch { setGeneralError(true); }
-              }} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                  <input name="name" style={inp} placeholder="Your Name" required />
-                  <input name="email" type="email" style={inp} placeholder="Email" required />
-                </div>
-                <input name="organisation" style={inp} placeholder="Organisation" />
-                <textarea name="message" rows={5} style={{ ...inp, resize: 'vertical' }} placeholder="Tell us about your event, or ask us anything." />
-                {generalError && <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#e05555' }}>Something went wrong — please try again or email us at contact@overdrivefilms.com</div>}
-                <button type="submit" className="btn-primary" style={{ alignSelf: 'flex-start', padding: '12px 28px', fontSize: 12, background: accent }}>Send Enquiry</button>
-              </form>
-            )}
+        {/* Tab toggle */}
+        <div className="reveal" style={{ display: 'flex', justifyContent: 'center', marginBottom: 32 }}>
+          <div style={{ display: 'inline-flex', background: '#111', border: '1px solid #1a1a1a', borderRadius: 4, padding: 4 }}>
+            {[['general','General Enquiry'],['detailed','Detailed Quote']].map(([key, label]) => (
+              <button key={key} onClick={() => setFormTab(key)} style={{ padding: '11px 28px', borderRadius: 3, border: 'none', cursor: 'pointer', fontFamily: 'Barlow', fontSize: 12, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', background: formTab === key ? accent : 'transparent', color: formTab === key ? '#fff' : '#555', transition: 'all .2s' }}>{label}</button>
+            ))}
           </div>
+        </div>
 
-          {/* Detailed Quote */}
-          <div className="reveal-zoom d2" style={{ background: '#111', border: '1px solid #1a1a1a', borderLeft: 'none', borderRadius: '0 4px 0 0', padding: '40px' }}>
-            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 6 }}>Detailed Quote</div>
-            <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>Build Your Production</div>
-            {sentDetailed ? <SuccessTick msg="Thanks for contacting us, we will get back to you ASAP." /> : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                {/* Service */}
-                <div>
-                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Service Type</div>
-                  <div style={{ position: 'relative' }}>
-                    <select value={activeService} onChange={e => { setActiveService(e.target.value); setCameras(2); setGraphics(true); setVideoPlayback(false); setClientFeed(false); setAudio('ours'); }}
-                      style={{ ...inp, appearance: 'none', paddingRight: 36, cursor: 'pointer', fontWeight: 600 }}>
-                      {Object.entries(SERVICE_DATA).map(([key, s]) => <option key={key} value={key}>{s.label} — {s.tagline}</option>)}
-                    </select>
-                    <svg style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="11" height="7" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#555" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                  </div>
-                </div>
-                {/* Cameras */}
-                <div>
-                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Cameras</div>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    {[1,2,3,4,5,6].map(n => (
-                      <button type="button" key={n} onClick={() => setCameras(n)}
-                        style={{ width: 38, height: 36, borderRadius: 4, border: `1.5px solid ${cameras === n ? accent : '#222'}`, background: cameras === n ? `rgba(196,30,30,0.12)` : '#0D0D0D', color: cameras === n ? accent : '#444', fontFamily: 'Blue Highway', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}>{n}</button>
-                    ))}
-                  </div>
-                </div>
-                {/* Toggles */}
-                <div style={{ border: '1px solid #1e1e1e', borderRadius: 4, padding: '0 14px' }}>
-                  <Toggle label="Graphics Package" sublabel="Lower thirds, titles, bugs" value={graphics} onChange={setGraphics} />
-                  <Toggle label="Video Playback" sublabel="Pre-roll / interstitials" value={videoPlayback} onChange={setVideoPlayback} />
-                  <Toggle label="Computer or Feed Input" sublabel="HDMI or SDI ingest from your system" value={clientFeed} onChange={setClientFeed} />
-                </div>
-                {/* Audio */}
-                <div>
-                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Livestream Audio Input</div>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    {[['ours','Our Team'],['client','Your Team'],['hybrid','Hybrid']].map(([val, lbl]) => (
-                      <button type="button" key={val} onClick={() => setAudio(val)}
-                        style={{ flex: 1, padding: '8px 4px', borderRadius: 4, border: `1.5px solid ${audio === val ? accent : '#222'}`, background: audio === val ? `rgba(196,30,30,0.1)` : '#0D0D0D', color: audio === val ? accent : '#444', fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>{lbl}</button>
-                    ))}
-                  </div>
-                </div>
-                {/* Config tags */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {included.map((item, i) => <span key={i} style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 600, color: accent, background: `rgba(196,30,30,0.08)`, border: `1px solid rgba(196,30,30,0.2)`, borderRadius: 2, padding: '3px 9px' }}>{item}</span>)}
-                </div>
-                {/* Form */}
+        {/* Forms */}
+        <div style={{ maxWidth: 680, margin: '0 auto' }}>
+
+          {/* General Enquiry */}
+          {formTab === 'general' && (
+            <div style={{ background: '#0D0D0D', border: '1px solid #1a1a1a', borderRadius: 4, padding: '40px' }}>
+              <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 6 }}>General Enquiry</div>
+              <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>Quick Question</div>
+              {sentGeneral ? <SuccessTick msg="Thanks for contacting us, we will get back to you ASAP." /> : (
                 <form onSubmit={async e => {
                   e.preventDefault();
-                  setDetailedError(false);
+                  setGeneralError(false);
                   try {
-                    const data = new FormData(e.target);
-                    data.append('service', activeService);
-                    data.append('cameras', cameras);
-                    data.append('graphics_package', graphics ? 'Yes' : 'No');
-                    data.append('video_playback', videoPlayback ? 'Yes' : 'No');
-                    data.append('computer_or_feed_input', clientFeed ? 'Yes' : 'No');
-                    data.append('audio', audio);
-                    const res = await fetch('https://formspree.io/f/xaqazpwb', {
-                      method: 'POST', headers: { 'Accept': 'application/json' }, body: data
+                    const res = await fetch('https://formspree.io/f/mjgjdabw', {
+                      method: 'POST', headers: { 'Accept': 'application/json' },
+                      body: new FormData(e.target)
                     });
-                    if (res.ok) { setSentDetailed(true); } else { setDetailedError(true); }
-                  } catch { setDetailedError(true); }
+                    if (res.ok) { setSentGeneral(true); } else { setGeneralError(true); }
+                  } catch { setGeneralError(true); }
                 }} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     <input name="name" style={inp} placeholder="Your Name" required />
                     <input name="email" type="email" style={inp} placeholder="Email" required />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <input name="event_date" style={inp} type="date" />
-                    <input name="venue" style={inp} placeholder="Venue / Location" />
-                  </div>
-                  <textarea name="notes" rows={2} style={{ ...inp, resize: 'none' }} placeholder="Anything else…" />
-                  {detailedError && <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#e05555' }}>Something went wrong — please try again or email us directly at contact@overdrivefilms.com</div>}
-                  <button type="submit" className="btn-primary" style={{ padding: '12px 28px', fontSize: 12, background: accent }}>Send Quote Request</button>
+                  <input name="organisation" style={inp} placeholder="Organisation" />
+                  <textarea name="message" rows={5} style={{ ...inp, resize: 'vertical' }} placeholder="Tell us about your event, or ask us anything." />
+                  {generalError && <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#e05555' }}>Something went wrong — please try again or email us at contact@overdrivefilms.com</div>}
+                  <button type="submit" className="btn-primary" style={{ alignSelf: 'flex-start', padding: '12px 28px', fontSize: 12, background: accent }}>Send Enquiry</button>
                 </form>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
+
+          {/* Detailed Quote */}
+          {formTab === 'detailed' && (
+            <div style={{ background: '#0D0D0D', border: '1px solid #1a1a1a', borderRadius: 4, padding: '40px' }}>
+              <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 6 }}>Detailed Quote</div>
+              <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>Build Your Production</div>
+              {sentDetailed ? <SuccessTick msg="Thanks for contacting us, we will get back to you ASAP." /> : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                  <div>
+                    <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Service Type</div>
+                    <div style={{ position: 'relative' }}>
+                      <select value={activeService} onChange={e => { setActiveService(e.target.value); setCameras(2); setGraphics(true); setVideoPlayback(false); setClientFeed(false); setAudio('ours'); }}
+                        style={{ ...inp, appearance: 'none', paddingRight: 36, cursor: 'pointer', fontWeight: 600 }}>
+                        {Object.entries(SERVICE_DATA).map(([key, s]) => <option key={key} value={key}>{s.label} — {s.tagline}</option>)}
+                      </select>
+                      <svg style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="11" height="7" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#555" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Cameras</div>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      {[1,2,3,4,5,6].map(n => (
+                        <button type="button" key={n} onClick={() => setCameras(n)}
+                          style={{ width: 38, height: 36, borderRadius: 4, border: `1.5px solid ${cameras === n ? accent : '#222'}`, background: cameras === n ? `rgba(196,30,30,0.12)` : '#0A0A0A', color: cameras === n ? accent : '#444', fontFamily: 'Blue Highway', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}>{n}</button>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ border: '1px solid #1e1e1e', borderRadius: 4, padding: '0 14px' }}>
+                    <Toggle label="Graphics Package" sublabel="Lower thirds, titles, bugs" value={graphics} onChange={setGraphics} />
+                    <Toggle label="Video Playback" sublabel="Pre-roll / interstitials" value={videoPlayback} onChange={setVideoPlayback} />
+                    <Toggle label="Computer or Feed Input" sublabel="HDMI or SDI ingest from your system" value={clientFeed} onChange={setClientFeed} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Livestream Audio Input</div>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      {[['ours','Our Team'],['client','Your Team'],['hybrid','Hybrid']].map(([val, lbl]) => (
+                        <button type="button" key={val} onClick={() => setAudio(val)}
+                          style={{ flex: 1, padding: '8px 4px', borderRadius: 4, border: `1.5px solid ${audio === val ? accent : '#222'}`, background: audio === val ? `rgba(196,30,30,0.1)` : '#0A0A0A', color: audio === val ? accent : '#444', fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>{lbl}</button>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                    {included.map((item, i) => <span key={i} style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 600, color: accent, background: `rgba(196,30,30,0.08)`, border: `1px solid rgba(196,30,30,0.2)`, borderRadius: 2, padding: '3px 9px' }}>{item}</span>)}
+                  </div>
+                  <form onSubmit={async e => {
+                    e.preventDefault();
+                    setDetailedError(false);
+                    try {
+                      const data = new FormData(e.target);
+                      data.append('service', activeService);
+                      data.append('cameras', cameras);
+                      data.append('graphics_package', graphics ? 'Yes' : 'No');
+                      data.append('video_playback', videoPlayback ? 'Yes' : 'No');
+                      data.append('computer_or_feed_input', clientFeed ? 'Yes' : 'No');
+                      data.append('audio', audio);
+                      const res = await fetch('https://formspree.io/f/xaqazpwb', {
+                        method: 'POST', headers: { 'Accept': 'application/json' }, body: data
+                      });
+                      if (res.ok) { setSentDetailed(true); } else { setDetailedError(true); }
+                    } catch { setDetailedError(true); }
+                  }} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                      <input name="name" style={inp} placeholder="Your Name" required />
+                      <input name="email" type="email" style={inp} placeholder="Email" required />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                      <input name="event_date" style={inp} type="date" />
+                      <input name="venue" style={inp} placeholder="Venue / Location" />
+                    </div>
+                    <textarea name="notes" rows={2} style={{ ...inp, resize: 'none' }} placeholder="Anything else…" />
+                    {detailedError && <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#e05555' }}>Something went wrong — please try again or email us directly at contact@overdrivefilms.com</div>}
+                    <button type="submit" className="btn-primary" style={{ padding: '12px 28px', fontSize: 12, background: accent }}>Send Quote Request</button>
+                  </form>
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
 
         {/* Feature strip */}
