@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ — OverDrive Live Adelaide</title>
+  <meta name="description" content="Common questions about live streaming with OverDrive Live — Adelaide's broadcast production specialists. Pricing, equipment, and what to expect.">
+  <meta name="keywords" content="live streaming FAQ Adelaide, broadcast production Adelaide, how much does live streaming cost Adelaide, live stream equipment Adelaide">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://overdrivelive.com.au/faq/">
+  <meta name="theme-color" content="#C41E1E">
+  <meta name="geo.region" content="AU-SA">
+  <meta name="geo.placename" content="Adelaide, South Australia">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/logo-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/logo-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo-icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logo-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/logo-icon.png">
+
+  <!-- Font preload -->
+  <link rel="preload" href="/fonts/blue_highway_cd.ttf" as="font" type="font/ttf" crossorigin>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RYB6B83FJ5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RYB6B83FJ5');
+  </script>
+
+  <!-- JSON-LD FAQ structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How much does live streaming cost in Adelaide?", "acceptedAnswer": { "@type": "Answer", "text": "Our packages start from $1,000 for a single-camera one-hour stream, $2,000 for a standard two-camera two-hour production, and $2,500 for an advanced two-camera four-hour event. Sport, broadcast, and systems integration are quoted individually." } },
+      { "@type": "Question", "name": "What equipment do you use?", "acceptedAnswer": { "@type": "Answer", "text": "We shoot on Sony PXW-Z150 and Panasonic HC-X2000 cameras, switch vision with a Blackmagic ATEM series switcher, and use a LiveU Solo for bonded 4G/5G encoding. Audio is handled with Rode and Sennheiser wireless systems. All equipment is professional broadcast-grade." } },
+      { "@type": "Question", "name": "Can you stream to YouTube, Facebook Live, and other platforms simultaneously?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We can stream to any platform that accepts an RTMP endpoint — YouTube, Facebook Live, LinkedIn Live, Vimeo, Twitch, and custom RTMP destinations. Multi-platform simultaneous streaming is available on all packages." } },
+      { "@type": "Question", "name": "How far in advance should I book a live streaming crew in Adelaide?", "acceptedAnswer": { "@type": "Answer", "text": "For most corporate events and ceremonies, we recommend booking 2–4 weeks in advance. Large-scale multi-camera productions or events with complex AV requirements benefit from 4–8 weeks notice." } },
+      { "@type": "Question", "name": "Do you travel outside Adelaide for live streaming events?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. We cover all of South Australia and can travel interstate — travel and accommodation is quoted accordingly. We carry our own bonded 4G uplink, so remote venues without reliable fixed-line internet are no problem." } },
+      { "@type": "Question", "name": "What internet connection is needed for live streaming?", "acceptedAnswer": { "@type": "Answer", "text": "We recommend a minimum upload speed of 10 Mbps for a single-camera stream, and 20–30 Mbps for multi-camera productions. We carry a LiveU Solo bonded 4G/5G encoder as a backup on every job." } },
+      { "@type": "Question", "name": "Do you record the event as well as stream it?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — a master programme recording is included with every production. Isolated camera recordings (ISOs) are available on request. We can deliver files same-day for basic review or within 24–72 hours." } },
+      { "@type": "Question", "name": "Can you ingest our presenter slides or existing AV system?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We accept HDMI and SDI inputs and can mix presenter laptops, existing venue displays, or other AV feeds directly into the stream. We coordinate with your AV team during the pre-event run sheet." } },
+      { "@type": "Question", "name": "What happens if the internet goes down during the stream?", "acceptedAnswer": { "@type": "Answer", "text": "We run a LiveU Solo bonded 4G/5G encoder on every production, which aggregates multiple mobile connections for resilience. If a single connection drops, the encoder seamlessly switches load to the remaining connections." } },
+      { "@type": "Question", "name": "Do you offer same-day event edits?", "acceptedAnswer": { "@type": "Answer", "text": "Same-day edits are not part of our standard packages, but a highlights or condensed edit can be quoted separately with a 24–72 hour turnaround depending on the scope." } }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/colors_and_type.css">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    /* Reveal animations */
+    .reveal, .reveal-zoom {
+      opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal-zoom { transform: scale(0.96) translateY(16px); }
+    .reveal.visible, .reveal-zoom.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: .05s; }
+    .d2 { transition-delay: .15s; }
+    .d3 { transition-delay: .25s; }
+    .d4 { transition-delay: .35s; }
+    .d5 { transition-delay: .45s; }
+
+    /* Nav */
+    .nav-link-light { color: #fff; text-decoration: none; transition: color .15s; }
+    .nav-link-light:hover { color: #C41E1E; text-decoration: none; }
+    .nav-desktop { display: flex; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: all .25s; }
+    .mob-menu { display: none; position: fixed; inset: 0; top: 68px; background: rgba(10,10,10,.97); z-index: 199; flex-direction: column; align-items: flex-start; padding: 32px 32px 40px; gap: 0; }
+    .mob-menu.open { display: flex; }
+    .mob-menu a { font-family: Barlow, sans-serif; font-size: 22px; font-weight: 600; letter-spacing: .02em; color: #fff; text-decoration: none; padding: 14px 0; border-bottom: 1px solid #161616; width: 100%; }
+    .mob-menu a:hover { color: #C41E1E; }
+    .mob-cta { width: 100%; margin-top: 24px; }
+    @media(max-width:768px) {
+      .nav-desktop { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* Section label */
+    .section-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    @media(max-width:768px){ .section-inner { padding: 0 20px; } }
+
+    /* Buttons */
+    .btn-primary { font-family: Barlow, sans-serif; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: #C41E1E; color: #fff; border: none; border-radius: 3px; cursor: pointer; transition: background .15s; }
+    .btn-primary:hover { background: #991616; }
+
+    /* FAQ */
+    .faq-item { border-bottom: 1px solid #1a1a1a; }
+    .faq-btn { width: 100%; background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 20px 0; text-align: left; gap: 16px; }
+    .faq-q { font-family: Barlow,sans-serif; font-size: 16px; font-weight: 600; color: #fff; line-height: 1.35; }
+    .faq-icon { flex-shrink: 0; width: 22px; height: 22px; border: 1px solid #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #888; font-size: 14px; transition: transform .25s, border-color .25s; }
+    .faq-icon.open { transform: rotate(45deg); border-color: #C41E1E; color: #C41E1E; }
+    .faq-answer { overflow: hidden; transition: max-height .3s ease, opacity .3s ease; opacity: 0; }
+    .faq-answer.open { opacity: 1; }
+    .faq-answer-inner { font-family: Barlow,sans-serif; font-size: 14px; color: #888; line-height: 1.7; padding-bottom: 20px; }
+
+    /* Social icon */
+    .social-icon-link { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 1px solid #444; border-radius: 4px; color: #aaa; transition: color .15s, border-color .15s, background .15s; }
+    .social-icon-link:hover { color: #fff; border-color: #C41E1E; background: rgba(196,30,30,.12); }
+
+    /* Speed canvas */
+    .speed-canvas-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const accent = '#C41E1E';
+
+/* ── Scroll reveal ── */
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal,.reveal-zoom');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    els.forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
+/* ── SpeedCanvas (speed-line bg) ── */
+const SpeedCanvas = ({ style }) => {
+  const canvasRef = useRef(null);
+  useEffect(() => {
+    const canvas = canvasRef.current; if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let raf;
+    const lines = Array.from({ length: 60 }, () => ({
+      x: Math.random(), y: Math.random(), speed: 0.002 + Math.random() * 0.006,
+      len: 0.04 + Math.random() * 0.1, alpha: 0.04 + Math.random() * 0.1,
+    }));
+    const draw = () => {
+      const w = canvas.width = canvas.offsetWidth;
+      const h = canvas.height = canvas.offsetHeight;
+      ctx.clearRect(0, 0, w, h);
+      lines.forEach(l => {
+        l.x += l.speed;
+        if (l.x > 1 + l.len) l.x = -l.len;
+        ctx.beginPath();
+        ctx.moveTo((l.x - l.len) * w, l.y * h);
+        ctx.lineTo(l.x * w, l.y * h);
+        ctx.strokeStyle = `rgba(196,30,30,${l.alpha})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return (
+    <div className="speed-canvas-wrap" style={style}>
+      <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
+    </div>
+  );
+};
+
+/* ── SectionLabel ── */
+const SectionLabel = ({ text }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+    <div style={{ height: 2, width: 26, background: accent, flexShrink: 0 }} />
+    <span style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent }}>{text}</span>
+  </div>
+);
+
+/* ── Header ── */
+const Header = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  const bg = scrolled || menuOpen ? 'rgba(10,10,10,0.95)' : 'transparent';
+  const border = scrolled || menuOpen ? '1px solid #1a1a1a' : '1px solid transparent';
+  const linkStyle = { fontFamily: 'Barlow', fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none' };
+  const closeMenu = () => setMenuOpen(false);
+  return (
+    <>
+      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: 68, background: bg, borderBottom: border, transition: 'background .3s, border-color .3s' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <a href="/"><img src="/assets/logo-banner.png" alt="OverDrive Live" style={{ height: 40 }} /></a>
+          <nav className="nav-desktop" style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+            {[['Services','/#services'],['About','/#about'],['FAQ','/faq/'],['Films','https://www.overdrivefilms.com'],['Contact','/#contact']].map(([label, href]) => {
+              const isCurrent = label === 'FAQ';
+              return (
+                <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  className="nav-link-light" style={{ ...linkStyle, color: isCurrent ? accent : undefined }}>
+                  {label}
+                </a>
+              );
+            })}
+          </nav>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <a href="/#contact" className="btn-primary" style={{ padding: '10px 22px', fontSize: 12, borderRadius: 3, textDecoration: 'none', display: 'inline-block' }}>Get a Quote</a>
+            <button className={`hamburger${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(v => !v)} aria-label="Menu">
+              <span /><span /><span />
+            </button>
+          </div>
+        </div>
+      </header>
+      <div className={`mob-menu${menuOpen ? ' open' : ''}`}>
+        {[['Services','/#services'],['About','/#about'],['FAQ','/faq/'],['Films','https://www.overdrivefilms.com'],['Contact','/#contact']].map(([label, href]) => (
+          <a key={label} href={href} onClick={closeMenu} style={{ color: label === 'FAQ' ? accent : undefined }}>{label}</a>
+        ))}
+        <div className="mob-cta">
+          <a href="/#contact" className="btn-primary" style={{ display: 'block', textAlign: 'center', padding: '13px 0', fontSize: 13, textDecoration: 'none', borderRadius: 3 }}>Get a Quote</a>
+        </div>
+      </div>
+    </>
+  );
+};
+
+/* ── FAQ ── */
+const FAQ_ITEMS = [
+  { q: 'How much does live streaming cost in Adelaide?', a: 'Our packages start from $1,000 for a single-camera one-hour stream, $2,000 for a standard two-camera two-hour production, and $2,500 for an advanced two-camera four-hour event. Sport, broadcast, and systems integration are quoted individually. Download our rate card or get in touch for a custom quote.' },
+  { q: 'What equipment do you use?', a: 'We shoot on Sony FX3 and PXW-Z190 cameras, switch vision with a Blackmagic ATEM series switcher, and use a LiveU Solo for bonded 4G/5G encoding. Audio is handled with Rode and Sennheiser wireless systems. All equipment is professional broadcast-grade.' },
+  { q: 'Can you stream to YouTube, Facebook Live, and other platforms simultaneously?', a: 'Yes. We can stream to any platform that accepts an RTMP endpoint — YouTube, Facebook Live, LinkedIn Live, Vimeo, Twitch, and custom RTMP destinations. Multi-platform simultaneous streaming is available on all packages.' },
+  { q: 'How far in advance should I book a live streaming crew in Adelaide?', a: 'For most corporate events and ceremonies, we recommend booking 2–4 weeks in advance to secure your date and allow for pre-production planning. Large-scale multi-camera productions or events with complex AV requirements benefit from 4–8 weeks notice.' },
+  { q: 'Do you travel outside Adelaide for live streaming events?', a: 'Absolutely. We cover all of South Australia and can travel interstate — travel and accommodation is quoted accordingly. We carry our own bonded 4G uplink, so remote venues without reliable fixed-line internet are no problem.' },
+  { q: 'What internet connection is needed for live streaming?', a: 'We recommend a minimum upload speed of 10 Mbps for a single-camera stream, and 20–30 Mbps for multi-camera productions with a high-quality output. We carry a LiveU Solo bonded 4G/5G encoder as a backup on every job, so we are never dependent on venue Wi-Fi alone.' },
+  { q: 'Do you record the event as well as stream it?', a: 'Yes — a master programme recording is included with every production. Isolated camera recordings (ISOs) are available on request. We can deliver files same-day for basic review or within 24–72 hours as polished deliverables.' },
+  { q: 'Can you ingest our presenter slides or existing AV system?', a: 'Yes. We accept HDMI and SDI inputs and can mix presenter laptops, existing venue displays, or other AV feeds directly into the stream as a full-screen or picture-in-picture source. We coordinate with your AV team during the pre-event run sheet.' },
+  { q: 'What happens if the internet goes down during the stream?', a: 'We run a LiveU Solo bonded 4G/5G encoder on every production, which aggregates multiple mobile connections for resilience. If a single connection drops, the encoder seamlessly switches load to the remaining connections — viewers experience no interruption.' },
+  { q: 'Do you offer same-day event edits?', a: "Same-day edits are not part of our standard packages, but a highlights or condensed edit can be quoted separately with a 24–72 hour turnaround depending on the scope. Let us know at the quoting stage and we'll include it in your production plan." },
+];
+
+const FAQ = () => {
+  useReveal();
+  const [openIndex, setOpenIndex] = useState(null);
+  const toggle = (i) => setOpenIndex(openIndex === i ? null : i);
+  return (
+    <section id="faq" style={{ background: '#0A0A0A', padding: '64px 0 112px', position: 'relative' }}>
+      <SpeedCanvas style={{ opacity: 0.18 }} />
+      <div className="section-inner" style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: 800 }}>
+          {FAQ_ITEMS.map((item, i) => {
+            const isOpen = openIndex === i;
+            return (
+              <div key={i} className={`faq-item reveal d${(i % 3) + 1}`}>
+                <button className="faq-btn" onClick={() => toggle(i)} aria-expanded={isOpen}>
+                  <span className="faq-q">{item.q}</span>
+                  <span className={`faq-icon${isOpen ? ' open' : ''}`}>+</span>
+                </button>
+                <div className={`faq-answer${isOpen ? ' open' : ''}`} style={{ maxHeight: isOpen ? 500 : 0 }}>
+                  <div className="faq-answer-inner">{item.a}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="reveal" style={{ marginTop: 56, textAlign: 'center' }}>
+          <p style={{ fontFamily: 'Barlow', fontSize: 14, color: '#666', marginBottom: 18 }}>
+            Don't see your question? We're happy to walk you through exactly what's involved.
+          </p>
+          <a href="/#contact" style={{ display: 'inline-block', fontFamily: 'Barlow', fontSize: 12, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: accent, borderBottom: `1px solid ${accent}`, paddingBottom: 2, textDecoration: 'none' }}>
+            Ask Us Directly →
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ── Footer ── */
+const Footer = () => (
+  <footer style={{ background: '#060606', borderTop: '1px solid #111', padding: '48px 0 24px' }}>
+    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 48, marginBottom: 40, flexWrap: 'wrap' }}>
+        <div>
+          <img src="/assets/logo-banner.png" alt="OverDrive Live" style={{ height: 26, marginBottom: 16 }} />
+          <p style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', lineHeight: 1.65, maxWidth: 240 }}>Professional live streaming and broadcast production, based in Adelaide, South Australia.</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 14 }}>
+            <span style={{ width: 5, height: 5, background: accent, borderRadius: '50%', display: 'inline-block' }} />
+            <span style={{ fontFamily: 'Barlow', fontSize: 11, color: '#777' }}>Adelaide, SA, Australia</span>
+          </div>
+          <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+            <a href="https://www.instagram.com/overdrive__live/" target="_blank" rel="noopener noreferrer" className="social-icon-link" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="5"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>Company</div>
+          {[['← Back to Home','/'],['Services','/#services'],['About','/#about'],['Films','https://www.overdrivefilms.com'],['Contact','/#contact'],['Privacy Policy','/privacy/']].map(([label, href]) => (
+            <div key={label} style={{ marginBottom: 8 }}>
+              <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined} style={{ fontFamily: 'Barlow', fontSize: 12, color: label === '← Back to Home' ? '#aaa' : '#777', textDecoration: 'none' }}>{label}</a>
+            </div>
+          ))}
+        </div>
+        <div>
+          <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>Contact</div>
+          <div style={{ marginBottom: 8 }}>
+            <a href="mailto:contact@overdrivefilms.com" style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', textDecoration: 'none' }}>contact@overdrivefilms.com</a>
+          </div>
+          <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777' }}>Adelaide, SA, Australia</div>
+        </div>
+      </div>
+      <div style={{ borderTop: '1px solid #111', paddingTop: 18, display: 'flex', justifyContent: 'space-between' }}>
+        <span style={{ fontFamily: 'Barlow', fontSize: 11, color: '#555' }}>© 2026 OverDrive Live. All rights reserved.</span>
+        <span style={{ fontFamily: 'JetBrains Mono', fontSize: 10, color: '#555' }}>ADL · SA · AU</span>
+      </div>
+    </div>
+  </footer>
+);
+
+/* ── Page hero banner ── */
+const PageHero = () => (
+  <section style={{ background: '#080808', paddingTop: 68, paddingBottom: 0, borderBottom: '1px solid #111', position: 'relative', overflow: 'hidden' }}>
+    <SpeedCanvas style={{ opacity: 0.25 }} />
+    <div className="section-inner" style={{ position: 'relative', zIndex: 1, padding: '72px 40px 64px' }}>
+      <SectionLabel text="OverDrive Live" />
+      <h1 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(40px,6vw,80px)', fontWeight: 700, textTransform: 'uppercase', color: '#fff', lineHeight: .9, letterSpacing: '-0.02em', marginTop: 12, marginBottom: 20 }}>
+        Frequently<br /><span style={{ color: accent }}>Asked</span>
+      </h1>
+      <p style={{ fontFamily: 'Barlow', fontSize: 15, color: '#777', lineHeight: 1.65, maxWidth: 480 }}>
+        Answers to the most common questions about live streaming in Adelaide — pricing, equipment, planning, and what to expect on the day.
+      </p>
+    </div>
+  </section>
+);
+
+/* ── App ── */
+const App = () => (
+  <>
+    <Header />
+    <PageHero />
+    <FAQ />
+    <Footer />
+  </>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

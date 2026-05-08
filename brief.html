@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Brief — OverDrive Live</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#C41E1E">
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-square.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-square.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="colors_and_type.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RYB6B83FJ5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RYB6B83FJ5');
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #fff;
+      color: #333;
+      font-family: Barlow, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .brief-header {
+      background: #fff;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 18px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brief-header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .back-link {
+      font-family: Barlow, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #999;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color .15s;
+    }
+    .back-link:hover { color: #C41E1E; text-decoration: none; }
+
+    /* Hero */
+    .brief-hero {
+      background: #f7f7f7;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 56px 0 48px;
+    }
+    .brief-hero-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .eyebrow-line { width: 26px; height: 2px; background: #C41E1E; flex-shrink: 0; }
+    .eyebrow-text {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #C41E1E;
+    }
+    .brief-hero h1 {
+      font-family: 'Blue Highway', Barlow, sans-serif;
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #111;
+      line-height: .92;
+      letter-spacing: -.01em;
+      margin-bottom: 18px;
+    }
+    .brief-hero p {
+      font-size: 14px;
+      color: #666;
+      max-width: 480px;
+      line-height: 1.65;
+    }
+
+    /* Form layout */
+    .brief-body {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 32px 96px;
+    }
+
+    /* Section blocks */
+    .form-section { margin-bottom: 48px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .section-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid #C41E1E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Blue Highway', Barlow, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #C41E1E;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family: Barlow, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #111;
+    }
+
+    /* Fields */
+    .field-group { display: flex; flex-direction: column; gap: 14px; }
+    .field-row { display: grid; gap: 12px; }
+    .field-row-2 { grid-template-columns: 1fr 1fr; }
+    .field-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+    @media(max-width: 600px) {
+      .field-row-2, .field-row-3 { grid-template-columns: 1fr; }
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #555;
+    }
+    .field-label .req { color: #C41E1E; margin-left: 2px; }
+    .field-hint {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: #aaa;
+      margin-left: 4px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="time"],
+    input[type="url"],
+    select,
+    textarea {
+      background: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      color: #111;
+      font-family: Barlow, sans-serif;
+      font-size: 14px;
+      padding: 11px 14px;
+      outline: none;
+      width: 100%;
+      transition: border-color .15s;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #aaa; }
+    textarea { resize: vertical; }
+    select {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' stroke-linecap='round' fill='none'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: none;
+      cursor: pointer;
+    }
+
+    /* Pill radio / checkbox groups */
+    .pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill-group input[type="radio"],
+    .pill-group input[type="checkbox"] { display: none; }
+    .pill-group label {
+      font-family: Barlow, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: #888;
+      border: 1.5px solid #ddd;
+      border-radius: 3px;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: all .15s;
+      user-select: none;
+    }
+    .pill-group input[type="radio"]:checked + label,
+    .pill-group input[type="checkbox"]:checked + label {
+      color: #111;
+      border-color: #C41E1E;
+      background: rgba(196,30,30,0.07);
+    }
+    .pill-group label:hover { border-color: #bbb; color: #444; }
+
+    /* Sub-contact block */
+    .contact-block {
+      background: #f5f5f5;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .contact-block-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+
+    /* Divider */
+    .field-divider { border: none; border-top: 1px solid #ebebeb; margin: 8px 0; }
+
+    /* Submit */
+    .submit-area {
+      padding-top: 32px;
+      border-top: 1px solid #e8e8e8;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .submit-btn {
+      font-family: Barlow, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: #C41E1E;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 15px 40px;
+      cursor: pointer;
+      transition: background .15s;
+      align-self: flex-start;
+    }
+    .submit-btn:hover { background: #991616; }
+    .submit-btn:disabled { background: #ddd; color: #aaa; cursor: not-allowed; }
+    .submit-note { font-size: 12px; color: #aaa; }
+
+    /* Success / Error states */
+    .form-success {
+      background: #f7f7f7;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      padding: 56px 40px;
+      text-align: center;
+    }
+    .success-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(196,30,30,0.08);
+      border: 1px solid rgba(196,30,30,0.22);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+    }
+    .form-success h2 {
+      font-family: 'Blue Highway', Barlow, sans-serif;
+      font-size: 28px;
+      text-transform: uppercase;
+      color: #111;
+      margin-bottom: 10px;
+    }
+    .form-success p { font-size: 14px; color: #666; }
+    .form-error {
+      font-size: 13px;
+      color: #b91c1c;
+      padding: 12px 16px;
+      background: rgba(196,30,30,0.05);
+      border: 1px solid rgba(196,30,30,0.18);
+      border-radius: 4px;
+    }
+
+    /* Download button */
+    .print-btn {
+      font-family: Barlow, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #888;
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 7px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .15s;
+    }
+    .print-btn:hover { color: #111; border-color: #aaa; }
+
+    /* ── Print / Save as PDF ── */
+    @media print {
+      @page { margin: 18mm 14mm; }
+      body { font-size: 10.5pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .brief-header { position: static !important; padding: 10px 0 !important; }
+      .brief-header-inner { max-width: 100% !important; padding: 0 14mm !important; }
+      .back-link, .print-btn { display: none !important; }
+      .brief-hero { padding: 20px 0 14px !important; }
+      .brief-hero-inner { max-width: 100% !important; padding: 0 14mm !important; }
+      .brief-hero h1 { font-size: 26pt !important; margin-bottom: 8px; }
+      .eyebrow-line { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .brief-body { max-width: 100% !important; padding: 20px 14mm 24px !important; }
+      input, select, textarea {
+        background: #fff !important;
+        border: none !important;
+        border-bottom: 1px solid #bbb !important;
+        border-radius: 0 !important;
+        padding: 3px 2px 5px !important;
+        font-size: 10.5pt !important;
+      }
+      textarea { min-height: 32px; overflow: visible; }
+      .pill-group input[type="radio"]:checked + label,
+      .pill-group input[type="checkbox"]:checked + label {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+      .submit-area, .brief-footer, #form-success, #form-error { display: none !important; }
+      .form-section { page-break-inside: avoid; break-inside: avoid; }
+    }
+
+    /* Footer */
+    .brief-footer {
+      background: #f5f5f5;
+      border-top: 1px solid #e8e8e8;
+      padding: 24px 0;
+    }
+    .brief-footer-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .brief-footer span { font-size: 11px; color: #aaa; }
+  </style>
+</head>
+<body>
+
+  <header class="brief-header">
+    <div class="brief-header-inner">
+      <a href="index.html" style="display:inline-block;background:#111;padding:6px 12px;border-radius:4px;line-height:0;">
+        <img src="assets/logo-banner.png" alt="OverDrive Live" style="height:20px;display:block;">
+      </a>
+      <a href="index.html" class="back-link">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M8 1L3 6L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to site
+      </a>
+    </div>
+  </header>
+
+  <div class="brief-hero">
+    <div class="brief-hero-inner">
+      <div class="eyebrow">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">OverDrive Live</span>
+      </div>
+      <h1>Client<br><span style="color:#C41E1E;">Brief</span></h1>
+      <p>Fill in as much detail as you can. The more we know before the day, the smoother the production. We'll follow up on anything we need to clarify.</p>
+    </div>
+  </div>
+
+  <div class="brief-body">
+
+    <form id="brief-form">
+
+      <!-- Event Details -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-num">★</div>
+          <div class="section-title">Event Details</div>
+        </div>
+        <div class="field-group">
+          <div class="field-row field-row-2">
+            <div class="field">
+              <label class="field-label">Event Name <span class="req">*</span></label>
+              <input type="text" name="event_name" placeholder="e.g. Annual Gala Awards Night" required>
+            </div>
+            <div class="field">
+              <label class="field-label">Type of Event <span class="req">*</span></label>
+              <select name="event_type" required>
+                <option value="" disabled selected>Select type…</option>
+                <option>Sport</option>
+                <option>Corporate</option>
+                <option>Conference</option>
+                <option>Broadcast</option>
+                <option>Launch</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row field-row-2">
+            <div class="field">
+              <label class="field-label">Start Date <span class="req">*</span></label>
+              <input type="date" name="event_start_date" required>
+            </div>
+            <div class="field">
+              <label class="field-label">End Date <span class="field-hint">(leave blank if single day)</span></label>
+              <input type="date" name="event_end_date">
+            </div>
+          </div>
+          <div class="field-row field-row-2">
+            <div class="field">
+              <label class="field-label">Start Time <span class="req">*</span></label>
+              <input type="time" name="start_time" required>
+            </div>
+            <div class="field">
+              <label class="field-label">Finish Time</label>
+              <input type="time" name="finish_time">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Notes on Timing</label>
+            <textarea name="timing_notes" rows="2" placeholder="Bump-in times, rehearsal times, schedule changes across days etc."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1: Venue -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-num">1</div>
+          <div class="section-title">Venue &amp; Venue Support</div>
+        </div>
+        <div class="field-group">
+          <div class="field-row field-row-2">
+            <div class="field">
+              <label class="field-label">Venue Name <span class="req">*</span></label>
+              <input type="text" name="venue_name" placeholder="e.g. Adelaide Convention Centre" required>
+            </div>
+            <div class="field">
+              <label class="field-label">Venue Address</label>
+              <input type="text" name="venue_address" placeholder="Street address">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Environment</label>
+            <div class="pill-group">
+              <input type="radio" name="environment" id="env-indoor" value="Indoor">
+              <label for="env-indoor">Indoor</label>
+              <input type="radio" name="environment" id="env-outdoor" value="Outdoor">
+              <label for="env-outdoor">Outdoor</label>
+              <input type="radio" name="environment" id="env-hybrid" value="Hybrid">
+              <label for="env-hybrid">Hybrid</label>
+            </div>
+          </div>
+
+          <div class="field-row field-row-2">
+            <div class="field">
+              <label class="field-label">Power at Camera Positions</label>
+              <div class="pill-group">
+                <input type="radio" name="power_cameras" id="pc-yes" value="Yes">
+                <label for="pc-yes">Yes</label>
+                <input type="radio" name="power_cameras" id="pc-no" value="No">
+                <label for="pc-no">No</label>
+                <input type="radio" name="power_cameras" id="pc-unknown" value="Unknown">
+                <label for="pc-unknown">Unknown</label>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label">Power at Production Desk</label>
+              <div class="pill-group">
+                <input type="radio" name="power_desk" id="pd-yes" value="Yes">
+                <label for="pd-yes">Yes</label>
+                <input type="radio" name="power_desk" id="pd-no" value="No">
+                <label for="pd-no">No</label>
+                <input type="radio" name="power_desk" id="pd-unknown" value="Unknown">
+                <label for="pd-unknown">Unknown</label>
+              </div>
+            </div>
+          </div>
+
+          <hr class="field-divider">
+
+          <div class="field-row field-row-2">
+            <div class="field">
+              <label class="field-label">Internet: Venue-Supplied?</label>
+              <div class="pill-group">
+                <input type="radio" name="internet_supplied" id="int-yes" value="Yes">
+                <label for="int-yes">Yes</label>
+                <input type="radio" name="internet_supplied" id="int-no" value="No">
+                <label for="int-no">No</label>
+                <input type="radio" name="internet_supplied" id="int-unknown" value="Unknown">
+                <label for="int-unknown">Unknown</label>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label">Internet Password</label>
+              <input type="text" name="internet_password" placeholder="If known">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Upload Speed Available (Mbps)</label>
+            <input type="text" name="upload_speed" placeholder="e.g. 50 Mbps — if known, or leave blank">
+          </div>
+
+          <hr class="field-divider">
+
+          <div class="contact-block">
+            <div class="contact-block-title">Site Manager</div>
+            <div class="field-row field-row-3">
+              <input type="text" name="site_manager_name" placeholder="Name">
+              <input type="tel" name="site_manager_phone" placeholder="Phone">
+              <input type="email" name="site_manager_email" placeholder="Email">
+            </div>
+          </div>
+
+          <div class="contact-block">
+            <div class="contact-block-title">IT Contact</div>
+            <div class="field-row field-row-3">
+              <input type="text" name="it_contact_name" placeholder="Name">
+              <input type="tel" name="it_contact_phone" placeholder="Phone">
+              <input type="email" name="it_contact_email" placeholder="Email">
+            </div>
+          </div>
+
+          <hr class="field-divider">
+
+          <div class="field">
+            <label class="field-label">Venue Access Times</label>
+            <input type="text" name="venue_access_times" placeholder="e.g. Bump-in from 7am, doors open 9am">
+          </div>
+
+          <div class="field">
+            <label class="field-label">Venue Restrictions</label>
+            <textarea name="venue_restrictions" rows="2" placeholder="Noise, lighting, signage, permits, restricted areas…"></textarea>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Venue-Provided Support / Security on the Day</label>
+            <textarea name="venue_support" rows="2" placeholder="Security staff, AV technicians, venue coordinator presence etc."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Destination -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-num">2</div>
+          <div class="section-title">Streaming Destination</div>
+        </div>
+        <div class="field-group">
+          <div class="field">
+            <label class="field-label">Streaming Destination(s) — select all that apply</label>
+            <div class="pill-group">
+              <input type="checkbox" name="dest_youtube" id="d-yt" value="YouTube">
+              <label for="d-yt">YouTube</label>
+              <input type="checkbox" name="dest_facebook" id="d-fb" value="Facebook">
+              <label for="d-fb">Facebook Live</label>
+              <input type="checkbox" name="dest_vimeo" id="d-vi" value="Vimeo">
+              <label for="d-vi">Vimeo</label>
+              <input type="checkbox" name="dest_private" id="d-pr" value="Private Platform">
+              <label for="d-pr">Private Platform</label>
+              <input type="checkbox" name="dest_rtmp" id="d-rt" value="Custom RTMP">
+              <label for="d-rt">Custom RTMP</label>
+              <input type="checkbox" name="dest_venue" id="d-vn" value="TV / Monitors in Venue">
+              <label for="d-vn">TV / Monitors in Venue</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Stream URLs / RTMP Details</label>
+            <textarea name="stream_urls" rows="2" placeholder="YouTube channel URL, RTMP server + stream key, private platform login etc."></textarea>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Other In-Venue Displays</label>
+            <textarea name="venue_displays" rows="2" placeholder="TVs, megatrons, projectors — location, inputs available (HDMI/SDI), who controls them"></textarea>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Audio Setup in Venue</label>
+            <textarea name="audio_setup" rows="2" placeholder="Where are the patch panels? House audio mix from venue desk? Any existing audio feeds available?"></textarea>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Recording Required (in addition to live stream)?</label>
+            <div class="pill-group">
+              <input type="radio" name="recording_required" id="rec-yes" value="Yes">
+              <label for="rec-yes">Yes</label>
+              <input type="radio" name="recording_required" id="rec-no" value="No">
+              <label for="rec-no">No</label>
+              <input type="radio" name="recording_required" id="rec-discuss" value="Discuss">
+              <label for="rec-discuss">Let's Discuss</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Deliverables After the Event — select all that apply</label>
+            <div class="pill-group">
+              <input type="checkbox" name="deliv_raw" id="del-raw" value="Raw recording">
+              <label for="del-raw">Raw Recording</label>
+              <input type="checkbox" name="deliv_highlights" id="del-hl" value="Edited highlights">
+              <label for="del-hl">Edited Highlights</label>
+              <input type="checkbox" name="deliv_tbd" id="del-tbd" value="TBD">
+              <label for="del-tbd">TBD</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Production -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-num">3</div>
+          <div class="section-title">Production Details</div>
+        </div>
+        <div class="field-group">
+
+          <div class="field-row field-row-2">
+            <div class="field">
+              <label class="field-label">Run Sheet Available?</label>
+              <div class="pill-group">
+                <input type="radio" name="run_sheet" id="rs-yes" value="Yes">
+                <label for="rs-yes">Yes</label>
+                <input type="radio" name="run_sheet" id="rs-dev" value="Being developed">
+                <label for="rs-dev">Being Developed</label>
+                <input type="radio" name="run_sheet" id="rs-no" value="No">
+                <label for="rs-no">No</label>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label">Number of Presenters / Speakers</label>
+              <input type="text" name="presenter_count" placeholder="e.g. 4 speakers, 1 MC">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Mic Setup — select all that apply</label>
+            <div class="pill-group">
+              <input type="checkbox" name="mic_podium" id="mic-pod" value="Podium mic">
+              <label for="mic-pod">Podium Mic</label>
+              <input type="checkbox" name="mic_lav" id="mic-lav" value="Lav">
+              <label for="mic-lav">Lav</label>
+              <input type="checkbox" name="mic_handheld" id="mic-hh" value="Handheld">
+              <label for="mic-hh">Handheld</label>
+              <input type="checkbox" name="mic_venue" id="mic-ven" value="Venue-supplied">
+              <label for="mic-ven">Venue-supplied</label>
+              <input type="checkbox" name="mic_tbc" id="mic-tbc" value="To be confirmed">
+              <label for="mic-tbc">To be confirmed</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Graphics / Lower Thirds</label>
+            <div class="pill-group">
+              <input type="radio" name="graphics" id="gfx-yes" value="Yes">
+              <label for="gfx-yes">Yes</label>
+              <input type="radio" name="graphics" id="gfx-no" value="No">
+              <label for="gfx-no">No</label>
+              <input type="radio" name="graphics" id="gfx-discuss" value="Let's discuss">
+              <label for="gfx-discuss">Let's Discuss</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Section 4: Logistics -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-num">4</div>
+          <div class="section-title">Logistics &amp; Contact</div>
+        </div>
+        <div class="field-group">
+          <div class="contact-block">
+            <div class="contact-block-title">Client Production Liaison / Point of Contact on the Day <span style="color:#C41E1E">*</span></div>
+            <div class="field-row field-row-3">
+              <input type="text" name="liaison_name" placeholder="Name" required>
+              <input type="tel" name="liaison_phone" placeholder="Mobile" required>
+              <input type="email" name="liaison_email" placeholder="Email">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Anything Else We Should Know</label>
+            <textarea name="additional_notes" rows="3" placeholder="Run sheet details, special requests, previous productions, budget considerations…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-area">
+        <div id="form-error" class="form-error" style="display:none;">Something went wrong — please try again or email us at contact@overdrivefilms.com</div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <button type="submit" class="submit-btn" id="submit-btn">Submit Brief</button>
+          <button type="button" class="print-btn" id="download-btn" onclick="downloadBriefPDF()">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1v8M4 6l3 3 3-3M1 10v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Download PDF
+          </button>
+        </div>
+        <p class="submit-note">We'll review this and be in touch within 24 hours to confirm details and next steps.</p>
+      </div>
+
+    </form>
+
+    <div id="form-success" class="form-success" style="display:none;">
+      <div class="success-icon">
+        <svg width="20" height="16" viewBox="0 0 22 18" fill="none">
+          <path d="M1 9l7 7L21 1" stroke="#C41E1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>Brief Received</h2>
+      <p>Thanks — we've got everything. We'll be in touch within 24 hours to confirm the details and next steps.</p>
+    </div>
+
+  </div>
+
+  <footer class="brief-footer">
+    <div class="brief-footer-inner">
+      <span>© 2026 OverDrive Live. All rights reserved.</span>
+      <span style="font-family:'JetBrains Mono',monospace;">ADL · SA · AU</span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    function applyPrintStyles() {
+      const s = document.createElement('style');
+      s.id = 'pdf-override';
+      s.textContent = `
+        body { background:#fff!important; color:#111!important; }
+        .brief-header { background:#fff!important; border-bottom:1px solid #ddd!important; position:static!important; }
+        .brief-hero { background:#fff!important; border-bottom:1px solid #ddd!important; padding:24px 0 14px!important; }
+        .brief-hero h1 { color:#111!important; font-size:30pt!important; }
+        .eyebrow-line { background:#C41E1E!important; }
+        .eyebrow-text { color:#C41E1E!important; }
+        .brief-hero p { color:#555!important; }
+        .section-title { color:#111!important; }
+        .section-header { border-bottom-color:#ddd!important; }
+        .section-num { border-color:#C41E1E!important; color:#C41E1E!important; }
+        .field-label { color:#444!important; }
+        .field-hint { color:#888!important; }
+        .field-divider { border-top-color:#e0e0e0!important; }
+        input,select,textarea { background:#fff!important; border:none!important; border-bottom:1px solid #bbb!important; color:#111!important; border-radius:0!important; padding:3px 2px 5px!important; font-size:10.5pt!important; }
+        .pill-group label { color:#999!important; border-color:#ddd!important; background:transparent!important; font-size:9pt!important; padding:5px 10px!important; }
+        .pill-group input[type="radio"]:checked+label,
+        .pill-group input[type="checkbox"]:checked+label { color:#111!important; border-color:#C41E1E!important; font-weight:700!important; }
+        .contact-block { background:#f7f7f7!important; border-color:#ddd!important; }
+        .contact-block-title { color:#666!important; }
+        .submit-area,#form-error,.brief-footer,#form-success,#download-btn,.back-link { display:none!important; }
+      `;
+      document.head.appendChild(s);
+      return s;
+    }
+
+    async function downloadBriefPDF() {
+      const btn = document.getElementById('download-btn');
+      btn.disabled = true;
+      const orig = btn.innerHTML;
+      btn.innerHTML = 'Generating…';
+
+      // If the CDN library didn't load, fall back to browser print dialog
+      if (typeof html2pdf === 'undefined') {
+        const s = applyPrintStyles();
+        window.print();
+        s.remove();
+        btn.disabled = false;
+        btn.innerHTML = orig;
+        return;
+      }
+
+      const s = applyPrintStyles();
+      await new Promise(r => setTimeout(r, 300));
+
+      try {
+        await html2pdf().set({
+          margin: [12, 14, 12, 14],
+          filename: 'overdrive-live-brief.pdf',
+          image: { type: 'jpeg', quality: 0.95 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            logging: false,
+            foreignObjectRendering: false
+          },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['avoid-all', 'legacy'] }
+        }).from(document.body).save();
+      } catch (err) {
+        // Library failed — fall back to browser print dialog
+        window.print();
+      } finally {
+        s.remove();
+        btn.disabled = false;
+        btn.innerHTML = orig;
+      }
+    }
+
+    const form = document.getElementById('brief-form');
+    const success = document.getElementById('form-success');
+    const errorBox = document.getElementById('form-error');
+    const submitBtn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      try {
+        const res = await fetch('https://formspree.io/f/mwvypgka', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(form)
+        });
+        if (res.ok) {
+          form.style.display = 'none';
+          success.style.display = 'block';
+        } else {
+          throw new Error();
+        }
+      } catch {
+        errorBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Brief';
+      }
+    });
+  </script>
+
+</body>
+</html>

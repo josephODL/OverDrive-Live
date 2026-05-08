@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Case Studies &amp; FAQ — OverDrive Live Adelaide</title>
-  <meta name="description" content="Live streaming case studies and common questions from OverDrive Live — Adelaide's broadcast production specialists. Pricing, equipment, and what to expect.">
-  <meta name="keywords" content="live streaming case studies Adelaide, broadcast production Adelaide, live stream FAQ, corporate event streaming Adelaide, how much does live streaming cost Adelaide">
+  <title>FAQ — OverDrive Live Adelaide</title>
+  <meta name="description" content="Common questions about live streaming with OverDrive Live — Adelaide's broadcast production specialists. Pricing, equipment, and what to expect.">
+  <meta name="keywords" content="live streaming FAQ Adelaide, broadcast production Adelaide, how much does live streaming cost Adelaide, live stream equipment Adelaide">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://overdrivelive.com.au/work.html">
   <meta name="theme-color" content="#C41E1E">
@@ -13,11 +13,11 @@
   <meta name="geo.placename" content="Adelaide, South Australia">
 
   <!-- Favicon -->
-  <link rel="icon" href="favicon.ico">
-  <link rel="shortcut icon" href="assets/logo-square.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-square.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/logo-square.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-square.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/logo-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/logo-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/logo-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-icon.png">
 
   <!-- Font preload -->
   <link rel="preload" href="fonts/blue_highway_cd.ttf" as="font" type="font/ttf" crossorigin>
@@ -29,6 +29,26 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-RYB6B83FJ5');
+  </script>
+
+  <!-- JSON-LD FAQ structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How much does live streaming cost in Adelaide?", "acceptedAnswer": { "@type": "Answer", "text": "Our packages start from $1,000 for a single-camera one-hour stream, $2,000 for a standard two-camera two-hour production, and $2,500 for an advanced two-camera four-hour event. Sport, broadcast, and systems integration are quoted individually." } },
+      { "@type": "Question", "name": "What equipment do you use?", "acceptedAnswer": { "@type": "Answer", "text": "We shoot on Sony PXW-Z150 and Panasonic HC-X2000 cameras, switch vision with a Blackmagic ATEM series switcher, and use a LiveU Solo for bonded 4G/5G encoding. Audio is handled with Rode and Sennheiser wireless systems. All equipment is professional broadcast-grade." } },
+      { "@type": "Question", "name": "Can you stream to YouTube, Facebook Live, and other platforms simultaneously?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We can stream to any platform that accepts an RTMP endpoint — YouTube, Facebook Live, LinkedIn Live, Vimeo, Twitch, and custom RTMP destinations. Multi-platform simultaneous streaming is available on all packages." } },
+      { "@type": "Question", "name": "How far in advance should I book a live streaming crew in Adelaide?", "acceptedAnswer": { "@type": "Answer", "text": "For most corporate events and ceremonies, we recommend booking 2–4 weeks in advance. Large-scale multi-camera productions or events with complex AV requirements benefit from 4–8 weeks notice." } },
+      { "@type": "Question", "name": "Do you travel outside Adelaide for live streaming events?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. We cover all of South Australia and can travel interstate — travel and accommodation is quoted accordingly. We carry our own bonded 4G uplink, so remote venues without reliable fixed-line internet are no problem." } },
+      { "@type": "Question", "name": "What internet connection is needed for live streaming?", "acceptedAnswer": { "@type": "Answer", "text": "We recommend a minimum upload speed of 10 Mbps for a single-camera stream, and 20–30 Mbps for multi-camera productions. We carry a LiveU Solo bonded 4G/5G encoder as a backup on every job." } },
+      { "@type": "Question", "name": "Do you record the event as well as stream it?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — a master programme recording is included with every production. Isolated camera recordings (ISOs) are available on request. We can deliver files same-day for basic review or within 24–72 hours." } },
+      { "@type": "Question", "name": "Can you ingest our presenter slides or existing AV system?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We accept HDMI and SDI inputs and can mix presenter laptops, existing venue displays, or other AV feeds directly into the stream. We coordinate with your AV team during the pre-event run sheet." } },
+      { "@type": "Question", "name": "What happens if the internet goes down during the stream?", "acceptedAnswer": { "@type": "Answer", "text": "We run a LiveU Solo bonded 4G/5G encoder on every production, which aggregates multiple mobile connections for resilience. If a single connection drops, the encoder seamlessly switches load to the remaining connections." } },
+      { "@type": "Question", "name": "Do you offer same-day event edits?", "acceptedAnswer": { "@type": "Answer", "text": "Same-day edits are not part of our standard packages, but a highlights or condensed edit can be quoted separately with a 24–72 hour turnaround depending on the scope." } }
+    ]
+  }
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -77,25 +97,6 @@
     /* Buttons */
     .btn-primary { font-family: Barlow, sans-serif; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: #C41E1E; color: #fff; border: none; border-radius: 3px; cursor: pointer; transition: background .15s; }
     .btn-primary:hover { background: #991616; }
-
-    /* Case Studies */
-    .case-studies-grid {
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
-    }
-    @media(max-width:1024px){ .case-studies-grid { grid-template-columns: repeat(2,1fr); } }
-    @media(max-width:768px){ .case-studies-grid { grid-template-columns: 1fr; } }
-    .cs-card {
-      background: #141414; border: 1px solid #1e1e1e; border-radius: 4px;
-      overflow: hidden; transition: transform .2s, box-shadow .2s;
-      border-top: 2px solid transparent;
-    }
-    .cs-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.5); border-top-color: #C41E1E; }
-    .cs-card-inner { padding: 24px; }
-    .cs-badge { display: inline-block; padding: 3px 10px; border: 1px solid #2a2a2a; border-radius: 2px; font-family: Barlow,sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #888; margin-bottom: 12px; }
-    .cs-stat-row { display: flex; gap: 16px; margin-top: 18px; padding-top: 16px; border-top: 1px solid #1e1e1e; }
-    .cs-stat { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-    .cs-stat-val { font-family: 'Blue Highway',Barlow,sans-serif; font-size: 16px; font-weight: 700; color: #fff; }
-    .cs-stat-lbl { font-family: Barlow,sans-serif; font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: .06em; }
 
     /* FAQ */
     .faq-item { border-bottom: 1px solid #1a1a1a; }
@@ -198,8 +199,8 @@ const Header = () => {
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <a href="index.html"><img src="assets/logo-banner.png" alt="OverDrive Live" style={{ height: 40 }} /></a>
           <nav className="nav-desktop" style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
-            {[['Services','index.html#services'],['About','index.html#about'],['Work','work.html'],['Films','https://www.overdrivefilms.com'],['Contact','index.html#contact']].map(([label, href]) => {
-              const isCurrent = label === 'Work';
+            {[['Services','index.html#services'],['About','index.html#about'],['FAQ','work.html'],['Films','https://www.overdrivefilms.com'],['Contact','index.html#contact']].map(([label, href]) => {
+              const isCurrent = label === 'FAQ';
               return (
                 <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
                   className="nav-link-light" style={{ ...linkStyle, color: isCurrent ? accent : undefined }}>
@@ -217,130 +218,14 @@ const Header = () => {
         </div>
       </header>
       <div className={`mob-menu${menuOpen ? ' open' : ''}`}>
-        {[['Services','index.html#services'],['About','index.html#about'],['Work','work.html'],['Films','https://www.overdrivefilms.com'],['Contact','index.html#contact']].map(([label, href]) => (
-          <a key={label} href={href} onClick={closeMenu} style={{ color: label === 'Work' ? accent : undefined }}>{label}</a>
+        {[['Services','index.html#services'],['About','index.html#about'],['FAQ','work.html'],['Films','https://www.overdrivefilms.com'],['Contact','index.html#contact']].map(([label, href]) => (
+          <a key={label} href={href} onClick={closeMenu} style={{ color: label === 'FAQ' ? accent : undefined }}>{label}</a>
         ))}
         <div className="mob-cta">
           <a href="index.html#contact" className="btn-primary" style={{ display: 'block', textAlign: 'center', padding: '13px 0', fontSize: 13, textDecoration: 'none', borderRadius: 3 }}>Get a Quote</a>
         </div>
       </div>
     </>
-  );
-};
-
-/* ── Case Studies ── */
-const CASE_STUDIES = [
-  {
-    client: 'Adelaide Convention Centre',
-    event: 'National Procurement Summit',
-    badge: 'Corporate',
-    location: 'Adelaide, SA',
-    challenge: 'Streamed a full-day summit across two stages with live switching between keynotes, panels, and sponsor content.',
-    outcome: 'Delivered a seamless broadcast experience to a national audience with zero downtime across an 8-hour day.',
-    stats: [{ val: '800+', lbl: 'Viewers' }, { val: '6', lbl: 'Cameras' }, { val: '8hrs', lbl: 'Live' }],
-    img: 'assets/case-acc.jpg',
-  },
-  {
-    client: 'Athletics SA',
-    event: 'SA Track & Field Championships',
-    badge: 'Sport',
-    location: 'SA Athletics Stadium, Adelaide',
-    challenge: 'Covered multiple simultaneous track and field events with dedicated camera positions and instant replay capability.',
-    outcome: 'Delivered a broadcast-quality sport stream with over 40 replays, reaching athletics fans across South Australia.',
-    stats: [{ val: '2,400+', lbl: 'Viewers' }, { val: '3', lbl: 'Cameras' }, { val: '40+', lbl: 'Replays' }],
-    img: 'assets/case-athletics.jpg',
-  },
-  {
-    client: 'University of South Australia',
-    event: 'Graduation Ceremonies 2024',
-    badge: 'Event',
-    location: 'Adelaide Convention Centre',
-    challenge: 'Streamed six consecutive graduation ceremonies for families unable to attend in person, across two days.',
-    outcome: 'Over 5,000 viewers tuned in across all ceremonies, with families connecting from across Australia and internationally.',
-    stats: [{ val: '5,000+', lbl: 'Viewers' }, { val: '6', lbl: 'Ceremonies' }, { val: '5', lbl: 'Cameras' }],
-    img: 'assets/case-unisa.jpg',
-  },
-  {
-    client: 'TechSummit AU',
-    event: 'Adelaide Tech Summit 2024',
-    badge: 'Broadcast',
-    location: 'Lot Fourteen, Adelaide',
-    challenge: 'Simultaneously streamed 24 speakers across three platforms with branded lower-third graphics for each presenter.',
-    outcome: 'Peaked at 3,200 concurrent viewers and delivered a polished broadcast that positioned Adelaide firmly on the tech map.',
-    stats: [{ val: '3,200', lbl: 'Peak Viewers' }, { val: '3', lbl: 'Platforms' }, { val: '24', lbl: 'Speakers' }],
-    img: 'assets/case-techsummit.jpg',
-  },
-  {
-    client: 'City Music Collective',
-    event: 'Fringe Festival Live Stream',
-    badge: 'Event',
-    location: 'Adelaide CBD',
-    challenge: 'Streamed live music performances across two stages over two consecutive nights during Adelaide Fringe.',
-    outcome: "Reached over 1,800 viewers who couldn't attend in person and extended the artists' reach to national and international audiences.",
-    stats: [{ val: '1,800+', lbl: 'Viewers' }, { val: '2', lbl: 'Stages' }, { val: '2', lbl: 'Nights' }],
-    img: 'assets/case-fringe.jpg',
-  },
-];
-
-const CaseStudies = () => {
-  useReveal();
-  const [expanded, setExpanded] = useState(false);
-  const INITIAL = 3;
-  const visible = CASE_STUDIES.slice(0, expanded ? CASE_STUDIES.length : INITIAL);
-  const hasMore = !expanded && CASE_STUDIES.length > INITIAL;
-  return (
-    <section id="case-studies" style={{ background: '#0D0D0D', padding: '112px 0 80px' }}>
-      <div className="section-inner">
-        <div className="reveal" style={{ marginBottom: 56 }}>
-          <SectionLabel text="Our Work" />
-          <h2 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(32px,4vw,52px)', fontWeight: 700, textTransform: 'uppercase', color: '#fff', lineHeight: .95, letterSpacing: '-0.01em', marginTop: 12 }}>
-            Case<br /><span style={{ color: accent }}>Studies</span>
-          </h2>
-          <p style={{ fontFamily: 'Barlow', fontSize: 15, color: '#777', lineHeight: 1.65, maxWidth: 520, marginTop: 16 }}>
-            A selection of live productions delivered across South Australia — from corporate summits to sport championships and festival streams.
-          </p>
-        </div>
-        <div className="case-studies-grid">
-          {visible.map((cs, i) => (
-            <div key={cs.client} className={`cs-card reveal-zoom d${(i % 3) + 1}`}>
-              <img
-                src={cs.img}
-                alt={cs.event}
-                onError={e => { e.currentTarget.src = `https://placehold.co/640x320/141414/333333?text=${encodeURIComponent(cs.client)}`; }}
-                style={{ width: '100%', height: 160, objectFit: 'cover', display: 'block' }}
-              />
-              <div className="cs-card-inner">
-                <span className="cs-badge">{cs.badge}</span>
-                <div style={{ fontFamily: 'Blue Highway', fontSize: 18, fontWeight: 700, textTransform: 'uppercase', color: '#fff', lineHeight: 1.1, marginBottom: 4 }}>{cs.event}</div>
-                <div style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: accent, marginBottom: 12 }}>{cs.location}</div>
-                <p style={{ fontFamily: 'Barlow', fontSize: 13, color: '#666', lineHeight: 1.6, marginBottom: 6 }}>{cs.challenge}</p>
-                <p style={{ fontFamily: 'Barlow', fontSize: 13, color: '#888', lineHeight: 1.6 }}>{cs.outcome}</p>
-                <div className="cs-stat-row">
-                  {cs.stats.map(s => (
-                    <div key={s.lbl} className="cs-stat">
-                      <span className="cs-stat-val">{s.val}</span>
-                      <span className="cs-stat-lbl">{s.lbl}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {hasMore && (
-          <div className="reveal" style={{ textAlign: 'center', marginTop: 40 }}>
-            <button
-              onClick={() => setExpanded(true)}
-              style={{ fontFamily: 'Barlow', fontSize: 13, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', background: 'none', border: '1px solid #2a2a2a', color: '#888', padding: '13px 32px', borderRadius: 3, cursor: 'pointer', transition: 'border-color .15s, color .15s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = accent; e.currentTarget.style.color = accent; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = '#2a2a2a'; e.currentTarget.style.color = '#888'; }}
-            >
-              View All {CASE_STUDIES.length} Case Studies ↓
-            </button>
-          </div>
-        )}
-      </div>
-    </section>
   );
 };
 
@@ -363,15 +248,9 @@ const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i);
   return (
-    <section id="faq" style={{ background: '#0A0A0A', padding: '80px 0 112px', position: 'relative' }}>
+    <section id="faq" style={{ background: '#0A0A0A', padding: '64px 0 112px', position: 'relative' }}>
       <SpeedCanvas style={{ opacity: 0.18 }} />
       <div className="section-inner" style={{ position: 'relative', zIndex: 1 }}>
-        <div className="reveal" style={{ marginBottom: 56 }}>
-          <SectionLabel text="FAQ" />
-          <h2 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(32px,4vw,52px)', fontWeight: 700, textTransform: 'uppercase', color: '#fff', lineHeight: .95, letterSpacing: '-0.01em', marginTop: 12 }}>
-            Common<br /><span style={{ color: accent }}>Questions</span>
-          </h2>
-        </div>
         <div style={{ maxWidth: 800 }}>
           {FAQ_ITEMS.map((item, i) => {
             const isOpen = openIndex === i;
@@ -454,21 +333,11 @@ const PageHero = () => (
     <div className="section-inner" style={{ position: 'relative', zIndex: 1, padding: '72px 40px 64px' }}>
       <SectionLabel text="OverDrive Live" />
       <h1 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(40px,6vw,80px)', fontWeight: 700, textTransform: 'uppercase', color: '#fff', lineHeight: .9, letterSpacing: '-0.02em', marginTop: 12, marginBottom: 20 }}>
-        Our Work<br /><span style={{ color: accent }}>&amp; FAQ</span>
+        Frequently<br /><span style={{ color: accent }}>Asked</span>
       </h1>
       <p style={{ fontFamily: 'Barlow', fontSize: 15, color: '#777', lineHeight: 1.65, maxWidth: 480 }}>
-        Case studies from our Adelaide productions, plus answers to the most common questions about live streaming.
+        Answers to the most common questions about live streaming in Adelaide — pricing, equipment, planning, and what to expect on the day.
       </p>
-      <div style={{ display: 'flex', gap: 12, marginTop: 28, flexWrap: 'wrap' }}>
-        <a href="#case-studies" onClick={e => { e.preventDefault(); document.getElementById('case-studies').scrollIntoView({ behavior: 'smooth' }); }}
-          style={{ fontFamily: 'Barlow', fontSize: 12, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: '#fff', background: accent, padding: '11px 24px', borderRadius: 3, textDecoration: 'none' }}>
-          View Case Studies
-        </a>
-        <a href="#faq" onClick={e => { e.preventDefault(); document.getElementById('faq').scrollIntoView({ behavior: 'smooth' }); }}
-          style={{ fontFamily: 'Barlow', fontSize: 12, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: '#aaa', border: '1px solid #2a2a2a', padding: '11px 24px', borderRadius: 3, textDecoration: 'none' }}>
-          Jump to FAQ
-        </a>
-      </div>
     </div>
   </section>
 );
@@ -478,7 +347,6 @@ const App = () => (
   <>
     <Header />
     <PageHero />
-    <CaseStudies />
     <FAQ />
     <Footer />
   </>

@@ -15,11 +15,11 @@
   <meta name="ICBM" content="-34.9285, 138.6007">
 
   <!-- Favicon -->
-  <link rel="icon" href="favicon.ico">
-  <link rel="shortcut icon" href="assets/logo-square.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-square.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/logo-square.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-square.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/logo-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/logo-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/logo-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-icon.png">
 
   <!-- Font preload -->
   <link rel="preload" href="fonts/blue_highway_cd.ttf" as="font" type="font/ttf" crossorigin>
@@ -78,6 +78,10 @@
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AV Systems Integration Adelaide" } }
       ]
     },
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://overdrivelive.com.au/assets/logo-icon.png"
+    },
     "sameAs": ["https://www.instagram.com/overdrive__live/"]
   }
   </script>
@@ -89,6 +93,7 @@
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+  <script src="assets/clients/manifest.js"></script>
   <script type="text/babel">
 // tweaks-panel — inlined for file:// compatibility
 
@@ -597,7 +602,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "logoStyle": "banner",
   "logoHeight": 40,
   "navStyle": "transparent",
-  "heroCta": "Book Your Event",
+  "heroCta": "Book Your Broadcast",
   "showreel": "Showreel"
 }/*EDITMODE-END*/;
 
@@ -697,18 +702,16 @@ const Header = ({ onBook, tweaks }) => {
     <>
       <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: 68, background: bg, borderBottom: border, transition: 'background .3s, border-color .3s' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <LogoEl />
+          <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}><LogoEl /></a>
           <nav className="nav-desktop" style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
             {[['Services','#services'],['About','#about']].map((l) =>
               <a key={l[0]} href={l[0] === 'About' ? '#about' : `#${l[0].toLowerCase()}`} className="nav-link-light" style={linkStyle}>{l[0]}</a>
             )}
-            <a href="work.html" className="nav-link-light" style={linkStyle}>Work</a>
-            <a href="work.html#faq" className="nav-link-light" style={linkStyle}>FAQ</a>
+            <a href="/faq/" className="nav-link-light" style={linkStyle}>FAQ</a>
             <a href="https://www.overdrivefilms.com" target="_blank" rel="noopener noreferrer"
               style={{ ...linkStyle, color: '#C47000', transition: 'color .15s' }}
               onMouseEnter={e => e.currentTarget.style.color = '#D98000'}
               onMouseLeave={e => e.currentTarget.style.color = '#C47000'}>Films</a>
-            <a href="#contact" className="nav-link-light" style={linkStyle}>Contact</a>
           </nav>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <button className="btn-primary nav-cta" style={{ padding: '10px 22px', fontSize: 12, background: accent }} onClick={() => scrollTo('contact')}>Get a Quote</button>
@@ -722,10 +725,8 @@ const Header = ({ onBook, tweaks }) => {
       <div className={`mob-menu${menuOpen ? ' open' : ''}`}>
         <a href="#services" className="nav-link-light" onClick={() => scrollTo('services')}>Services</a>
         <a href="#about" className="nav-link-light" onClick={() => scrollTo('about')}>About</a>
-        <a href="work.html" className="nav-link-light">Work</a>
-        <a href="work.html#faq" className="nav-link-light">FAQ</a>
+        <a href="/faq/" className="nav-link-light">FAQ</a>
         <a href="https://www.overdrivefilms.com" target="_blank" rel="noopener noreferrer" onClick={closeMenu} style={{ color: '#C47000' }}>Films</a>
-        <a href="#contact" className="nav-link-light" onClick={() => scrollTo('contact')}>Contact</a>
         <div className="mob-cta">
           <button className="btn-primary" style={{ width: '100%', background: accent, padding: '13px 0', fontSize: 13 }} onClick={() => scrollTo('contact')}>Get a Quote</button>
         </div>
@@ -756,8 +757,8 @@ const Hero = ({ onShowreel, onBook, tweaks }) => {
 
   return (
     <section style={{ position: 'relative', width: '100%', height: '100vh', minHeight: 760, overflow: 'hidden', display: 'flex', alignItems: 'flex-end' }}>
-      {/* Full-screen background image */}
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url("assets/hero-bg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
+      {/* Full-screen background video */}
+      <img src="assets/hero-bg.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }} />
       {/* Dark overlay for legibility */}
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(110deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0.25) 100%)', zIndex: 1 }} />
       <SpeedCanvas style={{ zIndex: 2 }} />
@@ -788,8 +789,7 @@ const Hero = ({ onShowreel, onBook, tweaks }) => {
         <div style={{ maxWidth: 700 }}>
           <h1 style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(54px,6.5vw,96px)', fontWeight: 700, textTransform: 'uppercase', lineHeight: 0.9, letterSpacing: '-0.02em', color: '#fff', marginBottom: 18, animation: 'fade-up .7s .2s both' }}>
             Your Event<br />
-            <span style={{ color: accent }}>Live</span><br />
-            Flawless
+            <span style={{ color: accent }}>Live</span>
           </h1>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 26, animation: 'fade-up .7s .3s both' }}>
             <div style={{ height: 2, width: 26, background: accent, flexShrink: 0 }} />
@@ -799,16 +799,7 @@ const Hero = ({ onShowreel, onBook, tweaks }) => {
             Multi-camera live streaming and broadcast production built for events of any scale.
           </p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', animation: 'fade-up .7s .5s both' }}>
-            <button className="btn-primary" style={{ background: accent }} onClick={() => { const el = document.getElementById('contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}>{tweaks.heroCta}</button>
-            <button className="showreel-btn" onClick={onShowreel}>
-              <div className="play-icon" style={{ background: accent }}>
-                <svg width="13" height="15" viewBox="0 0 14 16" fill="none"><path d="M1 1L13 8L1 15V1Z" fill="white" /></svg>
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: 'Blue Highway', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff', lineHeight: 1 }}>{tweaks.showreel}</div>
-                <div style={{ fontFamily: 'Barlow', fontSize: 11, color: '#555', marginTop: 3 }}>2 min · Best of 2024</div>
-              </div>
-            </button>
+            <button className="btn-primary" style={{ background: accent, padding: '16px 44px', fontSize: 15 }} onClick={() => { const el = document.getElementById('contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}>{tweaks.heroCta}</button>
           </div>
         </div>
 
@@ -837,35 +828,28 @@ const Hero = ({ onShowreel, onBook, tweaks }) => {
    SERVICE DATA
 ══════════════════════════════════════════ */
 const SERVICE_DATA = {
-  corporate: { label: 'Corporate', tagline: 'AGMs, Town Halls & Conferences',
-    intro: 'Polished multi-camera production for corporate events. Broadcast-ready output to any platform — from boardroom AGMs to national town halls.',
+  corporate: { label: 'Corporate / Event', tagline: 'AGMs, Town Halls & Conferences', price: 'From $1,000',
+    intro: 'Professional conference streaming without compromise. Clean visuals, flawless audio, and seamless delivery — whether it\'s a single keynote or a multi-subject/room experience.',
     onsite: ['2× dedicated 15A power circuits (separate from PA/FOH)', 'Ethernet or min 20 Mbps upload (we carry bonded 4G backup)', 'Clear sightlines from camera positions to stage/podium', 'Minimum 1 hour setup access before first guest arrives', 'Small production area (2×3m) for switcher and crew station', 'Run sheet and presenter order at least 48hrs prior'],
-    steps: [{ num: '01', title: 'Discovery Call', desc: 'Align on event brief, run sheet, platform (Zoom, YouTube, Teams, custom), audience size, and branding requirements.' }, { num: '02', title: 'Site Visit', desc: 'Venue walkthrough to confirm camera positions, power access, internet, and AV integration with house systems.' }, { num: '03', title: 'Pre-Production', desc: 'Build your graphics package — lower thirds, title cards, holding slides, opening animation — all matched to your brand.' }, { num: '04', title: 'Setup & Rehearsal', desc: 'Full rig day before your event. Test stream, rehearsal with AV team, presenter monitor check.' }, { num: '05', title: 'Event Day — Go Live', desc: 'Real-time multi-camera switching, live audio mixing, stream monitoring. Dedicated technical director on comms.' }, { num: '06', title: 'Post-Event Delivery', desc: 'Master recording within 24hrs. ISO camera files available. Platform archive link confirmed.' }]
+    steps: [{ num: '01', title: 'Full Production Brief', desc: 'We align on the full scope: rundown, platforms, graphic requirements, talent, crew, and timeline.' }, { num: '02', title: 'Location Scout', desc: 'On-site visit to confirm camera positions, power, networking, and venue logistics.' }, { num: '03', title: 'Asset Building & Demonstration', desc: 'Graphics, animations, and lower thirds built and signed off. Demo session to review everything before the day.' }, { num: '04', title: 'Pre-Production', desc: 'All assets locked. Crew briefed. Equipment prepped and tested. Run sheet finalised.' }, { num: '05', title: 'Technical Rehearsal', desc: 'Full walk-through with talent and crew. All cameras, graphics, and audio live. Notes resolved before broadcast.' }, { num: '06', title: 'Broadcast Day', desc: 'Full crew on comms. Director calling cameras, live switching, graphics, and platform delivery in real time.' }, { num: '07', title: 'Post', desc: 'Master recording delivered. Highlights cut and archived. Compliance copies provided as required.' }]
   },
-  event: { label: 'Event', tagline: 'Concerts, Galas & Ceremonies',
-    intro: 'From graduation ceremonies to music festivals — we deliver atmosphere, scale, and quality. Every camera position designed to tell the story of the room.',
-    onsite: ['Stage plan and technical rider minimum 2 weeks prior', 'Rigging access points confirmed with venue manager', 'Dedicated broadcast position (FOH or elevated platform)', 'Power: minimum 2× 20A circuits, separate from FOH audio', 'All-areas crew credential for setup day and event day', 'Full run of show with artist changeover times'],
-    steps: [{ num: '01', title: 'Briefing', desc: 'Event type, audience scale, platform, key moments to capture, and on-screen talent requirements.' }, { num: '02', title: 'Technical Rider', desc: 'We produce a full technical rider — camera positions, rigging, power, comms plan — shared with the venue.' }, { num: '03', title: 'Pre-Production', desc: 'Graphics package: animated opening title, lower thirds, sponsor logos, holding screens.' }, { num: '04', title: 'Setup Day', desc: 'Full rig, cable management, camera focus and colour match, comms test, stream test to platform.' }, { num: '05', title: 'Rehearsal / Sound Check', desc: 'Live mix rehearsal with FOH. Confirm IEM integration. Camera operator briefing with director.' }, { num: '06', title: 'Show Day', desc: 'Live production with full crew on comms. Real-time switching, graphics, stream monitoring.' }, { num: '07', title: 'Post-Event', desc: 'Full recording within 48hrs. ISO files available. Highlights cut within 72hrs.' }]
-  },
-  sport: { label: 'Sport', tagline: 'Live Sport & Athletics',
-    intro: 'Fast-paced multi-angle coverage with real-time switching and replay. Built for action. Built for broadcast. From local leagues to state-level championship.',
+  sport: { label: 'Live Sport', tagline: 'Sports Broadcasts', price: 'Multiple Rates', priceSub: 'Enquire below',
+    intro: 'Capture the intensity of your season or tournament. From single-camera coverage for grassroots sport to full broadcast productions with replays and live graphics for elite level — we\'ll bring your sport to your audience.',
     onsite: ['Elevated camera gantry or scaffold tower for wide shot', 'Field/venue access credential for all camera operators', 'Commentary position with clear sightline to full playing surface', 'Timing system feed or manual score entry process agreed', 'Internet uplink: 30 Mbps+ upload (we carry bonded 4G backup)', 'Minimum 90 min setup access before first whistle'],
-    steps: [{ num: '01', title: 'Technical Meeting', desc: 'Align on broadcast requirements, platform, graphic standards, and any athlete/sponsor commitments.' }, { num: '02', title: 'Venue Inspection', desc: 'Confirm gantry access, camera platform suitability, power locations, commentary room.' }, { num: '03', title: 'Graphics Build', desc: 'Team logos, scoreboard skin, athlete lower thirds, competition title animation, sponsor rotation.' }, { num: '04', title: 'Setup Day', desc: 'All cameras rigged and focused. Replay system tested. Commentary booth set up with talkback.' }, { num: '05', title: 'Pre-Match', desc: 'Full stream test, commentary team briefed on cues, scoreboard operator test, director run-through.' }, { num: '06', title: 'Live Match Production', desc: 'Full multi-camera coverage with real-time replay operator. Scoreboard updated live.' }, { num: '07', title: 'Post-Match', desc: 'Highlights package cut and delivered same day. Full master recording next business day.' }]
+    steps: [{ num: '01', title: 'Full Production Brief', desc: 'We align on the full scope: rundown, platforms, graphic requirements, talent, crew, and timeline.' }, { num: '02', title: 'Location Scout', desc: 'On-site visit to confirm camera positions, power, networking, and venue logistics.' }, { num: '03', title: 'Asset Building & Demonstration', desc: 'Graphics, animations, and lower thirds built and signed off. Demo session to review everything before the day.' }, { num: '04', title: 'Pre-Production', desc: 'All assets locked. Crew briefed. Equipment prepped and tested. Run sheet finalised.' }, { num: '05', title: 'Technical Rehearsal', desc: 'Full walk-through with talent and crew. All cameras, graphics, and audio live. Notes resolved before broadcast.' }, { num: '06', title: 'Broadcast Day', desc: 'Full crew on comms. Director calling cameras, live switching, graphics, and platform delivery in real time.' }, { num: '07', title: 'Post', desc: 'Master recording delivered. Highlights cut and archived. Compliance copies provided as required.' }]
   },
-  broadcast: { label: 'Broadcast', tagline: 'Full Broadcast Production',
-    intro: 'End-to-end broadcast solutions with production values to match any network. Graphics, commentary, replay, and multichannel delivery — all under one roof.',
-    onsite: ['Dedicated 3-phase power supply or minimum 4× 20A circuits', 'Secure production flypack area with cable management access', 'Internet: 50 Mbps+ upload (we carry bonded 4G/5G backup)', 'Talent greenroom with confidence monitor and IFB feed', 'Minimum 2-hour pre-production access on day of broadcast', 'Full script, rundown, and talent brief minimum 48hrs prior'],
-    steps: [{ num: '01', title: 'Full Production Brief', desc: 'Script, rundown, platform destinations, graphic style guide, talent list, sponsor commitments.' }, { num: '02', title: 'Director Assignment', desc: 'Senior director and producer assigned. Full crew call issued. Pre-production schedule locked.' }, { num: '03', title: 'Location Scout', desc: 'Technical specification produced — power, comms, camera positions, talent areas.' }, { num: '04', title: 'Pre-Production', desc: 'Full graphics package built and approved. Opening animation, lower thirds, bumpers, music.' }, { num: '05', title: 'Technical Rehearsal', desc: 'Full dress rehearsal with talent. All cameras, graphics, audio live. Notes addressed before TX.' }, { num: '06', title: 'Broadcast Day', desc: 'Full crew on comms. Live TX with director calling cameras, graphics operator, audio engineer.' }, { num: '07', title: 'Post-Broadcast', desc: 'Master TX recording. Platform-specific edits. Compliance archive. Highlights within 48hrs.' }]
+  broadcast: { label: 'Broadcast', tagline: 'Multi-Camera Broadcasts', price: 'From $2,400',
+    intro: 'High-impact live production, built to perform. From high octane events with instant replays and dynamic graphics, to polished functions — every angle, every moment, handled with precision.',
+    onsite: [],
+    steps: [{ num: '01', title: 'Full Production Brief', desc: 'We align on the full scope: rundown, platforms, graphic requirements, talent, crew, and timeline.' }, { num: '02', title: 'Location Scout', desc: 'On-site visit to confirm camera positions, power, networking, and venue logistics.' }, { num: '03', title: 'Asset Building & Demonstration', desc: 'Graphics, animations, and lower thirds built and signed off. Demo session to review everything before the day.' }, { num: '04', title: 'Pre-Production', desc: 'All assets locked. Crew briefed. Equipment prepped and tested. Run sheet finalised.' }, { num: '05', title: 'Technical Rehearsal', desc: 'Full walk-through with talent and crew. All cameras, graphics, and audio live. Notes resolved before broadcast.' }, { num: '06', title: 'Broadcast Day', desc: 'Full crew on comms. Director calling cameras, live switching, graphics, and platform delivery in real time.' }, { num: '07', title: 'Post', desc: 'Master recording delivered. Highlights cut and archived. Compliance copies provided as required.' }]
   },
-  systems: { label: 'Systems', tagline: 'Custom Installs & Equipment Hire',
-    intro: 'Purpose-built livestream and audio systems for boardrooms, houses of worship, venues, and studios. We design, supply, install, and support — or simply hire you the gear.',
-    hire: [
-      { category: 'Camera Packages', items: ['Sony FX3 Cinema Package (lens + monitor)', 'Sony PXW-Z190 ENG Package', 'PTZ Camera (HDMI/NDI output)', 'GoPro Hero Package (action/POV shots)', 'Tripod & fluid head sets'] },
-      { category: 'Switching & Vision', items: ['Blackmagic ATEM Mini Pro (4 inputs, stream direct)', 'Blackmagic ATEM Constellation (16 inputs, broadcast)', 'Blackmagic Web Presenter HD (USB streaming)'] },
-      { category: 'Encoding & Streaming', items: ['LiveU Solo (bonded 4G encoder)', 'Teradek VidiU (cloud streaming encoder)', 'Laptop streaming station (OBS configured)'] },
-      { category: 'Audio', items: ['Rode Wireless GO II (dual lavalier kit)', 'Sennheiser EW 100 RF system', 'Zoom H6 portable recorder', 'DI boxes & XLR snake sets', 'QSC K10.2 powered speaker pair'] },
-      { category: 'Accessories', items: ['LED panel lighting (dimmable, bi-colour)', 'HDMI / SDI cables & adapters', 'Confidence monitor (15" portable display)', 'Equipment transport cases & trolleys'] }
-    ],
+  promo: { label: 'Promo', tagline: 'Promo Content', price: 'From $600',
+    intro: 'Building your audience is the goal. We create sharp, engaging content that builds hype before and keeps attention after. Designed for reach, built for impact.',
+    onsite: [],
+    steps: [{ num: '01', title: 'Full Production Brief', desc: 'We align on the full scope: rundown, platforms, graphic requirements, talent, crew, and timeline.' }, { num: '02', title: 'Location Scout', desc: 'On-site visit to confirm camera positions, power, networking, and venue logistics.' }, { num: '03', title: 'Asset Building & Demonstration', desc: 'Graphics, animations, and lower thirds built and signed off. Demo session to review everything before the day.' }, { num: '04', title: 'Pre-Production', desc: 'All assets locked. Crew briefed. Equipment prepped and tested. Run sheet finalised.' }, { num: '05', title: 'Technical Rehearsal', desc: 'Full walk-through with talent and crew. All cameras, graphics, and audio live. Notes resolved before broadcast.' }, { num: '06', title: 'Broadcast Day', desc: 'Full crew on comms. Director calling cameras, live switching, graphics, and platform delivery in real time.' }, { num: '07', title: 'Post', desc: 'Master recording delivered. Highlights cut and archived. Compliance copies provided as required.' }]
+  },
+  systems: { label: 'Systems', tagline: 'Custom Systems Installation',
+    intro: 'Built for reliability. Designed for you. We create custom live-streaming systems for your organisations—giving you complete control to go live, anytime.',
     build: [
       { title: 'Boardroom & Corporate', desc: 'Fixed PTZ camera, ceiling mic array, HDMI switching, and software encoder. Designed for hybrid meetings, town halls, and recurring webcasts — fully operable by non-technical staff.' },
       { title: 'House of Worship', desc: 'Multi-camera install with automated switching, graphics templates for announcements and lyrics, and reliable platform delivery. Scalable from weekly services to major events.' },
@@ -874,6 +858,17 @@ const SERVICE_DATA = {
       { title: 'Streaming Infrastructure', desc: 'End-to-end network design for live streaming — encoding, CDN configuration, platform management (YouTube, Facebook, custom RTMP), and redundancy planning.' },
     ],
     steps: [{ num: '01', title: 'Consultation', desc: 'Understand your use case — streaming platform, audience size, room layout, budget, and any existing AV equipment.' }, { num: '02', title: 'System Design', desc: 'We produce a full system diagram: camera positions, audio signal flow, encoding path, network topology, and cable schedule.' }, { num: '03', title: 'Equipment Specification', desc: 'Hardware selected and quoted — cameras, lenses, switcher, encoder, audio interface, cabling, and mounts. Hire options available for any or all items.' }, { num: '04', title: 'Installation', desc: 'Our team installs and commissions the full system. Cable management, mounting, labelling, and full signal test.' }, { num: '05', title: 'Training & Handover', desc: 'Your team trained on day-to-day operation. Documentation provided. Remote support available.' }, { num: '06', title: 'Ongoing Support', desc: 'Optional support retainer — remote troubleshooting, firmware updates, and on-site call-outs as needed.' }]
+  },
+  hire: { label: 'Hire', tagline: 'Equipment Hire',
+    intro: 'Short or long-term hire available on all items. Delivery, setup assistance, and operator hire available on request.',
+    hire: [
+      { category: 'Cameras', items: ['Sony PXW-Z150', 'Panasonic HC-X2000', 'Tripod per camera'] },
+      { category: 'Switchers', items: ['Blackmagic ATEM Constellation 2 M/E HD (20 inputs, 12 outputs)', 'Blackmagic ATEM Television Studio HD (HD)', 'Blackmagic ATEM Mini Pro ISO (HD)', 'Blackmagic ATEM SDI Extreme ISO'] },
+      { category: 'Encoding & Streaming', items: ['LiveU Solo (bonded 4G/5G — 3x connections)', 'Laptop streaming station (OBS configured)'] },
+      { category: 'Audio', items: ['Commentator headset & monitor out kits', 'Shotgun microphones', 'Lavalier microphones'] },
+      { category: 'Accessories', items: ['Aputure Nova P300c LED panels', 'HDMI/SDI cross converters', 'SmallHD 702 confidence monitor (7")'] }
+    ],
+    steps: []
   }
 };
 
@@ -982,9 +977,13 @@ const ServiceConfig = ({ accent }) => {
 
 };
 
-const ServiceModal = ({ service, onClose, accent }) => {
-  const [tab, setTab] = useState('overview');
+const ServiceModal = ({ service, onClose, onServiceChange, accent }) => {
+  const [tab, setTab] = useState(service === 'systems' ? 'build' : service === 'hire' ? 'hire' : 'overview');
   const data = SERVICE_DATA[service];
+
+  useEffect(() => {
+    setTab(service === 'systems' ? 'build' : service === 'hire' ? 'hire' : 'overview');
+  }, [service]);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -994,18 +993,22 @@ const ServiceModal = ({ service, onClose, accent }) => {
   }, []);
 
   const PROVIDES = {
-    corporate: ['Vision switcher & multi-camera flypack','Dedicated presenter & wide cameras','Live graphics — lower thirds, title cards, bugs','Broadcast encoder with platform delivery','Lapel & shotgun microphone package','Crew comms & technical direction'],
-    event: ['Full multi-camera flypack (4–6 cams)','Handheld ENG operators for crowd & atmosphere','Animated event graphics & sponsor bugs','Bonded uplink — simultaneous multi-platform','On-site audio capture & broadcast mix','Replay & highlights system'],
-    sport: ['Wide overview + action sideline cameras','Dedicated slow-motion replay camera','Live scoreboard & athlete lower thirds','Commentary booth setup & talkback','Real-time replay operator','Full crew on comms throughout'],
-    broadcast: ['Full broadcast flypack up to 6 cameras','ISO recording on every channel','Animated open, bumpers & full graphic package','Professional CDN delivery — multi-platform','Teleprompter & talent IFB package','Senior director + full production crew'],
-    systems: ['Full system design & documentation','Camera, lens & mounting hardware supply','Vision switcher & encoding solution','Professional audio interface & speaker systems','Network & streaming platform integration','Equipment hire — short or long term','Staff training & operational handover','Ongoing remote & on-site support'],
+    corporate: ['Vision switcher & multi-camera flypack','Live graphics — lower thirds, title cards, bugs','Broadcast standard encoders (any platform)','Directors, Producers, Camera, Audio as required','Integratable into existing AV Systems','Independent Audio systems (lavs/mics)','Backup Recording of Program'],
+    sport: ['Single Camera Streaming','Multi-Location with Individual Streams','Season Packages','Tournament Package','Single Commentator Audio Package','Dual Commentator Audio Package'],
+    broadcast: ['Vision switcher & multi-camera flypack','Up to 20 Inputs (Cameras / Sources)','Live Graphics / Custom Graphics','2-Camera Replay System','Backup Recording of Program','Crew','Setup & Installation','Stream to Any Platform'],
+    promo: ['Videography Coverage','Photography Coverage','Highlight Reels','Social Cutdowns / Edits'],
+    systems: ['Custom Design & Install','Staff Training','Ongoing Support'],
+    hire: ['Camera Packages','Switching & Vision','Encoding & Streaming','Audio','Accessories'],
   };
 
   const isSystem = service === 'systems';
-  const tabs = isSystem ? ['hire','build','process'] : ['overview','onsite','process'];
+  const isHire = service === 'hire';
+  const tabs = isSystem ? ['build','process'] : isHire ? ['hire'] : ['overview','process'];
   const labels = isSystem
-    ? { hire:'Equipment Hire', build:'Custom Build', process:'Process' }
-    : { overview:'What We Provide', onsite:'Requirements', process:'Process' };
+    ? { build:'Custom Build', process:'Process' }
+    : isHire
+    ? { hire:'Equipment Hire' }
+    : { overview:'What We Provide', process:'Process' };
 
   return (
     <>
@@ -1048,6 +1051,22 @@ const ServiceModal = ({ service, onClose, accent }) => {
                     </div>
                   ))}
                 </div>
+
+                {service === 'corporate' && (
+                  <div style={{ marginTop:28, padding:'20px 24px', background:'#fff', border:'1px solid #EBEBEB', borderRadius:4, display:'flex', alignItems:'center', justifyContent:'space-between', gap:16, flexWrap:'wrap' }}>
+                    <div>
+                      <div style={{ fontFamily:'Barlow', fontSize:10, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:accent, marginBottom:4 }}>Add-on</div>
+                      <div style={{ fontFamily:'Blue Highway', fontSize:16, fontWeight:700, textTransform:'uppercase', color:'#0A0A0A', marginBottom:4 }}>Promo Content</div>
+                      <p style={{ fontFamily:'Barlow', fontSize:12, color:'#888', lineHeight:1.55, maxWidth:380 }}>Build hype before and keep attention after your event — highlight reels, social cutdowns, videography, and photography coverage.</p>
+                    </div>
+                    <button onClick={() => onServiceChange('promo')}
+                      style={{ fontFamily:'Blue Highway', fontSize:11, fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', background:accent, color:'#fff', border:'none', borderRadius:4, padding:'11px 22px', cursor:'pointer', flexShrink:0, transition:'opacity .15s' }}
+                      onMouseEnter={e => e.currentTarget.style.opacity='0.85'}
+                      onMouseLeave={e => e.currentTarget.style.opacity='1'}>
+                      View Promo Services
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -1135,23 +1154,24 @@ const ServiceModal = ({ service, onClose, accent }) => {
 ══════════════════════════════════════════ */
 const serviceIcons = {
   corporate: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="7" width="22" height="16" rx="2" /><path d="M9 7V5a1 1 0 011-1h8a1 1 0 011 1v2" /><path d="M14 13v4M10 15h8" /></svg>,
-  event: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="14,3 17,10 25,11 19,17 21,24 14,20 7,24 9,17 3,11 11,10" /></svg>,
   sport: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="14" cy="14" r="11" /><path d="M8 6.5c2 4 2 11 0 15M20 6.5c-2 4-2 11 0 15M3 11h22M3 17h22" /></svg>,
   broadcast: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="24" height="15" rx="2" /><path d="M9 24h10M14 20v4" /><circle cx="14" cy="12.5" r="3.5" /></svg>,
-  systems: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="8" width="10" height="7" rx="1.5" /><rect x="16" y="8" width="10" height="7" rx="1.5" /><path d="M12 11.5h4M7 15v5M21 15v5M4 20h6M18 20h6" /></svg>
+  systems: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="8" width="10" height="7" rx="1.5" /><rect x="16" y="8" width="10" height="7" rx="1.5" /><path d="M12 11.5h4M7 15v5M21 15v5M4 20h6M18 20h6" /></svg>,
+  promo: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="18" height="16" rx="2" /><path d="M20 11l6-3v12l-6-3V11z" /><path d="M7 11h8M7 15h5" /></svg>,
+  hire: <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20V10a2 2 0 012-2h16a2 2 0 012 2v10" /><path d="M2 20h24" /><path d="M10 8V6a2 2 0 012-2h4a2 2 0 012 2v2" /><circle cx="14" cy="14" r="2.5" /></svg>
 };
 
-const Services = ({ onServiceClick, onPricingOpen, accent }) => {
+const Services = ({ onServiceClick, onPricingOpen, onQuoteClick, accent }) => {
   useReveal();
   return (
     <section id="services" className="section-block" style={{ background: '#0A0A0A', padding: '112px 0', borderBottom: '1px solid #1a1a1a' }}>
       <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
         <div className="reveal" style={{ marginBottom: 60 }}>
           <SectionLabel text="What We Do" accent={accent} />
-          <h2 style={{ fontFamily: 'Blue Highway', fontSize: 52, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.01em', color: '#fff', lineHeight: 0.95 }}>Built for Every Stage</h2>
-          <p style={{ fontFamily: 'Barlow', fontSize: 16, fontWeight: 300, color: '#555', marginTop: 14, maxWidth: 420, lineHeight: 1.65 }}>Four specialist verticals. One production team. Broadcast-grade results.</p>
+          <h2 style={{ fontFamily: 'Blue Highway', fontSize: 52, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.01em', color: '#fff', lineHeight: 0.95 }}>Built For Every Moment. <span style={{ color: accent }}>Live.</span></h2>
+          <p style={{ fontFamily: 'Barlow', fontSize: 16, fontWeight: 300, color: '#555', marginTop: 14, maxWidth: 420, lineHeight: 1.65 }}>Engineered for impact.</p>
         </div>
-        <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,minmax(0,1fr))', gap: 14 }}>
+        <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 14 }}>
           {Object.entries(SERVICE_DATA).map(([key, s], i) =>
           <div key={key} className={`service-card reveal-zoom d${i + 1}`} onClick={() => onServiceClick(key)}>
               <div style={{ color: '#444', marginBottom: 22, transition: 'color .2s' }}
@@ -1161,7 +1181,13 @@ const Services = ({ onServiceClick, onPricingOpen, accent }) => {
               </div>
               <div style={{ fontFamily: 'Blue Highway', fontSize: 22, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: accent, marginBottom: 8 }}>{s.label}</div>
               <h3 style={{ fontFamily: 'Blue Highway', fontSize: 16, fontWeight: 700, textTransform: 'uppercase', color: '#fff', lineHeight: 1.2, marginBottom: 12 }}>{s.tagline}</h3>
-              <p style={{ fontFamily: 'Barlow', fontSize: 13, color: '#555', lineHeight: 1.65, marginBottom: 22 }}>{s.intro.slice(0, 100)}…</p>
+              <p style={{ fontFamily: 'Barlow', fontSize: 13, color: '#555', lineHeight: 1.65, marginBottom: s.price ? 14 : 22 }}>{s.intro.slice(0, 100)}…</p>
+              {s.price && (
+                <div style={{ marginBottom: 18, paddingTop: 12, borderTop: '1px solid #1a1a1a' }}>
+                  <span style={{ fontFamily: 'Blue Highway', fontSize: 20, color: '#fff', letterSpacing: '0.02em' }}>{s.price}</span>
+                  {s.priceSub && <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: '#444', marginTop: 4 }}>{s.priceSub}</div>}
+                </div>
+              )}
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: accent }}>
                 <span style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>View Details</span>
                 <svg width="13" height="9" viewBox="0 0 14 10" fill="none"><path d="M0 5h12M8 1l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -1169,15 +1195,15 @@ const Services = ({ onServiceClick, onPricingOpen, accent }) => {
             </div>
           )}
         </div>
-        <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', gap: 16, borderTop: '1px solid #181818', paddingTop: 36 }}>
-          <button onClick={onPricingOpen}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontFamily: 'Blue Highway', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', background: accent, border: 'none', borderRadius: 4, color: '#fff', padding: '12px 26px', cursor: 'pointer', transition: 'opacity .15s' }}
+        <div style={{ marginTop: 40, borderTop: '1px solid #181818', paddingTop: 36, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span style={{ fontFamily: 'Barlow', fontSize: 14, color: '#555' }}>Or</span>
+          <button onClick={onQuoteClick}
+            style={{ fontFamily: 'Blue Highway', fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', background: accent, color: '#fff', border: 'none', borderRadius: 4, padding: '11px 22px', cursor: 'pointer', transition: 'opacity .15s' }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
             onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/></svg>
-            View Pricing
+            Get a Quote
           </button>
-          <span style={{ fontFamily: 'Barlow', fontSize: 13, color: '#444' }}>Our most popular livestream packages — starting from $1,000.</span>
+          <span style={{ fontFamily: 'Barlow', fontSize: 14, color: '#555' }}>if you need something custom.</span>
         </div>
       </div>
     </section>);
@@ -1190,105 +1216,62 @@ const Services = ({ onServiceClick, onPricingOpen, accent }) => {
    TEAM
 ══════════════════════════════════════════ */
 const TEAM = [
-{ name: 'Joseph Clarke', role: 'Director of Photography', type: 'full', bio: 'Co-founder. 10+ years in live broadcast. Led production for State Athletics, Adelaide Tech Summit, and dozens of corporate events across SA.' },
-{ name: 'Jack Bennett', role: 'Technical Director', type: 'full', bio: 'Co-founder. Broadcast engineering specialist. Oversees all systems — switching, encoding, networking, and signal flow for every production.' },
-{ name: 'Sam Rivers', role: 'Camera Operator', type: 'contractor', bio: 'Handheld and action specialist. 6 years in sports broadcast and live event coverage.' },
-{ name: 'Mia Chen', role: 'Audio Engineer', type: 'contractor', bio: 'Broadcast audio specialist. RF, mix, and IEM integration with FOH teams.' },
-{ name: 'Tyler Cross', role: 'Graphics & Motion', type: 'contractor', bio: 'Live graphics packages — scoreboard skins to animated broadcast opens.' },
-{ name: 'Bec Walsh', role: 'Camera Operator', type: 'contractor', bio: 'Multi-format operator with corporate, event, and sports production experience.' },
-{ name: 'Dan Okoro', role: 'Replay Operator', type: 'contractor', bio: 'Live replay and highlight specialist across sport and entertainment.' },
-{ name: 'Luka Petrov', role: 'Technical Support', type: 'contractor', bio: 'Setup, cabling, and systems support for every production day.' }];
+{ name: 'Jack Bennett', role: 'Technical Director', type: 'full', photo: 'assets/team/jack-bennett.png', bio: 'Jack Yordanoff Bennett, OverDrive Live Director/Producer. I\'m dedicated to helping businesses & sport organisations expand their production value through professional video & broadcast. I deliver high-quality livestreams and event coverage that elevates your brand and keeps your audience engaged.' },
+{ name: 'Joseph Clarke', role: 'Director of Photography', type: 'full', photo: 'assets/team/joseph-clarke.png', bio: 'I work closely with clients to deliver reliable, high-quality livestreams for corporate events, sports, and live productions. I take a hands-on approach to every project, focusing on preparation, clear communication, and building systems that ensure everything runs smoothly on the day. With a background in film and broadcast production, I bring a strong visual standard and a practical, problem-solving mindset to live environments.' }];
 
 
 const Team = ({ accent }) => {
-  const [showTeam, setShowTeam] = useState(false);
+  const fullTeam = TEAM.filter(t => t.type === 'full');
   return (
     <section id="about" className="section-block" style={{ background: '#fff', padding: '112px 0', borderBottom: '1px solid #EFEFEF' }}>
       <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
-        <div className="reveal about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start', marginBottom: 56 }}>
+        {/* Top row: bio + photo */}
+        <div className="reveal about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'start', marginBottom: 40 }}>
           <div>
             <SectionLabel text="About Us" accent={accent} />
             <h2 style={{ fontFamily: 'Blue Highway', fontSize: 48, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.01em', color: '#0A0A0A', lineHeight: 0.95, marginBottom: 24 }}>
               Adelaide's Live<br />Production Specialists
             </h2>
-            <p style={{ fontFamily: 'Barlow', fontSize: 16, fontWeight: 300, color: '#666', lineHeight: 1.75, marginBottom: 20 }}>
-              OverDrive Live was founded by two broadcast professionals who believed every event — no matter the size — deserves broadcast-quality production. We started with a single camera and a passion for live storytelling. Today we run full multi-camera flypack rigs across South Australia.
+            <p style={{ fontFamily: 'Barlow', fontSize: 15, fontWeight: 300, color: '#666', lineHeight: 1.8, marginBottom: 14 }}>
+              OverDrive Live was built on a simple idea: live events deserve to be captured properly.
             </p>
-            <ul style={{ margin: '0 0 20px', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 11 }}>
-              {['Broadcast-quality at every scale', 'Adelaide-based, nationally experienced', 'Full crew — no subcontracting, no surprises'].map((item, idx) => (
-                <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 18, height: 18, borderRadius: 2, border: `1.5px solid ${accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <svg width="9" height="7" viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke={accent} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </div>
-                  <span style={{ fontFamily: 'Barlow', fontSize: 14, color: '#555', lineHeight: 1.5 }}>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <p style={{ fontFamily: 'Barlow', fontSize: 14, color: '#aaa', lineHeight: 1.75, marginBottom: 32 }}>
-              Our core team of two full-timers is supported by a trusted network of six specialist contractors — camera operators, audio engineers, graphics artists, and replay technicians — brought in for every production. You always get the right crew for the job.
+            <p style={{ fontFamily: 'Barlow', fontSize: 15, fontWeight: 300, color: '#666', lineHeight: 1.8, marginBottom: 14 }}>
+              What started with two cameras and friends from film school has grown into 10+ years combined experience and delivery of full multi-camera productions across Australia. While the scale has changed, and our team has broadened, our focus hasn't.
             </p>
-            <button onClick={() => setShowTeam(v => !v)}
-              style={{ fontFamily: 'Blue Highway', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${accent}`, borderRadius: 4, color: accent, padding: '10px 22px', cursor: 'pointer', transition: 'background .15s, color .15s', display: 'flex', alignItems: 'center', gap: 8 }}
-              onMouseEnter={e => { e.currentTarget.style.background = accent; e.currentTarget.style.color = '#fff'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = accent; }}>
-              {showTeam ? 'Hide Team ↑' : 'Meet the Team ↓'}
-            </button>
+            <p style={{ fontFamily: 'Barlow', fontSize: 15, fontWeight: 300, color: '#666', lineHeight: 1.8, marginBottom: 14 }}>
+              We're here to bring a high quality broadcast to every event, and give your audience viewing experiences that blow them away.
+            </p>
+            <p style={{ fontFamily: 'Barlow', fontSize: 15, fontWeight: 300, color: '#666', lineHeight: 1.8 }}>
+              Contact us today to see how we can bring you an amazing quality broadcast. With our internal team and external team of crew, we are ready to enhance your next event.
+            </p>
           </div>
-          <div>
-            <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden', marginBottom: 14 }}>
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: accent, zIndex: 2 }} />
-              <img src="assets/team-photo.png" alt="OverDrive Live in production" style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }} />
-              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 16px 12px', background: 'linear-gradient(transparent, rgba(0,0,0,0.55))', pointerEvents: 'none' }}>
-                <span style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.65)' }}>OverDrive Live · On Location</span>
-              </div>
-            </div>
-            <div className="stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-              {[['8+', 'Years Experience', true], ['500+', 'Events Delivered', false], ['2', 'Full-Time Crew', true], ['6', 'Specialist Contractors', false]].map(([val, lbl, red], i) => (
-                <div key={i} className={`reveal-zoom d${i+1}`} style={{ background: '#F9F9F9', border: '1px solid #EFEFEF', borderRadius: 4, padding: '22px 20px' }}>
-                  <div style={{ fontFamily: 'Blue Highway', fontSize: 34, fontWeight: 700, color: red ? accent : '#0A0A0A', lineHeight: 1, textTransform: 'uppercase', marginBottom: 6 }}>{val}</div>
-                  <div style={{ fontFamily: 'Barlow', fontSize: 12, color: '#aaa', fontWeight: 500 }}>{lbl}</div>
-                </div>
-              ))}
+          <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: accent, zIndex: 2 }} />
+            <img src="assets/hero-bg.png" alt="OverDrive Live in production" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 16px 12px', background: 'linear-gradient(transparent, rgba(0,0,0,0.55))', pointerEvents: 'none' }}>
+              <span style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.65)' }}>OverDrive Live · On Location</span>
             </div>
           </div>
         </div>
 
-        {/* Expandable team */}
-        <div style={{ overflow: 'hidden', maxHeight: showTeam ? 800 : 0, transition: 'max-height 0.5s cubic-bezier(.22,1,.36,1)', opacity: showTeam ? 1 : 0, transitionProperty: 'max-height, opacity' }}>
-          <div style={{ paddingTop: 8 }}>
-            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#ccc', marginBottom: 12 }}>Core Team</div>
-            <div className="team-full-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
-              {TEAM.filter(t => t.type === 'full').map((m, i) => (
-                <div key={i} className={`team-card reveal-zoom d${i+1}`} style={{ display: 'flex' }}>
-                  <div style={{ width: 90, background: `linear-gradient(160deg, ${accent}18 0%, #F0F0F0 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: accent }} />
-                    <span style={{ fontFamily: 'Blue Highway', fontSize: 26, fontWeight: 700, color: accent }}>{m.name.split(' ').map(n => n[0]).join('')}</span>
-                  </div>
-                  <div style={{ padding: '18px 20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5 }}>
-                      <div style={{ width: 5, height: 5, background: accent, borderRadius: '50%' }} />
-                      <span style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent }}>Full Time</span>
-                    </div>
-                    <div style={{ fontFamily: 'Blue Highway', fontSize: 18, fontWeight: 700, textTransform: 'uppercase', color: '#0A0A0A', marginBottom: 2 }}>{m.name}</div>
-                    <div style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#ccc', marginBottom: 8 }}>{m.role}</div>
-                    <p style={{ fontFamily: 'Barlow', fontSize: 12, color: '#888', lineHeight: 1.6 }}>{m.bio}</p>
-                  </div>
-                </div>
-              ))}
+        {/* Bottom row: team cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+          {fullTeam.map((m, i) => (
+            <div key={i} className={`team-card reveal-zoom d${i+1}`} style={{ display: 'flex', background: '#F9F9F9', border: '1px solid #EFEFEF', borderRadius: 4, overflow: 'hidden' }}>
+              <div style={{ width: 110, flexShrink: 0, position: 'relative', overflow: 'hidden', background: '#EBEBEB' }}>
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: accent, zIndex: 2 }} />
+                {m.photo
+                  ? <img src={m.photo} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block', minHeight: 160 }} onError={e => { e.currentTarget.style.display='none'; }} />
+                  : <div style={{ minHeight: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ fontFamily: 'Blue Highway', fontSize: 26, fontWeight: 700, color: accent }}>{m.name.split(' ').map(n => n[0]).join('')}</span></div>
+                }
+              </div>
+              <div style={{ padding: '18px 20px' }}>
+                <div style={{ fontFamily: 'Blue Highway', fontSize: 16, fontWeight: 700, textTransform: 'uppercase', color: '#0A0A0A', marginBottom: 2 }}>{m.name}</div>
+                <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: accent, marginBottom: 10 }}>{m.role}</div>
+                <p style={{ fontFamily: 'Barlow', fontSize: 11, color: '#888', lineHeight: 1.65 }}>{m.bio}</p>
+              </div>
             </div>
-            <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#ccc', marginBottom: 12 }}>Production Contractors</div>
-            <div className="team-contractor-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 10 }}>
-              {TEAM.filter(t => t.type === 'contractor').map((m, i) => (
-                <div key={i} className={`team-card reveal-zoom d${i+1}`} style={{ padding: '18px 12px', textAlign: 'center' }}>
-                  <div style={{ width: 42, height: 42, background: '#F5F5F5', border: '1px solid #EBEBEB', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
-                    <span style={{ fontFamily: 'Blue Highway', fontSize: 16, fontWeight: 700, color: '#ccc' }}>{m.name.split(' ').map(n => n[0]).join('')}</span>
-                  </div>
-                  <div style={{ fontFamily: 'Blue Highway', fontSize: 12, fontWeight: 700, textTransform: 'uppercase', color: '#0A0A0A', lineHeight: 1.2, marginBottom: 4 }}>{m.name.split(' ')[0]}<br />{m.name.split(' ')[1]}</div>
-                  <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#ccc', marginBottom: 6 }}>{m.role}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -1314,20 +1297,7 @@ const Stars = ({ accent }) => (
   </div>
 );
 
-const CLIENT_LOGOS = [
-  { name: 'Adelaide Convention Centre', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor"/><rect x="12" y="2" width="6" height="6" rx="1" fill="currentColor"/><rect x="2" y="12" width="6" height="6" rx="1" fill="currentColor"/><rect x="12" y="12" width="6" height="6" rx="1" fill="currentColor"/></svg> },
-  { name: 'Athletics SA', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M2 16L10 4l8 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M5.5 11h9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg> },
-  { name: 'National Foods', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="2"/><circle cx="10" cy="10" r="3" fill="currentColor"/></svg> },
-  { name: 'University of SA', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2L18 7v1L10 5 2 8V7l8-5z" fill="currentColor"/><rect x="5" y="10" width="10" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="8" y="13" width="4" height="4" fill="currentColor"/></svg> },
-  { name: 'City Music Collective', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 14V7l14-3v7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><circle cx="6" cy="14" r="3" stroke="currentColor" strokeWidth="1.8"/><circle cx="17" cy="11" r="3" stroke="currentColor" strokeWidth="1.8"/></svg> },
-  { name: 'TechSummit AU', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="2.5" fill="currentColor"/><circle cx="3" cy="5" r="1.5" fill="currentColor"/><circle cx="17" cy="5" r="1.5" fill="currentColor"/><circle cx="3" cy="15" r="1.5" fill="currentColor"/><circle cx="17" cy="15" r="1.5" fill="currentColor"/><path d="M4.5 5.5L8 8.5M15.5 5.5L12 8.5M4.5 14.5L8 11.5M15.5 14.5L12 11.5" stroke="currentColor" strokeWidth="1.2"/></svg> },
-  { name: 'Adelaide Oval', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="10" rx="8" ry="6" stroke="currentColor" strokeWidth="2"/><ellipse cx="10" cy="10" rx="4" ry="2.5" stroke="currentColor" strokeWidth="1.5"/></svg> },
-  { name: 'SA Health', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M3 10h14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/></svg> },
-  { name: 'Channel 7 Adelaide', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 5h12L9 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
-  { name: 'City of Adelaide', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2L18 8v10H2V8l8-6z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/><rect x="7" y="12" width="6" height="6" fill="currentColor"/></svg> },
-  { name: 'Flinders University', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2c0 0-7 5-7 10a7 7 0 0014 0C17 7 10 2 10 2z" stroke="currentColor" strokeWidth="1.8"/><path d="M10 8v8M7 11h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg> },
-  { name: 'RAA Group', mark: <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l2.5 5h5.5l-4.5 3.5 1.5 5.5L10 13l-5 3 1.5-5.5L2 7h5.5L10 2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg> },
-];
+const CLIENT_LOGOS = (window.OD_CLIENTS || []);
 
 const Testimonials = ({ accent }) => {
   const doubled = [...TESTIMONIALS, ...TESTIMONIALS];
@@ -1336,22 +1306,25 @@ const Testimonials = ({ accent }) => {
       {/* Client logos */}
       <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', marginBottom: 72 }}>
         <div className="reveal" style={{ marginBottom: 28 }}>
-          <SectionLabel text="Trusted By" accent={accent} />
+          <SectionLabel text="Trusted at and by:" accent={accent} />
         </div>
-        <div className="logo-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 1, background: '#E8E8E8' }}>
-          {CLIENT_LOGOS.map((client, i) => (
-            <div key={i} className={`reveal d${(i%6)+1}`}
-              style={{ background: '#fff', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, transition: 'background .2s', cursor: 'default' }}
-              onMouseEnter={e => e.currentTarget.style.background = '#FAFAFA'}
-              onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
-              <img
-                src={`https://placehold.co/64x64/F0F0F0/AAAAAA?text=${encodeURIComponent(client.name.split(' ').map(w=>w[0]).join('').slice(0,4))}`}
-                alt={client.name}
-                style={{ width: 64, height: 64, objectFit: 'contain', borderRadius: 4 }}
-              />
-            </div>
-          ))}
-        </div>
+        {CLIENT_LOGOS.length > 0 ? (
+          <div className="logo-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 1, background: '#E8E8E8' }}>
+            {CLIENT_LOGOS.map((client, i) => (
+              <div key={i} className={`reveal d${(i%6)+1}`}
+                style={{ background: '#fff', padding: '24px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#FAFAFA'}
+                onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
+                <img
+                  src={`assets/clients/${client.file}`}
+                  alt={client.name}
+                  onError={e => { e.currentTarget.closest('div').style.display = 'none'; }}
+                  style={{ maxWidth: '100%', maxHeight: 56, objectFit: 'contain', display: 'block' }}
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       {/* Testimonials */}
@@ -1516,7 +1489,7 @@ const PricingModal = ({ onClose, accent }) => {
           </p>
           <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #141414', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
             <span style={{ fontFamily: 'Barlow', fontSize: 12, color: '#444' }}>Have questions about what's included?</span>
-            <a href="work.html#faq" style={{ fontFamily: 'Barlow', fontSize: 12, fontWeight: 600, color: '#C41E1E', textDecoration: 'none' }}
+            <a href="/faq/" style={{ fontFamily: 'Barlow', fontSize: 12, fontWeight: 600, color: '#C41E1E', textDecoration: 'none' }}
               onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
               onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}>
               Read our FAQ →
@@ -1528,8 +1501,7 @@ const PricingModal = ({ onClose, accent }) => {
   );
 };
 
-const ContactSection = ({ accent }) => {
-  const [formTab, setFormTab] = useState('general');
+const ContactSection = ({ accent, formTab, setFormTab }) => {
   const [sentGeneral, setSentGeneral] = useState(false);
   const [generalError, setGeneralError] = useState(false);
   const [sentDetailed, setSentDetailed] = useState(false);
@@ -1572,39 +1544,24 @@ const ContactSection = ({ accent }) => {
   );
 
   return (
-    <section id="contact" style={{ position: 'relative', background: '#0A0A0A', padding: '100px 0 0', overflow: 'hidden' }}>
+    <section id="contact" style={{ position: 'relative', background: '#0A0A0A', padding: '40px 0 0', overflow: 'hidden' }}>
       <SpeedCanvas />
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${accent} 35%, ${accent} 70%, transparent)` }} />
 
       <div className="section-inner" style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
         {/* Headline */}
-        <div style={{ textAlign: 'center', marginBottom: 72 }}>
-          <div className="reveal" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: `rgba(196,30,30,0.1)`, border: `1px solid rgba(196,30,30,0.25)`, borderRadius: 2, padding: '5px 12px', marginBottom: 24 }}>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <div className="reveal" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: `rgba(196,30,30,0.1)`, border: `1px solid rgba(196,30,30,0.25)`, borderRadius: 2, padding: '5px 12px', marginBottom: 0 }}>
             <span style={{ width: 6, height: 6, background: accent, borderRadius: '50%', display: 'inline-block', animation: 'live-pulse 2s infinite' }} />
             <span style={{ fontFamily: 'Blue Highway', fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent }}>Ready to Go Live</span>
           </div>
-          <h2 className="reveal" style={{ fontFamily: 'Blue Highway', fontSize: 'clamp(40px,6.5vw,84px)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.02em', color: '#fff', lineHeight: 0.92, marginBottom: 20 }}>
-            Your Event Deserves<br /><span style={{ color: accent }}>Broadcast Quality.</span>
-          </h2>
-          <p className="reveal" style={{ fontFamily: 'Barlow', fontSize: 17, fontWeight: 300, color: '#888', maxWidth: 420, lineHeight: 1.65, margin: '0 auto 16px' }}>
-            Tell us about your event and we'll come back within 24 hours.
-          </p>
-          <p className="reveal" style={{ fontFamily: 'Barlow', fontSize: 13, color: '#555', margin: '0 auto' }}>
-            Not sure yet?{' '}
-            <a href="work.html#faq" style={{ color: '#C41E1E', textDecoration: 'none', fontWeight: 600 }}
-              onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
-              onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}>
-              Read our FAQ
-            </a>
-            {' '}for answers to common questions about pricing, equipment, and what to expect.
-          </p>
         </div>
 
         {/* Tab toggle */}
         <div className="reveal" style={{ display: 'flex', justifyContent: 'center', marginBottom: 32 }}>
           <div style={{ display: 'inline-flex', background: '#111', border: '1px solid #1a1a1a', borderRadius: 4, padding: 4 }}>
-            {[['general','General Enquiry'],['detailed','Detailed Quote']].map(([key, label]) => (
-              <button key={key} onClick={() => setFormTab(key)} style={{ padding: '11px 28px', borderRadius: 3, border: 'none', cursor: 'pointer', fontFamily: 'Barlow', fontSize: 12, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', background: formTab === key ? accent : 'transparent', color: formTab === key ? '#fff' : '#555', transition: 'all .2s' }}>{label}</button>
+            {[['general','General Enquiry'],['detailed','Quote']].map(([key, label]) => (
+              <button key={key} onClick={() => setFormTab(key)} style={{ padding: '15px 40px', borderRadius: 3, border: 'none', cursor: 'pointer', fontFamily: 'Barlow', fontSize: 14, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', background: formTab === key ? accent : 'transparent', color: formTab === key ? '#fff' : '#555', transition: 'all .2s' }}>{label}</button>
             ))}
           </div>
         </div>
@@ -1771,7 +1728,7 @@ const Footer = () =>
         </div>
         <div>
           <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', marginBottom: 14 }}>Company</div>
-          {[['Services','#services'],['About','#about'],['Work','work.html'],['FAQ','work.html#faq'],['Films','https://www.overdrivefilms.com'],['Contact','#contact'],['Privacy Policy','privacy.html']].map(([label, href]) =>
+          {[['Services','#services'],['About','#about'],['FAQ','/faq/'],['Films','https://www.overdrivefilms.com'],['Contact','#contact'],['Privacy Policy','/privacy/']].map(([label, href]) =>
             <div key={label} style={{ marginBottom: 8 }}>
               <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined} style={{ fontFamily: 'Barlow', fontSize: 12, color: '#777', textDecoration: 'none' }}>{label}</a>
             </div>
@@ -1839,7 +1796,7 @@ const BookModal = ({ onClose, accent }) => {
 
           <>
               <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent, marginBottom: 8 }}>Get in Touch</div>
-              <h3 style={{ fontFamily: 'Blue Highway', fontSize: 28, textTransform: 'uppercase', color: '#0A0A0A', marginBottom: 22 }}>Book Your Event</h3>
+              <h3 style={{ fontFamily: 'Blue Highway', fontSize: 28, textTransform: 'uppercase', color: '#0A0A0A', marginBottom: 22 }}>Book Your Broadcast</h3>
               <form onSubmit={(e) => {e.preventDefault();setSent(true);}} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <input style={inp} placeholder="Your Name" />
@@ -1867,20 +1824,29 @@ const App = () => {
   const [showreel, setShowreel] = useState(false);
   const [activeService, setActiveService] = useState(null);
   const [showPricing, setShowPricing] = useState(false);
+  const [formTab, setFormTab] = useState('general');
   const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const accent = tweaks.accentColor;
+
+  const goToQuote = () => {
+    setFormTab('detailed');
+    setTimeout(() => {
+      const el = document.getElementById('contact');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 0);
+  };
 
   return (
     <>
       <Header tweaks={tweaks} />
       <Hero onShowreel={() => setShowreel(true)} tweaks={tweaks} />
-      <Services onServiceClick={setActiveService} onPricingOpen={() => setShowPricing(true)} accent={accent} />
+      <Services onServiceClick={setActiveService} onPricingOpen={() => setShowPricing(true)} onQuoteClick={goToQuote} accent={accent} />
       <Team accent={accent} />
       <Testimonials accent={accent} />
-      <ContactSection accent={accent} />
+      <ContactSection accent={accent} formTab={formTab} setFormTab={setFormTab} />
       <Footer />
 
-      {activeService && <ServiceModal service={activeService} onClose={() => setActiveService(null)} accent={accent} />}
+      {activeService && <ServiceModal service={activeService} onClose={() => setActiveService(null)} onServiceChange={setActiveService} accent={accent} />}
       {showPricing && <PricingModal onClose={() => setShowPricing(false)} accent={accent} />}
       {showreel && <ShowreelModal onClose={() => setShowreel(false)} />}
 
