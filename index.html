@@ -1372,7 +1372,7 @@ const CLIENT_LOGOS = (window.OD_CLIENTS || []);
 const Testimonials = ({ accent }) => {
   const doubled = [...TESTIMONIALS, ...TESTIMONIALS];
   return (
-    <section className="section-block" style={{ background: '#F5F5F5', padding: '88px 0 0', overflow: 'hidden', borderBottom: '1px solid #E8E8E8' }}>
+    <section className="section-block" style={{ background: '#F5F5F5', padding: '88px 0 72px', overflow: 'hidden', borderBottom: '1px solid #E8E8E8' }}>
       {/* Testimonials */}
       <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', marginBottom: 36 }}>
         <div className="reveal" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
@@ -1412,7 +1412,7 @@ const Testimonials = ({ accent }) => {
 
       {/* Client logos marquee — dark strip */}
       {CLIENT_LOGOS.length > 0 ? (
-        <div style={{ background: '#0A0A0A', borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a', padding: '32px 0', marginTop: 32, overflow: 'hidden' }}>
+        <div style={{ background: '#0A0A0A', borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a', padding: '32px 0', marginTop: 56, overflow: 'hidden' }}>
           <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', marginBottom: 16 }}>
             <SectionLabel text="Trusted by" accent={accent} />
           </div>
