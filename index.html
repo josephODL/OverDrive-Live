@@ -80,7 +80,15 @@
     },
     "logo": {
       "@type": "ImageObject",
-      "url": "https://www.overdrivelive.com.au/assets/logo-icon.png"
+      "url": "https://www.overdrivelive.com.au/assets/logo-icon.png",
+      "width": 512,
+      "height": 512
+    },
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://www.overdrivelive.com.au/assets/logo-icon.png",
+      "width": 512,
+      "height": 512
     },
     "aggregateRating": {
       "@type": "AggregateRating",
@@ -97,6 +105,22 @@
       { "@type": "Review", "author": { "@type": "Person", "name": "Marcus Webb" }, "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "reviewBody": "The energy on camera matched the energy in the room. Every angle captured, every moment delivered. Will use again without question." },
       { "@type": "Review", "author": { "@type": "Person", "name": "Priya Sharma" }, "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "reviewBody": "Fast setup, reliable stream, zero issues on the day. Exactly what you need when thousands of people are tuning in live." }
     ],
+    "sameAs": ["https://www.instagram.com/overdrive__live/"]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "OverDrive Live",
+    "url": "https://www.overdrivelive.com.au/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.overdrivelive.com.au/assets/logo-icon.png",
+      "width": 512,
+      "height": 512
+    },
     "sameAs": ["https://www.instagram.com/overdrive__live/"]
   }
   </script>
@@ -386,7 +410,7 @@ Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSli
       .services-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
       .about-grid { grid-template-columns:1fr !important; gap:40px !important; }
       .stat-grid { grid-template-columns:1fr 1fr !important; }
-      .logo-grid { grid-template-columns:repeat(4,1fr) !important; }
+      .logo-marquee-track { animation-duration: 50s !important; }
       .contact-grid { grid-template-columns:1fr !important; }
       .contact-grid>div:last-child { border-left:1px solid #1a1a1a !important; border-radius:0 0 4px 4px !important; border-top:1px solid #1a1a1a !important; }
       .team-full-grid { grid-template-columns:1fr !important; }
@@ -404,10 +428,41 @@ Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSli
     }
     @media (max-width:480px) {
       .services-grid { grid-template-columns:1fr !important; }
-      .logo-grid { grid-template-columns:repeat(3,1fr) !important; }
+      .logo-marquee-track { animation-duration: 40s !important; }
       .team-contractor-grid { grid-template-columns:repeat(2,1fr) !important; }
       .footer-grid { grid-template-columns:1fr !important; }
       .hero-stat-strip>div { flex:0 0 50% !important; }
+    }
+
+    /* Logo marquee */
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .logo-marquee-outer { overflow: hidden; position: relative; }
+    .logo-marquee-outer::before,
+    .logo-marquee-outer::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
+    }
+    .logo-marquee-outer::before { left: 0; background: linear-gradient(to right, #0A0A0A, transparent); }
+    .logo-marquee-outer::after  { right: 0; background: linear-gradient(to left,  #0A0A0A, transparent); }
+    .logo-marquee-track {
+      display: flex; align-items: center;
+      animation: marquee 70s linear infinite;
+      width: max-content;
+    }
+    .logo-marquee-item {
+      flex-shrink: 0; padding: 0 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-marquee-pill {
+      background: #fff; border-radius: 6px;
+      padding: 10px 20px;
+      display: flex; align-items: center; justify-content: center;
+      height: 60px; width: 140px;
+    }
+    .logo-marquee-item img {
+      max-height: 36px; max-width: 100px; width: auto;
+      object-fit: contain; display: block;
+      filter: grayscale(1);
+      opacity: 0.75;
     }
 
     .nav-link-dark { transition:color .15s; color:#666; }
@@ -911,9 +966,9 @@ const ServiceConfig = ({ accent }) => {
 
   const included = [];
   included.push(`${cameras} Camera${cameras > 1 ? 's' : ''} (${cameras <= 2 ? 'Single operator' : cameras <= 4 ? '2 operators' : '3 operators'})`);
-  if (graphics) included.push('Graphics Package (lower thirds, titles, bugs)');
-  if (videoPlayback) included.push('Video Playback / Pre-roll');
-  if (clientFeed) included.push('Client Feed Input (HDMI/SDI)');
+  if (graphics) included.push('On Screen Graphic (lower thirds, titles, logos)');
+  if (videoPlayback) included.push('Video Playback');
+  if (clientFeed) included.push('Presentation/Computer Input (HDMI/SDI)');
   if (audio === 'ours') included.push('Our Full Audio Package (operators + gear)');
   if (audio === 'client') included.push('Client Audio Integration (we connect, they operate)');
   if (audio === 'hybrid') included.push('Hybrid Audio (client FOH + our broadcast mix)');
@@ -943,9 +998,9 @@ const ServiceConfig = ({ accent }) => {
         {/* Options */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ fontFamily: 'Barlow', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: 4 }}>Production Options</div>
-          <Toggle label="Graphics Package" sublabel="Lower thirds, titles, sponsor bugs, animated opens" value={graphics} onChange={setGraphics} />
-          <Toggle label="Video Playback" sublabel="Pre-roll, interstitials, or recorded segments" value={videoPlayback} onChange={setVideoPlayback} />
-          <Toggle label="Client Feed Input" sublabel="Ingest HDMI or SDI from your existing AV system" value={clientFeed} onChange={setClientFeed} />
+          <Toggle label="On Screen Graphic" sublabel="Lower Third Graphics, Titles, Logos" value={graphics} onChange={setGraphics} />
+          <Toggle label="Video Playback" sublabel="Play pre-recorded videos" value={videoPlayback} onChange={setVideoPlayback} />
+          <Toggle label="Presentation/Computer Input" sublabel="Presentations, Keynotes, Personal Computer Input, HDMI or SDI" value={clientFeed} onChange={setClientFeed} />
         </div>
 
         {/* Audio */}
@@ -1231,8 +1286,8 @@ const Services = ({ onServiceClick, onPricingOpen, onQuoteClick, accent }) => {
    TEAM
 ══════════════════════════════════════════ */
 const TEAM = [
-{ name: 'Jack Bennett', role: 'Technical Director', type: 'full', photo: 'assets/team/jack-bennett.png', bio: 'Jack Yordanoff Bennett, OverDrive Live Director/Producer. I\'m dedicated to helping businesses & sport organisations expand their production value through professional video & broadcast. I deliver high-quality livestreams and event coverage that elevates your brand and keeps your audience engaged.' },
-{ name: 'Joseph Clarke', role: 'Director of Photography', type: 'full', photo: 'assets/team/joseph-clarke.png', bio: 'I work closely with clients to deliver reliable, high-quality livestreams for corporate events, sports, and live productions. I take a hands-on approach to every project, focusing on preparation, clear communication, and building systems that ensure everything runs smoothly on the day. With a background in film and broadcast production, I bring a strong visual standard and a practical, problem-solving mindset to live environments.' }];
+{ name: 'Jack Bennett', role: 'Production Producer, Technical Director', type: 'full', photo: 'assets/team/jack-bennett.png', bio: 'Jack Yordanoff Bennett, OverDrive Live Director/Producer. I\'m dedicated to helping businesses & sport organisations expand their production value through professional video & broadcast. I deliver high-quality livestreams and event coverage that elevates your brand and keeps your audience engaged.' },
+{ name: 'Joseph Clarke', role: 'Cinematographer, Producer', type: 'full', photo: 'assets/team/joseph-clarke.png', bio: 'I work closely with clients to deliver reliable, high-quality livestreams for corporate events, sports, and live productions. I take a hands-on approach to every project, focusing on preparation, clear communication, and building systems that ensure everything runs smoothly on the day. With a background in film and broadcast production, I bring a strong visual standard and a practical, problem-solving mindset to live environments.' }];
 
 
 const Team = ({ accent }) => {
@@ -1317,31 +1372,7 @@ const CLIENT_LOGOS = (window.OD_CLIENTS || []);
 const Testimonials = ({ accent }) => {
   const doubled = [...TESTIMONIALS, ...TESTIMONIALS];
   return (
-    <section className="section-block" style={{ background: '#F5F5F5', padding: '88px 0', overflow: 'hidden', borderBottom: '1px solid #E8E8E8' }}>
-      {/* Client logos */}
-      <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', marginBottom: 72 }}>
-        <div className="reveal" style={{ marginBottom: 28 }}>
-          <SectionLabel text="Trusted at and by:" accent={accent} />
-        </div>
-        {CLIENT_LOGOS.length > 0 ? (
-          <div className="logo-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 1, background: '#E8E8E8' }}>
-            {CLIENT_LOGOS.map((client, i) => (
-              <div key={i} className={`reveal d${(i%6)+1}`}
-                style={{ background: '#fff', padding: '24px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s' }}
-                onMouseEnter={e => e.currentTarget.style.background = '#FAFAFA'}
-                onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
-                <img
-                  src={`assets/clients/${client.file}`}
-                  alt={client.name}
-                  onError={e => { e.currentTarget.closest('div').style.display = 'none'; }}
-                  style={{ maxWidth: '100%', maxHeight: 56, objectFit: 'contain', display: 'block' }}
-                />
-              </div>
-            ))}
-          </div>
-        ) : null}
-      </div>
-
+    <section className="section-block" style={{ background: '#F5F5F5', padding: '88px 0 0', overflow: 'hidden', borderBottom: '1px solid #E8E8E8' }}>
       {/* Testimonials */}
       <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', marginBottom: 36 }}>
         <div className="reveal" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
@@ -1378,6 +1409,30 @@ const Testimonials = ({ accent }) => {
           </div>
         </div>
       </div>
+
+      {/* Client logos marquee — dark strip */}
+      {CLIENT_LOGOS.length > 0 ? (
+        <div style={{ background: '#0A0A0A', borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a', padding: '32px 0', marginTop: 32, overflow: 'hidden' }}>
+          <div className="section-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', marginBottom: 16 }}>
+            <SectionLabel text="Trusted by" accent={accent} />
+          </div>
+          <div className="logo-marquee-outer">
+            <div className="logo-marquee-track">
+              {[...CLIENT_LOGOS, ...CLIENT_LOGOS].map((client, i) => (
+                <div key={i} className="logo-marquee-item">
+                  <div className="logo-marquee-pill">
+                    <img
+                      src={`assets/clients/${client.file}`}
+                      alt={client.name}
+                      onError={e => { e.currentTarget.closest('.logo-marquee-item').style.display = 'none'; }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 };
@@ -1641,9 +1696,9 @@ const ContactSection = ({ accent, formTab, setFormTab }) => {
                     </div>
                   </div>
                   <div style={{ border: '1px solid #1e1e1e', borderRadius: 4, padding: '0 14px' }}>
-                    <Toggle label="Graphics Package" sublabel="Lower thirds, titles, bugs" value={graphics} onChange={setGraphics} />
-                    <Toggle label="Video Playback" sublabel="Pre-roll / interstitials" value={videoPlayback} onChange={setVideoPlayback} />
-                    <Toggle label="Computer or Feed Input" sublabel="HDMI or SDI ingest from your system" value={clientFeed} onChange={setClientFeed} />
+                    <Toggle label="On Screen Graphic" sublabel="Lower Third Graphics, Titles, Logos" value={graphics} onChange={setGraphics} />
+                    <Toggle label="Video Playback" sublabel="Play pre-recorded videos" value={videoPlayback} onChange={setVideoPlayback} />
+                    <Toggle label="Presentation/Computer Input" sublabel="Presentations, Keynotes, Personal Computer Input, HDMI or SDI" value={clientFeed} onChange={setClientFeed} />
                   </div>
                   <div>
                     <div style={{ fontFamily: 'Barlow', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#888', marginBottom: 8 }}>Livestream Audio Input</div>
