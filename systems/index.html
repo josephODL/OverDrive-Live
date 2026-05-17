@@ -96,7 +96,13 @@
     .btn-stop:hover   { background: rgba(245,158,11,.2); }
     .btn-delete { background: transparent; color: #555; border: 1px solid #1e1e1e; }
     .btn-delete:hover { background: rgba(196,30,30,.12); color: #C41E1E; border-color: rgba(196,30,30,.3); }
+    .btn-remove { background: transparent; color: #333; border: 1px solid #1a1a1a; }
+    .btn-remove:hover { color: #666; border-color: #333; }
     .btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+    .ip-link { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0ea5e9;
+      text-decoration: none; background: rgba(14,165,233,.08); padding: 2px 7px; border-radius: 3px;
+      border: 1px solid rgba(14,165,233,.18); transition: background .15s; }
+    .ip-link:hover { background: rgba(14,165,233,.18); }
 
     /* ── Instance table ── */
     .table-wrap { background: #0D0D0D; border: 1px solid #1a1a1a; border-radius: 6px; overflow: hidden; }
@@ -223,8 +229,10 @@
 
       <div class="page-heading">
         <h1>AWS Instances</h1>
-        <div style="display:flex;gap:10px;">
-          <button class="btn btn-ghost"   onclick="openCreateModal('kilolink')">+ KiloLink Machine</button>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <span id="kilolink-btn-wrap" title="">
+            <button id="kilolink-btn" class="btn btn-ghost" onclick="openCreateModal('kilolink')">+ KiloLink Machine</button>
+          </span>
           <button class="btn btn-primary" onclick="openCreateModal('vmix')">+ VMix Machine</button>
         </div>
       </div>
@@ -519,6 +527,10 @@
 
     const isTransitioning = s => NON_FINAL.has(s);
 
+    function hasKilolink() {
+      return instances.some(i => i.kind === 'kilolink');
+    }
+
     function render() {
       const list = document.getElementById('instance-list');
       if (instances.length === 0) {
@@ -533,16 +545,18 @@
       } else {
         list.innerHTML = instances.map(inst => {
           const busy = isTransitioning(inst.status);
+          const ipCell = inst.ip
+            ? (inst.kind === 'kilolink'
+                ? `<a class="ip-link" href="http://${inst.ip}" target="_blank" rel="noopener noreferrer">${inst.ip} ↗</a>`
+                : `<span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#aaa;">${inst.ip}</span>`)
+            : `<span style="color:#333;font-size:12px;">—</span>`;
           return `<div class="instance-row">
             <div>
               <div class="inst-name">${inst.name}</div>
               <div class="inst-id">${inst.id}</div>
             </div>
             <div>${kindBadge(inst.kind)}</div>
-            <div>${inst.ip
-              ? `<span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#aaa;">${inst.ip}</span>`
-              : `<span style="color:#333;font-size:12px;">—</span>`
-            }</div>
+            <div>${ipCell}</div>
             <div>${statusBadge(inst.status)}</div>
             <div class="row-actions">
               <button class="btn btn-sm btn-start"
@@ -553,7 +567,11 @@
                 ${inst.status === 'stopped' || busy ? 'disabled' : ''}>Stop</button>
               <button class="btn btn-sm btn-delete"
                 onclick="openDeleteModal('${inst.id}')"
+                title="Terminate instance in AWS"
                 ${busy ? 'disabled' : ''}>&#x2715;</button>
+              <button class="btn btn-sm btn-remove"
+                onclick="removeFromList('${inst.id}')"
+                title="Remove from list (does not terminate in AWS)">&#x2014;</button>
             </div>
           </div>`;
         }).join('');
@@ -566,6 +584,17 @@
       document.getElementById('stat-running').textContent = running;
       document.getElementById('stat-stopped').textContent = stopped;
       document.getElementById('stat-pending').textContent = pending;
+
+      // Change 3 — KiloLink single-instance lock
+      const kilolinkBtn  = document.getElementById('kilolink-btn');
+      const kilolinkWrap = document.getElementById('kilolink-btn-wrap');
+      if (hasKilolink()) {
+        kilolinkBtn.disabled = true;
+        kilolinkWrap.title = 'A KiloLink instance already exists. Terminate and remove it first.';
+      } else {
+        kilolinkBtn.disabled = false;
+        kilolinkWrap.title = '';
+      }
     }
 
     function openCreateModal(kind) {
@@ -584,11 +613,38 @@
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
     function handleOverlayClick(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
 
+    /* ── Change 2 — Remove from list without terminating ── */
+    function removeFromList(id) {
+      stopPolling(id);
+      instances = instances.filter(i => i.id !== id);
+      saveInstances();
+      render();
+      toast('Removed from list.');
+    }
+
+    /* ── Change 1 — Refresh all instance states on load ── */
+    async function refreshAllInstances() {
+      if (instances.length === 0) return;
+      await Promise.allSettled(instances.map(async inst => {
+        try {
+          const data = await callAPI({ action: 'get_ip', instance_id: inst.id });
+          inst.status = data.state;
+          inst.ip     = data.ip || null;
+          if (data.state === 'terminated') instances = instances.filter(i => i.id !== inst.id);
+          else if (NON_FINAL.has(data.state)) startPolling(inst.id);
+        } catch (e) {
+          if (e.message !== 'Unauthorized') console.warn('Refresh failed for', inst.id, e);
+        }
+      }));
+      saveInstances();
+      render();
+    }
+
     /* ── Init ── */
     function init() {
       instances = loadInstances();
       render();
-      instances.forEach(inst => { if (NON_FINAL.has(inst.status)) startPolling(inst.id); });
+      refreshAllInstances();
     }
 
     /* ── Keyboard shortcuts ── */
