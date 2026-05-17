@@ -6,19 +6,11 @@
   <title>Live Scoring — OverDrive Live Admin</title>
   <meta name="robots" content="noindex, nofollow">
 
-  <link rel="icon" type="image/png" href="/assets/logo-icon.png">
-  <link rel="preload" href="/fonts/blue_highway_cd.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
-    @font-face {
-      font-family: 'Blue Highway';
-      src: url('/fonts/blue_highway_cd.ttf') format('truetype');
-      font-weight: normal; font-style: normal; font-display: swap;
-    }
-
     /* CSS vars used by inline JS-generated HTML */
     :root { --muted: #444; --border: #1a1a1a; }
 
@@ -40,7 +32,13 @@
       border-bottom: 1px solid #1a1a1a;
     }
 
-    .sidebar-logo img { height: 26px; display: block; margin-bottom: 8px; }
+    .sidebar-wordmark {
+      font-family: Barlow, sans-serif; font-size: 14px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-wordmark span { color: #C41E1E; }
 
     .logo-sub {
       font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
@@ -83,8 +81,8 @@
     }
 
     .page-title {
-      font-family: 'Blue Highway', sans-serif; font-size: 26px;
-      text-transform: uppercase; letter-spacing: 0.02em; color: #fff;
+      font-family: Barlow, sans-serif; font-size: 26px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em; color: #fff;
     }
 
     /* ── Buttons ── */
@@ -149,8 +147,8 @@
     }
 
     .game-teams {
-      font-family: 'Blue Highway', sans-serif; font-size: 18px;
-      text-transform: uppercase; letter-spacing: 0.02em; color: #e0e0e0;
+      font-family: Barlow, sans-serif; font-size: 18px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em; color: #e0e0e0;
       margin-bottom: 4px;
     }
 
@@ -264,8 +262,8 @@
     }
 
     .modal-title {
-      font-family: 'Blue Highway', sans-serif; font-size: 22px;
-      text-transform: uppercase; letter-spacing: 0.02em;
+      font-family: Barlow, sans-serif; font-size: 22px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em;
     }
 
     .modal-close {
@@ -315,13 +313,13 @@
   <!-- Sidebar -->
   <div class="sidebar">
     <div class="sidebar-logo">
-      <img src="/assets/logo-banner.png" alt="OverDrive Live">
+      <div class="sidebar-wordmark">OverDrive <span>Live</span></div>
       <div class="logo-sub">Live Scoring Admin</div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-item active" onclick="showSection('games')">Games</div>
-      <div class="nav-item" onclick="showSection('teams')">Teams</div>
-      <div class="nav-item" onclick="showSection('sports')">Sports</div>
+      <div class="nav-item active" onclick="showSection('games', this)">Games</div>
+      <div class="nav-item" onclick="showSection('teams', this)">Teams</div>
+      <div class="nav-item" onclick="showSection('sports', this)">Sports</div>
     </nav>
     <div class="sidebar-footer">
       <div class="conn-indicator">
@@ -487,7 +485,7 @@
 </div>
 
 <!-- Toast -->
-<div id="toast"></div>
+<div id="toast" role="status"></div>
 
 <script>
   const BASE = window.location.origin;
@@ -507,11 +505,11 @@
   }
 
   // ── Navigation ─────────────────────────────────────────────
-  function showSection(name) {
+  function showSection(name, el) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById(`section-${name}`).classList.add('active');
-    event.currentTarget.classList.add('active');
+    el.classList.add('active');
   }
 
   // ── Games ──────────────────────────────────────────────────
@@ -748,6 +746,7 @@
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.className = `${type} show`;
+    t.id = 'toast';
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
