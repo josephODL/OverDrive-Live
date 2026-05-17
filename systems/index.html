@@ -127,6 +127,12 @@
       align-items: center; transition: background .15s;
     }
     .instance-row:last-child { border-bottom: none; }
+    .detected-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      color: #f59e0b; background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.2);
+      padding: 3px 8px; border-radius: 3px; margin-top: 5px;
+    }
     .instance-row:hover { background: #111; }
     .inst-name { font-size: 13px; font-weight: 600; color: #e0e0e0; }
     .inst-id   { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #333; margin-top: 3px; }
@@ -659,6 +665,7 @@
             <div>
               <div class="inst-name">${inst.name}</div>
               <div class="inst-id">${inst.id}</div>
+              ${inst.detected ? `<div class="detected-badge">⚠ Detected — not launched from this panel</div>` : ''}
             </div>
             <div>${kindBadge(inst.kind)}</div>
             <div>${ipCell}</div>
@@ -805,11 +812,44 @@
       render();
     }
 
+    /* ── Scanner — detects instances not launched from this panel ── */
+    async function scanInstances() {
+      try {
+        const data = await callAPI({ action: 'list_instances' });
+        const remote = Array.isArray(data.instances) ? data.instances : [];
+        let added = 0;
+        remote.forEach(r => {
+          if (instances.some(i => i.id === r.instance_id)) return;
+          const nameLower = (r.name || '').toLowerCase();
+          const kind = nameLower.includes('kilolink') ? 'kilolink' : 'vmix';
+          const inst = {
+            id: r.instance_id,
+            name: r.name || r.instance_id,
+            kind,
+            ip: r.ip || null,
+            status: r.state || 'unknown',
+            launchTime: r.launch_time || null,
+            detected: true,
+          };
+          instances.push(inst);
+          if (NON_FINAL.has(inst.status)) startPolling(inst.id);
+          added++;
+        });
+        if (added > 0) {
+          saveInstances();
+          render();
+          toast(`⚠ ${added} untracked instance${added > 1 ? 's' : ''} detected on AWS.`, true);
+        }
+      } catch (e) {
+        if (e.message !== 'Unauthorized') console.warn('Instance scan failed:', e);
+      }
+    }
+
     /* ── Init ── */
     function init() {
       instances = loadInstances();
       render();
-      refreshAllInstances();
+      refreshAllInstances().then(scanInstances);
       if (renderTimer) clearInterval(renderTimer);
       renderTimer = setInterval(render, 60000);
     }
