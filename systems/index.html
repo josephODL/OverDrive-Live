@@ -290,7 +290,7 @@
           <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
           <span id="qty-display" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:500;color:#fff;min-width:24px;text-align:center;">1</span>
           <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
-          <span style="font-size:11px;color:#444;margin-left:4px;">max 6</span>
+          <span style="font-size:11px;color:#444;margin-left:4px;">max 4</span>
         </div>
       </div>
       <div id="name-fields"></div>
@@ -698,10 +698,10 @@
     }
 
     function changeQty(delta) {
-      createQty = Math.min(6, Math.max(1, createQty + delta));
+      createQty = Math.min(4, Math.max(1, createQty + delta));
       document.getElementById('qty-display').textContent = createQty;
       document.querySelectorAll('.qty-btn')[0].disabled = createQty <= 1;
-      document.querySelectorAll('.qty-btn')[1].disabled = createQty >= 6;
+      document.querySelectorAll('.qty-btn')[1].disabled = createQty >= 4;
       renderNameFields();
       updateCostDisplay();
       setTimeout(() => document.getElementById('inst-name-0').focus(), 20);
