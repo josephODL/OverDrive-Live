@@ -284,11 +284,6 @@
     <div class="modal" onclick="event.stopPropagation()">
       <h2 id="modal-title">New Instance</h2>
       <p class="modal-sub" id="modal-sub"></p>
-      <div class="form-group">
-        <label class="form-label">Event Name</label>
-        <input class="form-input" id="new-name" type="text" placeholder="e.g. AFL Grand Final 2025">
-        <div style="font-size:11px;color:#444;margin-top:7px;">Launches a pre-configured AMI — no additional setup required.</div>
-      </div>
       <div class="form-group" id="qty-group" style="display:none;">
         <label class="form-label">Number of Machines</label>
         <div style="display:flex;align-items:center;gap:12px;">
@@ -296,6 +291,23 @@
           <span id="qty-display" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:500;color:#fff;min-width:24px;text-align:center;">1</span>
           <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
           <span style="font-size:11px;color:#444;margin-left:4px;">max 6</span>
+        </div>
+      </div>
+      <div id="name-fields"></div>
+      <div style="font-size:11px;color:#444;margin-top:-10px;margin-bottom:20px;">Launches pre-configured AMIs — no additional setup required.</div>
+      <div id="modal-cost" style="background:#0A0A0A;border:1px solid #1e1e1e;border-radius:6px;padding:14px 16px;margin-bottom:4px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#444;margin-bottom:10px;">Estimated Cost</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-size:10px;color:#555;margin-bottom:3px;" id="modal-instance-type"></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#aaa;" id="modal-cost-usd"></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#777;margin-top:2px;" id="modal-cost-aud"></div>
+          </div>
+          <div id="modal-cost-total-wrap" style="text-align:right;display:none;">
+            <div style="font-size:10px;color:#555;margin-bottom:3px;">Total (<span id="modal-cost-qty"></span> machines)</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#aaa;" id="modal-cost-total-usd"></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#777;margin-top:2px;" id="modal-cost-total-aud"></div>
+          </div>
         </div>
       </div>
       <div class="modal-actions">
@@ -348,8 +360,16 @@
     const NON_FINAL = new Set(['pending', 'launching', 'starting', 'stopping']);
 
     const MACHINE_TYPES = {
-      vmix:     { label: 'VMix',     color: '#6366f1', apiKey: 'vmix',     sub: 'Windows live production machine' },
-      kilolink: { label: 'KiloLink', color: '#0ea5e9', apiKey: 'kilolink', sub: 'Hardware encoder / decoder node' },
+      vmix: {
+        label: 'VMix', color: '#6366f1', apiKey: 'vmix', sub: 'Windows live production machine',
+        instanceType: 'g4dn.xlarge',
+        costUSD: '~$0.736 USD/hour', costAUD: '~$1.15 AUD/hour',
+      },
+      kilolink: {
+        label: 'KiloLink', color: '#0ea5e9', apiKey: 'kilolink', sub: 'Hardware encoder / decoder node',
+        instanceType: 't3.medium',
+        costUSD: '~$0.0528 USD/hour', costAUD: '~$0.08 AUD/hour',
+      },
     };
 
     let instances = [];
@@ -466,29 +486,37 @@
 
     /* ── Actions ── */
     async function launchInstance() {
-      const name = document.getElementById('new-name').value.trim();
-      if (!name) { document.getElementById('new-name').focus(); return; }
+      const qty = createKind === 'vmix' ? createQty : 1;
+      const names = Array.from({ length: qty }, (_, i) => {
+        const el = document.getElementById(`inst-name-${i}`);
+        return el ? el.value.trim() : '';
+      });
+      const firstEmpty = names.findIndex(n => !n);
+      if (firstEmpty !== -1) {
+        document.getElementById(`inst-name-${firstEmpty}`).focus();
+        return;
+      }
       const btn = document.getElementById('launch-btn');
       btn.disabled = true;
-      btn.textContent = 'Launching…';
+      btn.textContent = qty > 1 ? `Launching ${qty}…` : 'Launching…';
       try {
-        const data = await callAPI({
-          action: 'launch',
-          instance: MACHINE_TYPES[createKind].apiKey,
-          event_name: name,
+        const launches = names.map(name =>
+          callAPI({ action: 'launch', instance: MACHINE_TYPES[createKind].apiKey, event_name: name })
+        );
+        const results = await Promise.all(launches);
+        results.forEach((data, i) => {
+          const inst = { id: data.instance_id, name: names[i], kind: createKind, ip: null, status: data.status || 'pending' };
+          instances.unshift(inst);
+          startPolling(inst.id);
         });
-        const inst = { id: data.instance_id, name, kind: createKind, ip: null, status: data.status || 'pending' };
-        instances.unshift(inst);
         saveInstances();
         closeModal('create-modal');
-        document.getElementById('new-name').value = '';
         render();
-        startPolling(inst.id);
-        toast('Instance launching — polling for status…');
+        toast(qty > 1 ? `${qty} machines launching…` : 'Instance launching…');
       } catch (e) {
         if (e.message !== 'Unauthorized') toast('Launch failed: ' + e.message, true);
         btn.disabled = false;
-        btn.textContent = 'Launch';
+        btn.textContent = qty > 1 ? `Launch ${qty} Machines` : 'Launch';
       }
     }
 
@@ -638,17 +666,63 @@
       }
     }
 
+    function updateCostDisplay() {
+      const m = MACHINE_TYPES[createKind];
+      const qty = createKind === 'vmix' ? createQty : 1;
+      document.getElementById('modal-instance-type').textContent = m.instanceType;
+      document.getElementById('modal-cost-usd').textContent = m.costUSD;
+      document.getElementById('modal-cost-aud').textContent = m.costAUD;
+      const totalWrap = document.getElementById('modal-cost-total-wrap');
+      if (qty > 1) {
+        const baseUSD = parseFloat(m.costUSD.replace(/[^0-9.]/g, ''));
+        const baseAUD = parseFloat(m.costAUD.replace(/[^0-9.]/g, ''));
+        document.getElementById('modal-cost-qty').textContent = qty;
+        document.getElementById('modal-cost-total-usd').textContent = `~$${(baseUSD * qty).toFixed(3)} USD/hour`;
+        document.getElementById('modal-cost-total-aud').textContent = `~$${(baseAUD * qty).toFixed(2)} AUD/hour`;
+        totalWrap.style.display = 'block';
+      } else {
+        totalWrap.style.display = 'none';
+      }
+    }
+
+    function renderNameFields() {
+      const container = document.getElementById('name-fields');
+      const qty = createKind === 'vmix' ? createQty : 1;
+      container.innerHTML = Array.from({ length: qty }, (_, i) => `
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">${qty > 1 ? `Machine ${i + 1} Name` : 'Machine Name'}</label>
+          <input class="form-input" id="inst-name-${i}" type="text" placeholder="e.g. ${qty > 1 ? `VMix ${i + 1} — Stage ${String.fromCharCode(65 + i)}` : 'AFL Grand Final 2025'}">
+        </div>
+      `).join('');
+      document.getElementById('launch-btn').textContent = qty > 1 ? `Launch ${qty} Machines` : 'Launch';
+    }
+
+    function changeQty(delta) {
+      createQty = Math.min(6, Math.max(1, createQty + delta));
+      document.getElementById('qty-display').textContent = createQty;
+      document.querySelectorAll('.qty-btn')[0].disabled = createQty <= 1;
+      document.querySelectorAll('.qty-btn')[1].disabled = createQty >= 6;
+      renderNameFields();
+      updateCostDisplay();
+      setTimeout(() => document.getElementById('inst-name-0').focus(), 20);
+    }
+
     function openCreateModal(kind) {
       createKind = kind;
+      createQty  = 1;
       const m = MACHINE_TYPES[kind];
       document.getElementById('modal-title').textContent = 'New ' + m.label + ' Machine';
       document.getElementById('modal-sub').textContent   = m.sub;
-      document.getElementById('new-name').placeholder    = 'e.g. AFL Grand Final 2025';
+      document.getElementById('qty-group').style.display = kind === 'vmix' ? 'block' : 'none';
+      document.getElementById('qty-display').textContent = '1';
+      document.querySelectorAll('.qty-btn')[0].disabled = true;
+      document.querySelectorAll('.qty-btn')[1].disabled = false;
       const btn = document.getElementById('launch-btn');
       btn.disabled = false;
-      btn.textContent = 'Launch';
+      renderNameFields();
+      updateCostDisplay();
       document.getElementById('create-modal').classList.add('open');
-      setTimeout(() => document.getElementById('new-name').focus(), 50);
+      setTimeout(() => document.getElementById('inst-name-0').focus(), 50);
     }
 
     let kilolinkActiveIp = null;
