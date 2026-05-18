@@ -245,6 +245,9 @@
       <div class="page-heading">
         <h1>AWS Instances</h1>
         <div style="display:flex;gap:10px;align-items:center;">
+          <span title="Coming soon — AMI not yet configured">
+            <button class="btn btn-ghost" disabled>+ Graphics Machine</button>
+          </span>
           <span id="kilolink-btn-wrap" title="">
             <button id="kilolink-btn" class="btn btn-ghost" onclick="openCreateModal('kilolink')">+ KiloLink Machine</button>
           </span>
@@ -377,6 +380,10 @@
         instanceType: 't3.medium',
         costUSD: '~$0.0528 USD/hour', costAUD: '~$0.08 AUD/hour',
         rateAUD: 0.08,
+      },
+      graphics: {
+        label: 'Graphics', color: '#10b981', apiKey: 'graphics', sub: 'Scoring and graphics server',
+        instanceType: 'TBC', costUSD: 'TBC', costAUD: 'TBC', rateAUD: 0,
       },
     };
 
@@ -656,11 +663,16 @@
       } else {
         list.innerHTML = instances.map(inst => {
           const busy = isTransitioning(inst.status);
-          const ipCell = inst.ip
-            ? (inst.kind === 'kilolink'
-                ? `<button class="ip-link" onclick="openKilolinkCreds('${inst.ip}')">${inst.ip} ↗</button>`
-                : `<span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#aaa;">${inst.ip}</span>`)
-            : `<span style="color:#333;font-size:12px;">—</span>`;
+          let ipCell;
+          if (!inst.ip) {
+            ipCell = `<span style="color:#333;font-size:12px;">—</span>`;
+          } else if (inst.kind === 'kilolink') {
+            ipCell = `<button class="ip-link" onclick="openKilolinkCreds('${inst.ip}')">${inst.ip} ↗</button>`;
+          } else if (inst.kind === 'graphics') {
+            ipCell = `<button class="ip-link" onclick="window.open('http://${inst.ip}/admin/','_blank')">${inst.ip} ↗</button>`;
+          } else {
+            ipCell = `<span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#aaa;">${inst.ip}</span>`;
+          }
           return `<div class="instance-row">
             <div>
               <div class="inst-name">${inst.name}</div>
@@ -821,7 +833,10 @@
         remote.forEach(r => {
           if (instances.some(i => i.id === r.instance_id)) return;
           const nameLower = (r.name || '').toLowerCase();
-          const kind = nameLower.includes('kilolink') ? 'kilolink' : 'vmix';
+          const kind = nameLower.includes('vmix') ? 'vmix'
+                     : nameLower.includes('kilolink') ? 'kilolink'
+                     : nameLower.includes('overdrive-scoring') ? 'graphics'
+                     : 'unknown';
           const inst = {
             id: r.instance_id,
             name: r.name || r.instance_id,
