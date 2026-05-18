@@ -435,7 +435,16 @@
 
     /* ── Persistence ── */
     function loadInstances() {
-      try { return JSON.parse(localStorage.getItem('od_instances') || '[]'); }
+      try {
+        const list = JSON.parse(localStorage.getItem('od_instances') || '[]');
+        list.forEach(inst => {
+          const n = (inst.name || '').toLowerCase();
+          if (n.includes('overdrive-scoring')) inst.kind = 'graphics';
+          else if (n.includes('kilolink'))      inst.kind = 'kilolink';
+          else if (n.includes('vmix'))          inst.kind = 'vmix';
+        });
+        return list;
+      }
       catch { return []; }
     }
     function saveInstances() { localStorage.setItem('od_instances', JSON.stringify(instances)); }
