@@ -678,7 +678,13 @@
           } else if (inst.kind === 'kilolink') {
             ipCell = `<button class="ip-link" onclick="openKilolinkCreds('${inst.ip}')">${inst.ip} ↗</button>`;
           } else if (inst.kind === 'graphics') {
-            ipCell = `<button class="ip-link" onclick="window.open('http://${inst.ip}/admin/','_blank')">${inst.ip} ↗</button>`;
+            ipCell = `<div style="display:flex;flex-direction:column;gap:5px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#555;">${inst.ip}</span>
+              <div style="display:flex;gap:4px;">
+                <button class="btn btn-sm btn-ghost" onclick="window.open('http://${inst.ip}/admin/','_blank')">Admin</button>
+                <button class="btn btn-sm btn-ghost" onclick="copyCompanionLink('${inst.ip}')">Companion Link</button>
+              </div>
+            </div>`;
           } else {
             ipCell = `<span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#aaa;">${inst.ip}</span>`;
           }
@@ -800,6 +806,12 @@
     }
     function openKilolinkUrl() {
       if (kilolinkActiveIp) window.open('http://' + kilolinkActiveIp, '_blank');
+    }
+
+    function copyCompanionLink(ip) {
+      navigator.clipboard.writeText(`ws://${ip}/?role=controller`)
+        .then(() => toast('Companion link copied to clipboard'))
+        .catch(() => toast('Failed to copy to clipboard', true));
     }
 
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
