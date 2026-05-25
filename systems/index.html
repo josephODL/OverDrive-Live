@@ -90,6 +90,7 @@
     .btn-ghost { background: transparent; color: #aaa; border: 1px solid #222; }
     .btn-ghost:hover { border-color: #444; color: #fff; }
     .btn-sm { padding: 6px 12px; font-size: 11px; }
+    .btn-xs { padding: 3px 8px; font-size: 10px; }
     .btn-start  { background: rgba(34,197,94,.12);  color: #22c55e; border: 1px solid rgba(34,197,94,.2); }
     .btn-start:hover  { background: rgba(34,197,94,.22); }
     .btn-stop   { background: rgba(245,158,11,.1);  color: #f59e0b; border: 1px solid rgba(245,158,11,.2); }
@@ -681,9 +682,9 @@
             ipCell = `<div style="display:flex;flex-direction:column;gap:5px;">
               <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#555;">${inst.ip}</span>
               <div style="display:flex;gap:4px;">
-                <button class="btn btn-sm btn-ghost" onclick="window.open('http://${inst.ip}/admin/','_blank')">Admin</button>
-                <button class="btn btn-sm btn-ghost" onclick="copyCompanionLink('${inst.ip}')">Companion</button>
-                <button class="btn btn-sm btn-ghost" onclick="copySSHCommand('${inst.ip}')" title="Copies SSH command — open Terminal and paste">Terminal</button>
+                <button class="btn btn-xs btn-ghost" onclick="window.open('http://${inst.ip}/admin/','_blank')">Admin</button>
+                <button class="btn btn-xs btn-ghost" onclick="copyCompanionLink('${inst.ip}')">Companion</button>
+                <button class="btn btn-xs btn-ghost" onclick="copySSHCommand('${inst.ip}')" title="Copies SSH command — open Terminal and paste">Terminal</button>
               </div>
             </div>`;
           } else {
