@@ -816,10 +816,13 @@
     }
 
     function copySSHCommand(ip) {
-      const cmd = `ssh -i /Users/overdrive/Documents/5_ODL/AWS/Keys/vmix-test-01.pem ubuntu@${ip} 'bash /var/www/overdrive/scripts/update-ip.sh'`;
+      const cmd = [
+        `sed -i '' 's/SERVER="ubuntu@.*/SERVER="ubuntu@${ip}"/' ~/Documents/5_ODL/overdrive-scoring/scripts/deploy-frontend.sh`,
+        `ssh -i /Users/overdrive/Documents/5_ODL/AWS/Keys/vmix-test-01.pem ubuntu@${ip} 'bash /var/www/overdrive/scripts/update-ip.sh'`,
+      ].join(' && ');
       navigator.clipboard.writeText(cmd)
-        .then(() => toast('SSH command copied — open Terminal and paste'))
-        .catch(() => toast('Failed to copy SSH command', true));
+        .then(() => toast('Commands copied — open Terminal and paste'))
+        .catch(() => toast('Failed to copy commands', true));
     }
 
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
