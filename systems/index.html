@@ -682,7 +682,8 @@
               <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#555;">${inst.ip}</span>
               <div style="display:flex;gap:4px;">
                 <button class="btn btn-sm btn-ghost" onclick="window.open('http://${inst.ip}/admin/','_blank')">Admin</button>
-                <button class="btn btn-sm btn-ghost" onclick="copyCompanionLink('${inst.ip}')">Companion Link</button>
+                <button class="btn btn-sm btn-ghost" onclick="copyCompanionLink('${inst.ip}')">Companion</button>
+                <button class="btn btn-sm btn-ghost" onclick="copySSHCommand('${inst.ip}')" title="Copies SSH command — open Terminal and paste">Terminal</button>
               </div>
             </div>`;
           } else {
@@ -812,6 +813,13 @@
       navigator.clipboard.writeText(`ws://${ip}/?role=controller`)
         .then(() => toast('Companion link copied to clipboard'))
         .catch(() => toast('Failed to copy to clipboard', true));
+    }
+
+    function copySSHCommand(ip) {
+      const cmd = `ssh -i /Users/overdrive/Documents/5_ODL/AWS/Keys/vmix-test-01.pem ubuntu@${ip} 'bash /var/www/overdrive/scripts/update-ip.sh'`;
+      navigator.clipboard.writeText(cmd)
+        .then(() => toast('SSH command copied — open Terminal and paste'))
+        .catch(() => toast('Failed to copy SSH command', true));
     }
 
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
