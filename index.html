@@ -388,6 +388,14 @@ Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSli
       .services-grid { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
       .footer-grid { grid-template-columns:1fr 1fr !important; gap:32px !important; }
     }
+    /* Hero background: video on desktop, static image on phones */
+    .hero-bg-mobile { display: none; }
+    .hero-bg-video  { display: block; }
+    @media (max-width:768px) {
+      .hero-bg-mobile { display: block !important; }
+      .hero-bg-video  { display: none !important; }
+    }
+
     @media (max-width:768px) {
       .nav-desktop { display:none !important; }
       .nav-cta { display:none !important; }
@@ -414,6 +422,9 @@ Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSli
     @media (max-width:480px) {
       .services-grid { grid-template-columns:1fr !important; }
       .logo-marquee-track { animation-duration: 120s !important; }
+      .logo-marquee-item { padding: 0 10px !important; }
+      .logo-marquee-pill { height: 58px !important; width: 140px !important; padding: 4px 8px !important; }
+      .logo-marquee-item img { max-height: 50px !important; max-width: 124px !important; }
       .team-contractor-grid { grid-template-columns:repeat(2,1fr) !important; }
       .footer-grid { grid-template-columns:1fr !important; }
       .hero-stat-strip>div { flex:0 0 50% !important; }
@@ -812,8 +823,9 @@ const Hero = ({ onShowreel, onBook, tweaks }) => {
 
   return (
     <section style={{ position: 'relative', width: '100%', height: '100vh', minHeight: 760, overflow: 'hidden', display: 'flex', alignItems: 'flex-end' }}>
-      {/* Full-screen background video */}
-      <video autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}>
+      {/* Full-screen background — video on desktop, static image on mobile */}
+      <img src="assets/hero-bg.jpg" alt="" className="hero-bg-mobile" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }} />
+      <video autoPlay muted loop playsInline preload="metadata" className="hero-bg-video" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}>
         <source src="video/hero.mp4" type="video/mp4" />
       </video>
       {/* Dark overlay for legibility */}
@@ -1312,7 +1324,7 @@ const Team = ({ accent }) => {
         </div>
 
         {/* Bottom row: team cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+        <div className="team-full-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
           {fullTeam.map((m, i) => (
             <div key={i} className={`team-card reveal-zoom d${i+1}`} style={{ display: 'flex', background: '#F9F9F9', border: '1px solid #EFEFEF', borderRadius: 4, overflow: 'hidden' }}>
               <div style={{ width: 110, flexShrink: 0, position: 'relative', overflow: 'hidden', background: '#EBEBEB' }}>
@@ -1915,6 +1927,15 @@ const App = () => {
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+<script>
+  // Resume hero video when tab becomes visible again — browsers pause it when hidden
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+      const v = document.querySelector('video');
+      if (v && v.paused) v.play();
+    }
+  });
 </script>
 </body>
 </html>
